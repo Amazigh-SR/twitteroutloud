@@ -7,10 +7,20 @@ const { Strategy } = require("passport-twitter");
 const session = require("express-session");
 // load .env data into process.env
 require("dotenv").config();
-const { PORT, TWITTER_API_SECRET_KEY, TWITTER_API_KEY } = process.env;
+const { PORT, TWITTER_API_SECRET_KEY, TWITTER_API_KEY, ACCESS_TOKEN_SECRET, ACCESS_TOKEN } = process.env;
+const Twitter = require("twitter");
+
+const client = new Twitter({
+  consumer_key: TWITTER_API_KEY,
+  consumer_secret: TWITTER_API_SECRET_KEY,
+  access_token_key: ACCESS_TOKEN,
+  access_token_secret: ACCESS_TOKEN_SECRET
+});
+
+
+
 
 const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
 const app = express();
 
 app.use(logger("dev"));
@@ -44,9 +54,11 @@ passport.use(
     function (token, tokenSecret, profile, cb) {
       const { id, emails } = profile;
 
-      console.log(profile);
+      console.log("id: ", id)
+      console.log("emails: ", emails)
+      // console.log(profile);
       // User.findOrCreate({ twitterId: profile.id }, function (err, user) {
-      //   return cb(err, user);
+        return cb(null, id);
       // });
     }
   )
@@ -54,21 +66,41 @@ passport.use(
 
 app.use(passport.initialize());
 
-app.get("/auth/twitter", passport.authenticate("twitter"));
+app.get("/auth", passport.authenticate("twitter"));
 
 app.get(
   "/auth/callback",
   passport.authenticate("twitter", {
-    failureRedirect: "localhost:3000/login",
+    failureRedirect: "http://localhost:3000/login",
     session: false,
   }),
   function (req, res) {
-    req.session.userID = "req.user.id";
+    // console.log("req.session.userID: ", req.session.userID)
+    console.log("req.user: ", req.user)
+    // console.log("req: ", req)
+    req.session.userID = req.user;
     // Successful authentication, redirect home.
-    res.redirect("/");
+    res.redirect("http://localhost:3000/");
     // res.send("ok");
   }
 );
+
+
+app.get("/tweets", (req,res) => {
+  const params = { tweet_mode: 'extended', count: 5 };
+  
+  client
+    .get(`statuses/home_timeline`, params)
+    .then(timeline => {
+      cache = timeline;
+      console.log("timeline: ", timeline)
+      res.send(timeline);
+    })
+    .catch(error => res.send(error));
+})
+
+
+
 
 app.listen(PORT || 8000, () => {
   console.log(`Example app listening on port ${PORT}`);
