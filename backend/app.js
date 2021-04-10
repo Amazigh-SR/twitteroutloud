@@ -1,13 +1,3 @@
-const db = require("./db/helpers/index");
-const express = require("express");
-const path = require("path");
-const cookieParser = require("cookie-parser");
-const logger = require("morgan");
-const passport = require("passport");
-const { Strategy } = require("passport-twitter");
-const session = require("express-session");
-const cors = require("cors");
-
 // load .env data into process.env
 require("dotenv").config();
 let {
@@ -17,14 +7,18 @@ let {
   ACCESS_TOKEN_SECRET,
   ACCESS_TOKEN,
 } = process.env;
+
+const db = require("./db/helpers/index");
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+const passport = require("passport");
+const { Strategy } = require("passport-twitter");
+const session = require("express-session");
+const cors = require("cors");
 const Twitter = require("twitter");
 
-const client = new Twitter({
-  consumer_key: TWITTER_API_KEY,
-  consumer_secret: TWITTER_API_SECRET_KEY,
-  access_token_key: ACCESS_TOKEN,
-  access_token_secret: ACCESS_TOKEN_SECRET,
-});
 
 const indexRouter = require("./routes/index");
 const app = express();
@@ -35,17 +29,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
-
-// client = new Twitter({
-//   consumer_key: TWITTER_API_KEY,
-//   consumer_secret: TWITTER_API_SECRET_KEY,
-//   access_token_key: null,
-//   access_token_secret: null,
-// });
-// app.use("/", indexRouter);
-// app.use("/users", usersRouter);
-
-// app.set("trust proxy", 1);
 
 app.use(
   session({
@@ -65,19 +48,14 @@ passport.use(
       includeEmail: true,
     },
     function (token, tokenSecret, profile, cb) {
-      const { id, emails } = profile;
+      const { id, emails, photos, username } = profile;
 
-      client.access_token_key = token;
-      client.access_token_secret = tokenSecret;
+      db.addUser(id, username, emails[0].value, token, tokenSecret, photos[0].value)
+      .then(rows => {
+        console.log(`Successfully added Twitter User: ${rows.twitter_id} to database!`)
+        return cb(null, id);
+      })
 
-      console.log("token: " + token);
-      console.log("tokenSecret: " + tokenSecret);
-      console.log("id: ", id);
-      console.log("emails: ", emails);
-      // console.log(profile);
-      // User.findOrCreate({ twitterId: profile.id }, function (err, user) {
-      return cb(null, id);
-      // });
     }
   )
 );
@@ -93,9 +71,6 @@ app.get(
     session: false,
   }),
   function (req, res) {
-    // console.log("req.session.userID: ", req.session.userID)
-    console.log("req.user: ", req.user);
-    // console.log("req: ", req);
     req.session.userID = req.user;
     // Successful authentication, redirect home.
     res.redirect("http://localhost:3000/");
@@ -104,25 +79,27 @@ app.get(
 );
 
 app.get("/tweets", (req, res) => {
+  const userID = req.session.userID;
   const params = { tweet_mode: "extended", count: 2 };
-
-  // const client = new Twitter({
-  //   consumer_key: TWITTER_API_KEY,
-  //   consumer_secret: TWITTER_API_SECRET_KEY,
-  //   access_token_key: ACCESS_TOKEN,
-  //   access_token_secret: ACCESS_TOKEN_SECRET,
-  // });
-
-  console.log("tweets req: ", req);
-
-  client
-    .get(`statuses/home_timeline`, params)
-    .then((timeline) => {
-      cache = timeline;
-      // console.log("timeline: ", timeline);
-      res.send(timeline);
+  db.getUserById(userID)
+    .then(rows => {
+      const {token, secret_token} = rows;
+      const client = new Twitter({
+        consumer_key: TWITTER_API_KEY,
+        consumer_secret: TWITTER_API_SECRET_KEY,
+        access_token_key: token,
+        access_token_secret: secret_token,
+      });
+      
+        client
+          .get(`statuses/home_timeline`, params)
+          .then((timeline) => {
+            cache = timeline;
+            // console.log("timeline: ", timeline);
+            res.send(timeline);
+          })
+          .catch((error) => res.send(error));
     })
-    .catch((error) => res.send(error));
 });
 
 app.listen(PORT || 8000, () => {
