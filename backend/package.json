@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node app.js",
-    "nodemon": "nodemon app.js"
+    "nodemon": "nodemon app.js",
+    "db": "node db/resetdb.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -16,6 +17,8 @@
     "morgan": "~1.9.1",
     "passport": "^0.4.1",
     "passport-twitter": "^1.0.4",
+    "pg": "^8.5.1",
+    "pg-native": "^3.0.0",
     "twitter": "^1.7.1"
   },
   "devDependencies": {
