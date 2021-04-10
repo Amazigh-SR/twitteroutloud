@@ -27,7 +27,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(cors());
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));  // borrowed from this SO response: https://stackoverflow.com/a/61115624
 
 // // !------------------
 // const { createProxyMiddleware } = require("http-proxy-middleware");
@@ -80,7 +80,8 @@ passport.use(
           return cb(null, id);
         })
         .catch((err) => {
-          console.log("Error: ", err);
+          console.log("Error: ", err.message);
+          console.log("User is already in the db")
           return cb(null, id);
         });
     }
@@ -88,6 +89,14 @@ passport.use(
 );
 
 app.use(passport.initialize());
+
+// app.use(function(req, res, next) {
+//   res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+//   res.header('Access-Control-Allow-Credentials', true);
+//   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+//   next();
+// });
+
 
 app.get("/auth", passport.authenticate("twitter"));
 
@@ -106,8 +115,9 @@ app.get(
 );
 
 app.get("/tweets", (req, res) => {
+  console.log(req.headers)
   const userID = req.session.userID;
-  // console.log("UserID: ", userID);
+  console.log("UserID: ", userID);
   const params = { tweet_mode: "extended", count: 2 };
   db.getUserByID(userID).then((rows) => {
     const { token, secret_token } = rows;
