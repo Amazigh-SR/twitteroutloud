@@ -19,7 +19,6 @@ const session = require("express-session");
 const cors = require("cors");
 const Twitter = require("twitter");
 
-
 const indexRouter = require("./routes/index");
 const app = express();
 
@@ -30,6 +29,24 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 
+// // !------------------
+// const { createProxyMiddleware } = require("http-proxy-middleware");
+
+// app.use(
+//   "/tweets",
+//   createProxyMiddleware({
+//     target: "http://localhost:3000/", //original url
+
+//     changeOrigin: true,
+
+//     secure: false,
+
+//     onProxyRes: function (proxyRes, req, res) {
+//       proxyRes.headers["Access-Control-Allow-Origin"] = "*";
+//     },
+//   })
+// );
+
 app.use(
   session({
     secret: "keyboard cat",
@@ -38,6 +55,8 @@ app.use(
     cookie: { secure: false },
   })
 );
+
+app.set("trust proxy", 1);
 
 passport.use(
   new Strategy(
@@ -50,12 +69,24 @@ passport.use(
     function (token, tokenSecret, profile, cb) {
       const { id, emails, photos, username } = profile;
 
-      db.addUser(id, username, emails[0].value, token, tokenSecret, photos[0].value)
-      .then(rows => {
-        console.log(`Successfully added Twitter User: ${rows.twitter_id} to database!`)
-        return cb(null, id);
-      })
-
+      db.addUser(
+        id,
+        username,
+        emails[0].value,
+        token,
+        tokenSecret,
+        photos[0].value
+      )
+        .then((rows) => {
+          console.log(
+            `Successfully added Twitter User: ${rows.twitter_id} to database!`
+          );
+          return cb(null, id);
+        })
+        .catch((err) => {
+          console.log("Error: ", err);
+          return cb(null, id);
+        });
     }
   )
 );
@@ -80,26 +111,27 @@ app.get(
 
 app.get("/tweets", (req, res) => {
   const userID = req.session.userID;
+  // console.log("UserID: ", userID);
   const params = { tweet_mode: "extended", count: 2 };
-  db.getUserById(userID)
-    .then(rows => {
-      const {token, secret_token} = rows;
-      const client = new Twitter({
-        consumer_key: TWITTER_API_KEY,
-        consumer_secret: TWITTER_API_SECRET_KEY,
-        access_token_key: token,
-        access_token_secret: secret_token,
-      });
-      
-        client
-          .get(`statuses/home_timeline`, params)
-          .then((timeline) => {
-            cache = timeline;
-            // console.log("timeline: ", timeline);
-            res.send(timeline);
-          })
-          .catch((error) => res.send(error));
-    })
+  db.getUserByID(userID).then((rows) => {
+    const { token, secret_token } = rows;
+    const client = new Twitter({
+      consumer_key: TWITTER_API_KEY,
+      consumer_secret: TWITTER_API_SECRET_KEY,
+      access_token_key: token,
+      access_token_secret: secret_token,
+    });
+
+    client
+      .get(`statuses/home_timeline`, params)
+      .then((timeline) => {
+        cache = timeline;
+        // console.log("timeline: ", timeline);
+        // res.setHeader("Access-Control-Allow-Credentials", true);
+        res.send(timeline);
+      })
+      .catch((error) => res.send(error));
+  });
 });
 
 app.listen(PORT || 8000, () => {

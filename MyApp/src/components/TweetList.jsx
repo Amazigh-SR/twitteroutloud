@@ -1,4 +1,4 @@
-import { Timeline, Tweet } from 'react-twitter-widgets'
+import { Tweet } from 'react-twitter-widgets'
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 
@@ -7,7 +7,7 @@ export default function TweetList(props){
   const [tweets, setTweets] = useState([])
   
   useEffect(() =>{
-    axios.get('http://localhost:3001/tweets', {withCredentials: true})
+    axios.get('http://localhost:3001/tweets', {withCredentials: true, headers: {"Access-Control-Allow-Origin": "http://localhost:3000/"}})
         .then(tweets => {
           setTweets(tweets.data)
           console.log(tweets.data)
