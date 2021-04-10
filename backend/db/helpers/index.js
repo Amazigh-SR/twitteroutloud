@@ -8,11 +8,9 @@ const createOrFindByTwitterID = function (
   secret_token,
   image_url
 ) {
-  getUserByID(twitter_id).then((rows) => {
-    console.log("rows:", rows);
-    if (rows) {
-      console.log("Got em", rows);
-      return rows;
+  return getUserByID(twitter_id).then((row) => {
+    if (row !== undefined) {
+      return updateUserTokens(twitter_id, token, secret_token)
     } else {
       return addUser(
         twitter_id,
@@ -46,9 +44,35 @@ const addUser = function (
     VALUES ($1, $2, $3, $4, $5, $6)
     RETURNING *;
   `;
-  return db.query(queryString, queryParams).then((res) => res.rows[0]);
+  return db.query(queryString, queryParams).then(res => {
+    console.log(`Successfully added Twitter User: ${twitter_id} to database!`);
+    return res.rows[0]
+  });
 };
 exports.addUser = addUser;
+
+/**
+ * update user tokens if user is already in database
+ * @param 
+ * @returns the new user id.
+ */
+const updateUserTokens = function (
+  twitter_id,
+  token,
+  secret_token
+  ) {
+    queryParams = [twitter_id, token, secret_token];
+    queryString = `
+    UPDATE users SET token = $2, secret_token = $3
+    WHERE twitter_id = $1
+    RETURNING *;
+    `;
+  return db.query(queryString, queryParams).then(res => {
+    console.log(`Updated tokens for Twitter User: ${twitter_id} successfully!`)
+    return res.rows[0]
+  });
+};
+exports.updateUserTokens = updateUserTokens;
 
 /**
  * Query db by twitter_id

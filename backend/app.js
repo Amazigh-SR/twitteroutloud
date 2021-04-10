@@ -69,18 +69,14 @@ passport.use(
     function (token, tokenSecret, profile, cb) {
       const { id, emails, photos, username } = profile;
 
-      db.addUser(
+      db.createOrFindByTwitterID(
         id,
         username,
         emails[0].value,
         token,
         tokenSecret,
         photos[0].value
-      )
-        .then((rows) => {
-          console.log(
-            `Successfully added Twitter User: ${rows.twitter_id} to database!`
-          );
+      ).then(res => {
           return cb(null, id);
         })
         .catch((err) => {
