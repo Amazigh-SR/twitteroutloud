@@ -5,20 +5,25 @@ const logger = require("morgan");
 const passport = require("passport");
 const { Strategy } = require("passport-twitter");
 const session = require("express-session");
+const cors = require("cors");
+
 // load .env data into process.env
 require("dotenv").config();
-const { PORT, TWITTER_API_SECRET_KEY, TWITTER_API_KEY, ACCESS_TOKEN_SECRET, ACCESS_TOKEN } = process.env;
+let {
+  PORT,
+  TWITTER_API_SECRET_KEY,
+  TWITTER_API_KEY,
+  ACCESS_TOKEN_SECRET,
+  ACCESS_TOKEN,
+} = process.env;
 const Twitter = require("twitter");
 
 const client = new Twitter({
   consumer_key: TWITTER_API_KEY,
   consumer_secret: TWITTER_API_SECRET_KEY,
   access_token_key: ACCESS_TOKEN,
-  access_token_secret: ACCESS_TOKEN_SECRET
+  access_token_secret: ACCESS_TOKEN_SECRET,
 });
-
-
-
 
 const indexRouter = require("./routes/index");
 const app = express();
@@ -28,7 +33,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(cors());
 
+// client = new Twitter({
+//   consumer_key: TWITTER_API_KEY,
+//   consumer_secret: TWITTER_API_SECRET_KEY,
+//   access_token_key: null,
+//   access_token_secret: null,
+// });
 // app.use("/", indexRouter);
 // app.use("/users", usersRouter);
 
@@ -54,11 +66,16 @@ passport.use(
     function (token, tokenSecret, profile, cb) {
       const { id, emails } = profile;
 
-      console.log("id: ", id)
-      console.log("emails: ", emails)
+      client.access_token_key = token;
+      client.access_token_secret = tokenSecret;
+
+      console.log("token: " + token);
+      console.log("tokenSecret: " + tokenSecret);
+      console.log("id: ", id);
+      console.log("emails: ", emails);
       // console.log(profile);
       // User.findOrCreate({ twitterId: profile.id }, function (err, user) {
-        return cb(null, id);
+      return cb(null, id);
       // });
     }
   )
@@ -76,8 +93,8 @@ app.get(
   }),
   function (req, res) {
     // console.log("req.session.userID: ", req.session.userID)
-    console.log("req.user: ", req.user)
-    // console.log("req: ", req)
+    console.log("req.user: ", req.user);
+    // console.log("req: ", req);
     req.session.userID = req.user;
     // Successful authentication, redirect home.
     res.redirect("http://localhost:3000/");
@@ -85,22 +102,27 @@ app.get(
   }
 );
 
+app.get("/tweets", (req, res) => {
+  const params = { tweet_mode: "extended", count: 2 };
 
-app.get("/tweets", (req,res) => {
-  const params = { tweet_mode: 'extended', count: 5 };
-  
+  // const client = new Twitter({
+  //   consumer_key: TWITTER_API_KEY,
+  //   consumer_secret: TWITTER_API_SECRET_KEY,
+  //   access_token_key: ACCESS_TOKEN,
+  //   access_token_secret: ACCESS_TOKEN_SECRET,
+  // });
+
+  console.log("tweets req: ", req);
+
   client
     .get(`statuses/home_timeline`, params)
-    .then(timeline => {
+    .then((timeline) => {
       cache = timeline;
-      console.log("timeline: ", timeline)
+      // console.log("timeline: ", timeline);
       res.send(timeline);
     })
-    .catch(error => res.send(error));
-})
-
-
-
+    .catch((error) => res.send(error));
+});
 
 app.listen(PORT || 8000, () => {
   console.log(`Example app listening on port ${PORT}`);
