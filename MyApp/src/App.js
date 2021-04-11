@@ -15,6 +15,7 @@ function App() {
   const [userAccess, setUserAccess] = useState(
     isLoggedIn === "true" ? true : false
   );
+  const [tweets, setTweets] = useState([])
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -42,11 +43,11 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Speech />
+        <Speech tweets={tweets} setTweets={setTweets}/>
         <Header userAccess={userAccess} setUserAccess={setUserAccess} />
         {!userAccess && <Auth />}
         {/* <Pull /> */}
-        {userAccess && <TweetList />}
+        {userAccess && <TweetList tweets={tweets} setTweets={setTweets}/>}
       </header>
     </div>
   );

@@ -1,10 +1,10 @@
 import { Tweet } from 'react-twitter-widgets'
-import {useEffect, useState} from 'react';
+import { useEffect } from 'react';
 import axios from 'axios';
 
 
 export default function TweetList(props){
-  const [tweets, setTweets] = useState([])
+  const { tweets, setTweets } = props;
   
   useEffect(() =>{
     axios.get(`${process.env.REACT_APP_BACK_END_HOST}/tweets`, {withCredentials: true, headers: {"Access-Control-Allow-Origin": process.env.REACT_APP_FRONT_END_HOST}})
