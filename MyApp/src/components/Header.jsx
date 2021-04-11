@@ -17,7 +17,7 @@ export default function Header(props) {
     
     <div className="signInOrOut">
 
-    {!props.userAccess && <a href={`${process.env.REACT_APP_BACK_END_HOST}/auth`}><img src="../../sign-in-with-twitter-link.png" alt="Sign in with Twitter" /></a>}
+    {!props.userAccess && <a href={`${process.env.REACT_APP_BACK_END_HOST}/auth`}><button className="btn btn-primary logout" ><i class="bi bi-twitter"></i> Sign in with Twitter</button></a>}
 
     {props.userAccess && <button onClick={()=>deleteSession()} className="btn btn-primary logout">Logout 👋</button>}
 

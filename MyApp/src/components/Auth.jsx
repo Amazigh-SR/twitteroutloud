@@ -11,7 +11,7 @@ export default function Auth() {
       <li>Powered by coffee</li>
 
       </ul>
-      <a href="http://localhost:3001/auth"><img src="../../sign-in-with-twitter.png" alt="Sign in with Twitter" /></a>
+      <a href="http://localhost:3001/auth"><button className="btn btn-primary logout" ><i class="bi bi-twitter"></i> Sign in with Twitter</button></a>
     </div>
   );
 }
