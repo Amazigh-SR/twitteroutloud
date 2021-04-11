@@ -4,11 +4,11 @@ import { useEffect } from 'react';
 export default function Header(props) {
 
   const deleteSession = function() {
-    console.log("I am delet")
     axios.delete('http://localhost:3001/session', {withCredentials: true, headers: {"Access-Control-Allow-Origin": "http://localhost:3000/"}})
     .then(res => {
       console.log(res)
       props.setUserAccess(false);
+      localStorage.removeItem('isLoggedIn')
     })
     .catch(err => console.error(err))
   };
