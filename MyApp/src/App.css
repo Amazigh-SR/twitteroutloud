@@ -19,7 +19,10 @@
   margin: 10px;
   border: 1px solid var(--twitter-blue);
   border-radius: 11px;
-  width: 74%;
+  width: 56%;
+  padding: 29px;
+  padding-bottom: 10px;
+  line-height: 60px;
 }
 
 .speechComponent {
