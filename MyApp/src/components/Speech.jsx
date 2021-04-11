@@ -4,8 +4,15 @@ import { speechSynthesis } from "../helpers/speechSynthesis";
 import mockData from "../helpers/mockData";
 
 export default function Speech(props) {
-  {
-    speechSynthesis(mockData[0]);
-  }
-  return <div>Hey, I'm talking here!</div>;
+  const { tweets, setTweets } = props;
+  const onClick = function() {
+    speechSynthesis(tweets[0])
+  };
+
+  return (
+  <div>
+    <div>Look who's talkin' now...</div>
+    <button onClick={()=>onClick()}>Let's make some noise!</button>
+  </div>
+  );
 }
