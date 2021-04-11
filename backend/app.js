@@ -6,6 +6,8 @@ let {
   TWITTER_API_KEY,
   ACCESS_TOKEN_SECRET,
   ACCESS_TOKEN,
+  FRONT_END_PATH,
+  BACK_END_PATH,
 } = process.env;
 
 const db = require("./db/helpers/index");
@@ -18,8 +20,10 @@ const { Strategy } = require("passport-twitter");
 const session = require("express-session");
 const cors = require("cors");
 const Twitter = require("twitter");
+const Cookies = require("js-cookie");
 
 const indexRouter = require("./routes/index");
+const { Cookie } = require("express-session");
 const app = express();
 
 app.use(logger("dev"));
@@ -27,7 +31,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));  // borrowed from this SO response: https://stackoverflow.com/a/61115624
+app.use(cors({ credentials: true, origin: FRONT_END_PATH })); // borrowed from this SO response: https://stackoverflow.com/a/61115624
 
 // // !------------------
 // const { createProxyMiddleware } = require("http-proxy-middleware");
@@ -49,10 +53,11 @@ app.use(cors({ credentials: true, origin: "http://localhost:3000" }));  // borro
 
 app.use(
   session({
-    secret: "keyboard cat",
+    name: "qid",
+    secret: "keyboard cat", //add to env
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false },
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 7 }, // 7 days
   })
 );
 
@@ -63,7 +68,7 @@ passport.use(
     {
       consumerKey: TWITTER_API_KEY,
       consumerSecret: TWITTER_API_SECRET_KEY,
-      callbackURL: "http://localhost:3001/auth/callback",
+      callbackURL: BACK_END_PATH + "/auth/callback",
       includeEmail: true,
     },
     function (token, tokenSecret, profile, cb) {
@@ -76,12 +81,13 @@ passport.use(
         token,
         tokenSecret,
         photos[0].value
-      ).then(res => {
+      )
+        .then((res) => {
           return cb(null, id);
         })
         .catch((err) => {
           console.log("Error: ", err.message);
-          console.log("User is already in the db")
+          console.log("User is already in the db");
           return cb(null, id);
         });
     }
@@ -97,25 +103,27 @@ app.use(passport.initialize());
 //   next();
 // });
 
-
 app.get("/auth", passport.authenticate("twitter"));
 
 app.get(
   "/auth/callback",
   passport.authenticate("twitter", {
-    failureRedirect: "http://localhost:3000/login",
+    failureRedirect: FRONT_END_PATH + "/login",
     session: false,
   }),
   function (req, res) {
     req.session.userID = req.user;
+    res.cookie("userAccess", "loggedIn", { maxAge: 900000 });
+    // Cookies.set("userAccess", "loggedIn");
     // Successful authentication, redirect home.
-    res.redirect("http://localhost:3000/");
+    res.redirect(FRONT_END_PATH);
     // res.send("ok");
   }
 );
 
 app.get("/tweets", (req, res) => {
-  console.log(req.headers)
+  console.log("req.cookies: ", req.cookies);
+  console.log(req.headers);
   const userID = req.session.userID;
   console.log("UserID: ", userID);
   const params = { tweet_mode: "extended", count: 2 };
