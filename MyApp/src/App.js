@@ -6,8 +6,6 @@ import Auth from "./components/Auth";
 import Header from "./components/Header";
 import Pull from "./components/Pull";
 import TweetList from "./components/TweetList";
-import Cookies from "js-cookie";
-
 
 function App() {
 

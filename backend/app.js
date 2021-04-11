@@ -13,7 +13,6 @@ const express = require("express");
 const logger = require("morgan");
 const cookieParser = require("cookie-parser");
 const cookieSession = require('cookie-session');
-// const session = require("express-session");
 const cors = require("cors");
 
 const path = require("path");
@@ -33,21 +32,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cors({ credentials: true, origin: FRONT_END_PATH })); // borrowed from this SO response: https://stackoverflow.com/a/61115624
 
-// app.use(
-//   session({
-//     name: "qid",
-//     secret: "keyboard cat", //add to env
-//     resave: false,
-//     saveUninitialized: true,
-//     cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 7 }, // 7 days
-//   })
-// );
-
 app.set("trust proxy", 1);
 
 app.use(cookieSession({
   name: 'session',
-  keys: ['key1', 'key2'],
+  keys: ['key1', 'key2'], //? these keys should be .env
   maxAge: 7 * 24 * 60 * 60 * 1000 //7 days
 }));
 
@@ -75,8 +64,7 @@ passport.use(
         })
         .catch((err) => {
           console.log("Error: ", err.message);
-          console.log("User is already in the db");
-          return cb(null, id);
+          return cb(null, id); //! revisit the removal of this?
         });
     }
   )
@@ -84,7 +72,7 @@ passport.use(
 
 app.use(passport.initialize());
 
-app.get("/auth", passport.authenticate("twitter"));
+app.get("/auth", passport.authenticate("twitter")); //? auth router?
 
 app.get(
   "/auth/callback",
@@ -94,16 +82,12 @@ app.get(
   }),
   function (req, res) {
     req.session.userID = req.user;
-    req.session.userAccess = "loggedIn";
-
-    res.cookie("userAccess", "loggedIn", { maxAge: 900000 });
-
     // Successful authentication, redirect home.
     res.redirect(FRONT_END_PATH);
   }
 );
 
-app.get("/validate", (req, res) => {
+app.get("/validate", (req, res) => { //? /session/validate => session router?
   const userID = req.session && req.session.userID;
   
   db.getUserByID(userID)
@@ -121,9 +105,6 @@ app.delete('/session', (req, res) => {
 })
 
 app.get("/tweets", (req, res) => {
-  console.log("Req.session.userID: ", req.session.userID)
-  console.log("Req.session.userAccess: ", req.session.userAccess)
-
   const userID = req.session.userID;
 
   db.getUserByID(userID).then((rows) => {
