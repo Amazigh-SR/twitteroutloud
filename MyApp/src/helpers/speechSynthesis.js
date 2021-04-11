@@ -1,15 +1,14 @@
 // Import mock data - tested and validated
-const mockData = require("./mockData");
+// const mockData = require("./mockData");
 const checkSpeechSynthesis = require("./checkSpeechSynthesis");
 const fetchEnVoices = require("./fetchEnVoices");
-const speechSettings = require("./speechSettings");
+// const speechSettings = require("./speechSettings");
 
 //-----------------------------------------------//
 
 const speechSynthesis = function (tweetObject) {
   const tweetText = tweetObject.full_text;
   const name = tweetObject.user.name;
-
   const finalFormMessage = `${name} tweets ${tweetText}`;
 
   //Check browser support
@@ -26,10 +25,12 @@ const speechSynthesis = function (tweetObject) {
   //Generate the voice for a given text
   const utterance = new SpeechSynthesisUtterance(finalFormMessage);
 
-  //Static settings
+  // speechSettings(utterance, settings);
+
+  // Static settings
   utterance.voice = voices[0];
-  utterance.pitch = 1.5;
-  utterance.rate = 1;
+  utterance.pitch = 1;
+  utterance.rate = 0.9;
   utterance.volume = 0.8;
 
   // Function that calls the speak method to generate audio for a given message
