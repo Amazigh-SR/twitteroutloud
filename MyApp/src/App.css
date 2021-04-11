@@ -9,6 +9,23 @@
   --twitter-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
+.player {
+  background-color: white;
+  color: var(--twitter-blue);;
+  border: 1px solid var(--twitter-blue);
+}
+
+.settingsComponent {
+  margin: 10px;
+  border: 1px solid var(--twitter-blue);
+  border-radius: 11px;
+  width: 74%;
+}
+
+.speechComponent {
+  margin-top: 12px;
+}
+
 .App {
   text-align: center;
   font-family: var(--twitter-font);
