@@ -1,31 +1,31 @@
-// load .env data into process.env
 require("dotenv").config();
 let {
   PORT,
   TWITTER_API_SECRET_KEY,
   TWITTER_API_KEY,
-  ACCESS_TOKEN_SECRET,
-  ACCESS_TOKEN,
+  ACCESS_TOKEN_SECRET,  //? is this necessary?
+  ACCESS_TOKEN,         //? is this necessary?
   FRONT_END_PATH,
   BACK_END_PATH,
 } = process.env;
 
-const db = require("./db/helpers/index");
 const express = require("express");
-const path = require("path");
-const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const cookieParser = require("cookie-parser");
+const cookieSession = require('cookie-session');
+// const session = require("express-session");
+const cors = require("cors");
+
+const path = require("path");
+
 const passport = require("passport");
 const { Strategy } = require("passport-twitter");
-const session = require("express-session");
-const cors = require("cors");
 const Twitter = require("twitter");
-const Cookies = require("js-cookie");
 
-const indexRouter = require("./routes/index");
-const { Cookie } = require("express-session");
+const db = require("./db/helpers/index");
+
+
 const app = express();
-
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -33,35 +33,23 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cors({ credentials: true, origin: FRONT_END_PATH })); // borrowed from this SO response: https://stackoverflow.com/a/61115624
 
-// // !------------------
-// const { createProxyMiddleware } = require("http-proxy-middleware");
-
 // app.use(
-//   "/tweets",
-//   createProxyMiddleware({
-//     target: "http://localhost:3000/", //original url
-
-//     changeOrigin: true,
-
-//     secure: false,
-
-//     onProxyRes: function (proxyRes, req, res) {
-//       proxyRes.headers["Access-Control-Allow-Origin"] = "*";
-//     },
+//   session({
+//     name: "qid",
+//     secret: "keyboard cat", //add to env
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 7 }, // 7 days
 //   })
 // );
 
-app.use(
-  session({
-    name: "qid",
-    secret: "keyboard cat", //add to env
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 7 }, // 7 days
-  })
-);
-
 app.set("trust proxy", 1);
+
+app.use(cookieSession({
+  name: 'session',
+  keys: ['key1', 'key2'],
+  maxAge: 7 * 24 * 60 * 60 * 1000 //7 days
+}));
 
 passport.use(
   new Strategy(
@@ -96,13 +84,6 @@ passport.use(
 
 app.use(passport.initialize());
 
-// app.use(function(req, res, next) {
-//   res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-//   res.header('Access-Control-Allow-Credentials', true);
-//   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-//   next();
-// });
-
 app.get("/auth", passport.authenticate("twitter"));
 
 app.get(
@@ -113,20 +94,38 @@ app.get(
   }),
   function (req, res) {
     req.session.userID = req.user;
+    req.session.userAccess = "loggedIn";
+
     res.cookie("userAccess", "loggedIn", { maxAge: 900000 });
-    // Cookies.set("userAccess", "loggedIn");
+
     // Successful authentication, redirect home.
     res.redirect(FRONT_END_PATH);
-    // res.send("ok");
   }
 );
 
+app.get("/validate", (req, res) => {
+  const userID = req.session && req.session.userID;
+  
+  db.getUserByID(userID)
+  .then(row => {
+    if (row) {
+      return res.send("valid"); //! this is an opportunity to send back the full profile
+    }
+    return res.send("invalid");
+  })
+})
+
+app.delete('/session', (req, res) => {
+  req.session.userID = null; 
+  res.send()
+})
+
 app.get("/tweets", (req, res) => {
-  console.log("req.cookies: ", req.cookies);
-  console.log(req.headers);
+  console.log("Req.session.userID: ", req.session.userID)
+  console.log("Req.session.userAccess: ", req.session.userAccess)
+
   const userID = req.session.userID;
-  console.log("UserID: ", userID);
-  const params = { tweet_mode: "extended", count: 2 };
+
   db.getUserByID(userID).then((rows) => {
     const { token, secret_token } = rows;
     const client = new Twitter({
@@ -135,13 +134,14 @@ app.get("/tweets", (req, res) => {
       access_token_key: token,
       access_token_secret: secret_token,
     });
-
+    
+    const params = { tweet_mode: "extended", count: 2 };
+    
     client
       .get(`statuses/home_timeline`, params)
       .then((timeline) => {
         cache = timeline;
-        // console.log("timeline: ", timeline);
-        // res.setHeader("Access-Control-Allow-Credentials", true);
+
         res.send(timeline);
       })
       .catch((error) => res.send(error));
