@@ -3,8 +3,8 @@ let {
   PORT,
   TWITTER_API_SECRET_KEY,
   TWITTER_API_KEY,
-  ACCESS_TOKEN_SECRET,  //? is this necessary?
-  ACCESS_TOKEN,         //? is this necessary?
+  ACCESS_TOKEN_SECRET, //? is this necessary?
+  ACCESS_TOKEN, //? is this necessary?
   FRONT_END_PATH,
   BACK_END_PATH,
 } = process.env;
@@ -12,7 +12,7 @@ let {
 const express = require("express");
 const logger = require("morgan");
 const cookieParser = require("cookie-parser");
-const cookieSession = require('cookie-session');
+const cookieSession = require("cookie-session");
 const cors = require("cors");
 
 const path = require("path");
@@ -22,7 +22,6 @@ const { Strategy } = require("passport-twitter");
 const Twitter = require("twitter");
 
 const db = require("./db/helpers/index");
-
 
 const app = express();
 app.use(logger("dev"));
@@ -34,11 +33,13 @@ app.use(cors({ credentials: true, origin: FRONT_END_PATH })); // borrowed from t
 
 app.set("trust proxy", 1);
 
-app.use(cookieSession({
-  name: 'session',
-  keys: ['key1', 'key2'], //? these keys should be .env
-  maxAge: 7 * 24 * 60 * 60 * 1000 //7 days
-}));
+app.use(
+  cookieSession({
+    name: "session",
+    keys: ["key1", "key2"], //? these keys should be .env
+    maxAge: 7 * 24 * 60 * 60 * 1000, //7 days
+  })
+);
 
 passport.use(
   new Strategy(
@@ -87,22 +88,22 @@ app.get(
   }
 );
 
-app.get("/validate", (req, res) => { //? /session/validate => session router?
+app.get("/validate", (req, res) => {
+  //? /session/validate => session router?
   const userID = req.session && req.session.userID;
-  
-  db.getUserByID(userID)
-  .then(row => {
+
+  db.getUserByID(userID).then((row) => {
     if (row) {
       return res.send("valid"); //! this is an opportunity to send back the full profile
     }
     return res.send("invalid");
-  })
-})
+  });
+});
 
-app.delete('/session', (req, res) => {
-  req.session.userID = null; 
-  res.send()
-})
+app.delete("/session", (req, res) => {
+  req.session.userID = null;
+  res.send();
+});
 
 app.get("/tweets", (req, res) => {
   const userID = req.session.userID;
@@ -115,9 +116,9 @@ app.get("/tweets", (req, res) => {
       access_token_key: token,
       access_token_secret: secret_token,
     });
-    
-    const params = { tweet_mode: "extended", count: 2 };
-    
+
+    const params = { tweet_mode: "extended", count: 5 };
+
     client
       .get(`statuses/home_timeline`, params)
       .then((timeline) => {
