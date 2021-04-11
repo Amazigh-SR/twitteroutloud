@@ -7,6 +7,8 @@ import Header from "./components/Header";
 import Pull from "./components/Pull";
 import TweetList from "./components/TweetList";
 import Speech from "./components/Speech";
+import Loading from "./components/Loading";
+import Settings from "./components/Settings";
 
 function App() {
   console.log(process.env.REACT_APP_FRONT_END_HOST);
@@ -15,7 +17,7 @@ function App() {
   const [userAccess, setUserAccess] = useState(
     isLoggedIn === "true" ? true : false
   );
-  const [tweets, setTweets] = useState([])
+  const [tweets, setTweets] = useState([]);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -43,11 +45,13 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Speech tweets={tweets} setTweets={setTweets}/>
         <Header userAccess={userAccess} setUserAccess={setUserAccess} />
+        {/* <Loading /> */}
+        {userAccess && <Speech tweets={tweets} setTweets={setTweets} />}
+        <Settings />
         {!userAccess && <Auth />}
         {/* <Pull /> */}
-        {userAccess && <TweetList tweets={tweets} setTweets={setTweets}/>}
+        {userAccess && <TweetList tweets={tweets} setTweets={setTweets} />}
       </header>
     </div>
   );
