@@ -8,13 +8,14 @@ import Pull from "./components/Pull";
 import TweetList from "./components/TweetList";
 
 function App() {
+  console.log(process.env.REACT_APP_FRONT_END_HOST)
   const isLoggedIn = localStorage.getItem('isLoggedIn') || false;
   
   const [userAccess, setUserAccess] = useState(isLoggedIn === "true" ? true : false);
   
   useEffect(() =>{
     if (!isLoggedIn){
-      axios.get('http://localhost:3001/validate', {withCredentials: true, headers: {"Access-Control-Allow-Origin": "http://localhost:3000/"}})
+      axios.get(`${process.env.REACT_APP_BACK_END_HOST}/validate`, {withCredentials: true, headers: {"Access-Control-Allow-Origin": process.env.REACT_APP_FRONT_END_HOST}})
         .then(res => {
           console.log(res.data)
           if (res.data === "valid") {

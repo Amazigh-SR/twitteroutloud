@@ -1,10 +1,9 @@
 import axios from 'axios';
-import { useEffect } from 'react';
 
 export default function Header(props) {
 
   const deleteSession = function() {
-    axios.delete('http://localhost:3001/session', {withCredentials: true, headers: {"Access-Control-Allow-Origin": "http://localhost:3000/"}})
+    axios.delete(`${process.env.REACT_APP_BACK_END_HOST}/session`, {withCredentials: true, headers: {"Access-Control-Allow-Origin": process.env.REACT_APP_FRONT_END_HOST}})
     .then(res => {
       console.log(res)
       props.setUserAccess(false);
@@ -18,7 +17,7 @@ export default function Header(props) {
     
     <div className="signInOrOut">
 
-    {!props.userAccess && <a href="http://localhost:3001/auth"><img src="../../sign-in-with-twitter-link.png" alt="Sign in with Twitter" /></a>}
+    {!props.userAccess && <a href={`${process.env.REACT_APP_BACK_END_HOST}/auth`}><img src="../../sign-in-with-twitter-link.png" alt="Sign in with Twitter" /></a>}
 
     {props.userAccess && <button onClick={()=>deleteSession()} className="btn btn-primary logout">Logout 👋</button>}
 

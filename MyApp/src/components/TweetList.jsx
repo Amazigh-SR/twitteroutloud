@@ -7,7 +7,7 @@ export default function TweetList(props){
   const [tweets, setTweets] = useState([])
   
   useEffect(() =>{
-    axios.get('http://localhost:3001/tweets', {withCredentials: true, headers: {"Access-Control-Allow-Origin": "http://localhost:3000/"}})
+    axios.get(`${process.env.REACT_APP_BACK_END_HOST}/tweets`, {withCredentials: true, headers: {"Access-Control-Allow-Origin": process.env.REACT_APP_FRONT_END_HOST}})
         .then(tweets => {
           setTweets(tweets.data)
           console.log(tweets.data)
