@@ -8,16 +8,25 @@ import Pull from "./components/Pull";
 import TweetList from "./components/TweetList";
 
 function App() {
-
-  const [userAccess, setUserAccess] = useState(false);
-
+  const isLoggedIn = localStorage.getItem('isLoggedIn') || false;
+  
+  const [userAccess, setUserAccess] = useState(isLoggedIn === "true" ? true : false);
+  
   useEffect(() =>{
-    axios.get('http://localhost:3001/validate', {withCredentials: true, headers: {"Access-Control-Allow-Origin": "http://localhost:3000/"}})
+    if (!isLoggedIn){
+      axios.get('http://localhost:3001/validate', {withCredentials: true, headers: {"Access-Control-Allow-Origin": "http://localhost:3000/"}})
         .then(res => {
-          res.data === "valid" ? setUserAccess(true) : setUserAccess(false);
           console.log(res.data)
+          if (res.data === "valid") {
+            setUserAccess(true);
+            localStorage.setItem('isLoggedIn', true);
+          } else {
+            setUserAccess(false);
+            localStorage.removeItem('isLoggedIn');
+          }
         })
         .catch(err => console.error(err))
+      }
   }, [])
 
   return (
