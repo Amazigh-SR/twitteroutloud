@@ -1,40 +1,30 @@
 /* borrowed from https://codepen.io/ksksoft/pen/lsqEo */
-.eight {
-  background-image: url('https://upload.wikimedia.org/wikipedia/fr/c/c8/Twitter_Bird.svg');
-	margin: 4em auto;
-	width: 8em;
-	height: 8em;
+
+.loading {
+  display: flex;
+  justify-content: center;
+  color: #1DA1F2;
+}
+
+.circle{
 	position: relative;
-	-webkit-transform-origin: center center 0;
-	transform-origin: center center 0;
-	-webkit-animation: flip 5s infinite step-end;
-	animation: flip 5s infinite step-end;
+	top:10;
+	left:0;
+	width: 2em;
+	height: 14em;
+	animation: roll 2s infinite linear;
 }
-.eight:before {
-	content: "";
-	display: block;
-	position: absolute;
-	top:0;
-	left:3.5em;
-	width: 1em;
-	height: 4em;
-	box-shadow:0 -0.5em 0 0 #fff,0 0.5em 0 0 #fff inset;
-	-webkit-transform-origin: center bottom 0;
-	transform-origin: center bottom 0;
-	-webkit-animation: roll 5s infinite linear;
-	animation: roll 5s infinite linear;
+.top {
+  transform-origin: center bottom 0;
+  animation-delay: -1.5s;
 }
+
+.bottom {
+  transform-origin: center top 0;
+}
+
 @keyframes roll {
-	100% { transform: rotateZ(-2turn); }
-}
-@-webkit-keyframes roll {
-	100% { -webkit-transform: rotateZ(-2turn); }
-}
-@keyframes flip {
-	25% { transform: rotateX(0.5turn) translate(0,-8em); }
-	75% { transform: rotateX(0turn); }
-}
-@-webkit-keyframes flip {
-	25% { -webkit-transform: rotateX(0.5turn) translate(0,-8em); }
-	75% { -webkit-transform: rotateX(0turn); }
+	100% { 
+    transform: rotateZ(1turn);
+  }
 }

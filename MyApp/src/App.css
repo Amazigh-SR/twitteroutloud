@@ -96,7 +96,7 @@ li:before { content: '✓'; margin-left: -20px; margin-right: 10px; }
 
 .App-header {
   /* background-color: #282c34; */
-  min-height: 100vh;
+  /* min-height: 100vh; */ /*! what does this line do? can we get rid of it? it causes weird popping in and out*/
   display: flex;
   flex-direction: column;
   align-items: center;
