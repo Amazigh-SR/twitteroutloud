@@ -1,17 +1,18 @@
 :root {
-  --twitter-blue: #1DA1F2;
-  --twitter-black: #14171A;
+  --twitter-blue: #1da1f2;
+  --twitter-black: #14171a;
   --twitter-dark-gray: #657786;
-  --twitter-light-light-gray: #AAB8C2;
-  --twitter-light-extra-light-gray: #E1E8ED;
-  --twitter-light-extra-extra-light-gray: #F5F8FA;
-  --twitter-white: #FFFFFF;
-  --twitter-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --twitter-light-light-gray: #aab8c2;
+  --twitter-light-extra-light-gray: #e1e8ed;
+  --twitter-light-extra-extra-light-gray: #f5f8fa;
+  --twitter-white: #ffffff;
+  --twitter-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
 }
 
 .player {
   background-color: white;
-  color: var(--twitter-blue);;
+  color: var(--twitter-blue);
   border: 1px solid var(--twitter-blue);
 }
 
@@ -29,7 +30,7 @@
 .App {
   text-align: center;
   font-family: var(--twitter-font);
-  background-color: var(--twitter-light-extra-extra-light-gray)
+  background-color: var(--twitter-light-extra-extra-light-gray);
 }
 
 nav {
@@ -43,7 +44,6 @@ nav {
   top: 0; /* Position the navbar at the top of the page */
   /* background-color: var(--twitter-light-extra-light-gray); */
   opacity: 1;
-
 }
 
 div.auth-container {
@@ -67,27 +67,28 @@ button.logout {
 .tweetComponent {
   width: 100% !important;
   display: flex;
-  justify-content:center;
+  justify-content: center;
   flex-direction: column;
   max-width: fit-content;
   /* margin-top: 81px; Add a top margin to avoid content overlay */
 }
-
-
 
 h1 {
   color: var(--twitter-blue);
 }
 
 li {
-  margin-top: .5rem;
-  margin-bottom: .5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
   display: list-item;
   text-align: left;
   list-style-type: none;
 }
-li:before { content: '✓'; margin-left: -20px; margin-right: 10px; } 
-
+li:before {
+  content: "✓";
+  margin-left: -20px;
+  margin-right: 10px;
+}
 
 .App-header {
   /* background-color: #282c34; */
