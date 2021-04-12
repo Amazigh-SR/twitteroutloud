@@ -70,9 +70,9 @@ function App() {
       <header className="App-header">
         <Header userAccess={userAccess} setUserAccess={setUserAccess} />
         {loading && <Loading>Loading app!</Loading>}
-        {!loading && userAccess && (
+        {!loading && userAccess && 
           <Speech tweets={tweets} setTweets={setTweets} />
-        )}
+        }
         {!loading && !userAccess && <Auth />}
         {!loading && userAccess && <TweetList tweets={tweets} />}
       </header>

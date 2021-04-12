@@ -1,7 +1,6 @@
-import {useState, useEffect} from 'react'
+import { useEffect } from 'react'
 import "../App.css";
-import fetchEnVoices from "../helpers/fetchEnVoices.js"
-// MyApp/src/helpers/fetchEnVoices.js
+
 export default function Settings(props) {
   console.log("props: ", props);
 
@@ -13,28 +12,42 @@ export default function Settings(props) {
     }));
   }
 
-  useEffect(() =>{loadVoices()})
-
-  function loadVoices() {
-    // Get the voice select element.
-    var voiceSelect = document.getElementById('voice');
-    // Fetch the available voices.
-    const voices = fetchEnVoices(window.speechSynthesis);
-    
-    // Loop through each of the voices.
-    voices.forEach(function(voice, i) {
-      // Create a new option element.
-      var option = document.createElement('option');
-      
-      // Set the options value and text.
-      option.value = voice.name;
-      option.innerHTML = voice.name;
-      option.voiceId = i
-        
-      // Add the option to the voice selector.
-      voiceSelect.appendChild(option);
-    });
+  function handleVoiceChange(evt) {
+    const voice = props.voices.find(voice => voice.name === evt.target.value);
+    props.setSettings((prev) => ({
+      ...prev, 
+      [evt.target.name]: voice,
+    }))
   }
+
+  const voiceNameList = props.voices.map((voice, index) => {
+    return (
+      <option value={voice.name} key={index}>{voice.name}</option>
+    )
+  })
+
+  // useEffect(() =>{loadVoices()})
+
+  // function loadVoices() {
+  //   // Get the voice select element.
+  //   const voiceSelect = document.getElementById('voice');
+  //   // Fetch the available voices.
+  //   const voices = fetchEnVoices(window.speechSynthesis);
+    
+  //   // Loop through each of the voices.
+  //   voices.forEach(function(voice, i) {
+  //     // Create a new option element.
+  //     const option = document.createElement('option');
+      
+  //     // Set the options value and text.
+  //     option.value = voice.name;
+  //     option.innerHTML = voice.name;
+  //     option.voiceId = i
+        
+  //     // Add the option to the voice selector.
+  //     voiceSelect.appendChild(option);
+  //   });
+  // }
   // Execute loadVoices.
 
   
@@ -65,8 +78,9 @@ export default function Settings(props) {
   return (
     <div className="settingsComponent">
       <div class="option">
-        <label for="voice">Voice</label>
-        <select name="voice" id="voice" onChange={handleChange}>
+        <label for="voice">Voice </label>
+        <select name="voice" id="voice" onChange={handleVoiceChange}>
+          {voiceNameList}
         </select>
       </div>
 

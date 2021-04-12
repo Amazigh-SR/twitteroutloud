@@ -1,19 +1,22 @@
 // import checkSpeechSynthesis from "../helpers/checkSpeechSynthesis";
-// import fetchEnVoices from "../helpers/fetchEnVoices";
 
 import { speechSynthesis } from "../helpers/speechSynthesis";
 import Settings from "./Settings";
 import mockData from "../helpers/mockData";
 import { useState, Fragment, useEffect } from "react";
+import fetchEnVoices from "../helpers/fetchEnVoices.js"
 
 export default function Speech(props) {
-  const { tweets, setTweets } = props;
+  const voices = fetchEnVoices(window.speechSynthesis);
+
+  const { tweets } = props;
   const [settings, setSettings] = useState({
-    voiceId: 1,
+    voice: voices[0],
     volume: 5,
     rate: 1,
     pitch: 1,
   });
+
 
   let currentTweet = 0;
   console.log("SETTINGS---->", settings);
@@ -74,7 +77,7 @@ export default function Speech(props) {
           </button>
         </div>
       </div>
-      <Settings settings={settings} setSettings={setSettings} />
+      <Settings settings={settings} setSettings={setSettings} voices={voices}/>
     </>
   );
 }

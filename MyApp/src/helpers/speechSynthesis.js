@@ -11,7 +11,7 @@ const speechSynthesis = function (tweetObject, settings) {
   const tweetText = tweetObject.full_text;
   const name = tweetObject.user.name;
   const finalFormMessage = `${name} tweets ${tweetText}`;
-  const { voiceId, pitch, rate, volume } = settings; //voiceId b/w 1 & 17.
+  const { voice, pitch, rate, volume } = settings; //voiceId b/w 1 & 17.
 
   //Check browser support
   if (!checkSpeechSynthesis()) {
@@ -29,7 +29,7 @@ const speechSynthesis = function (tweetObject, settings) {
   const utterance = new SpeechSynthesisUtterance(finalFormMessage);
 
   // Static settings
-  utterance.voice = voices[voiceId];
+  utterance.voice = voice;
   utterance.pitch = pitch;
   utterance.rate = rate;
   utterance.volume = volume;
