@@ -7,7 +7,7 @@ export default function Settings(props) {
     const value = Number(evt.target.value);
     props.setSettings((prev) => ({
       ...prev,
-      [evt.target.name]: parseFloat(value),
+      [evt.target.name]: (value),
     }));
   }
 
