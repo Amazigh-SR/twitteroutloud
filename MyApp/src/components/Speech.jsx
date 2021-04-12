@@ -1,10 +1,10 @@
 // import checkSpeechSynthesis from "../helpers/checkSpeechSynthesis";
 // import fetchEnVoices from "../helpers/fetchEnVoices";
 import { speechSynthesis } from "../helpers/speechSynthesis";
-import mockData from "../helpers/mockData";
+// import mockData from "../helpers/mockData";
 
 export default function Speech(props) {
-  const { tweets, setTweets } = props;
+  const { tweets } = props;
   
   let currentTweet = 0
   

@@ -5,7 +5,7 @@ export default function Header(props) {
   const deleteSession = function() {
     axios.delete(`${process.env.REACT_APP_BACK_END_HOST}/session`, {withCredentials: true, headers: {"Access-Control-Allow-Origin": process.env.REACT_APP_FRONT_END_HOST}})
     .then(res => {
-      console.log(res)
+      // console.log(res)
       props.setUserAccess(false);
       localStorage.removeItem('isLoggedIn')
     })
@@ -17,11 +17,9 @@ export default function Header(props) {
     
     <div className="signInOrOut">
 
-    {!props.userAccess && <a href={`${process.env.REACT_APP_BACK_END_HOST}/auth`}><button className="btn btn-primary logout" ><i class="bi bi-twitter"></i> Sign in with Twitter</button></a>}
+    {!props.userAccess && <a href={`${process.env.REACT_APP_BACK_END_HOST}/auth`}><button className="btn btn-primary logout" ><i className="bi bi-twitter"></i> Sign in with Twitter</button></a>}
 
     {props.userAccess && <button onClick={()=>deleteSession()} className="btn btn-primary logout">Logout 👋</button>}
-
-    {console.log("props.userAccess: ", props.userAccess)}
 
     </div>
 

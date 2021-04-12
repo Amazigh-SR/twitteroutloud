@@ -44,22 +44,22 @@ export default function Settings(props) {
   return <div className="settingsComponent">
 
   <div className="option">
-		<label style={{marginRight: "20px"}} for="voice">Voice</label>
+		<label style={{marginRight: "20px"}} htmlFor="voice">Voice</label>
 		<select name="voice" id="voice" onChange={handleChange}></select>
 	</div>
 
 	<div className="option">
-		<label for="volume">Volume</label>
+		<label htmlFor="volume">Volume</label>
 		<input type="range" min="0" max="1" step="0.01" name="volume" id="volume" value={settings.volume} onChange={handleChange}/>
 	</div>
 
 	<div className="option">
-		<label for="rate">Rate</label>
+		<label htmlFor="rate">Rate</label>
 		<input type="range" min="0.1" max="10" step="0.1" name="rate" id="rate" value={settings.rate} onChange={handleChange}/>
 	</div>
 
 	<div className="option">
-		<label for="pitch">Pitch</label>
+		<label htmlFor="pitch">Pitch</label>
 		<input type="range" min="0" max="2" step="0.01" name="pitch" id="pitch" value={settings.pitch} onChange={handleChange}/>
 	</div>
 
