@@ -12,10 +12,11 @@
 	left:0;
 	width: 2em;
 	height: 14em;
-	animation: roll 5s infinite linear;
+	animation: roll 2s infinite linear;
 }
 .top {
   transform-origin: center bottom 0;
+  animation-delay: -1.5s;
 }
 
 .bottom {
@@ -24,6 +25,6 @@
 
 @keyframes roll {
 	100% { 
-    transform: rotateZ(2turn);
+    transform: rotateZ(1turn);
   }
 }
