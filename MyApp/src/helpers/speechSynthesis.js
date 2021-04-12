@@ -6,10 +6,12 @@ const fetchEnVoices = require("./fetchEnVoices");
 
 //-----------------------------------------------//
 
-const speechSynthesis = function (tweetObject) {
+const speechSynthesis = function (tweetObject, settings) {
+  console.log("Settings in SPEECHSYnthesis:", settings);
   const tweetText = tweetObject.full_text;
   const name = tweetObject.user.name;
   const finalFormMessage = `${name} tweets ${tweetText}`;
+  const { voiceId, pitch, rate, volume } = settings; //voiceId b/w 1 & 17.
 
   //Check browser support
   if (!checkSpeechSynthesis()) {
@@ -23,20 +25,22 @@ const speechSynthesis = function (tweetObject) {
   const voices = fetchEnVoices(synthesis);
 
   //Generate the voice for a given text
+  // const utterance = new SpeechSynthesisUtterance(finalFormMessage);
   const utterance = new SpeechSynthesisUtterance(finalFormMessage);
 
-  // speechSettings(utterance, settings);
-
   // Static settings
-  utterance.voice = voices[0];
-  utterance.pitch = 1;
-  utterance.rate = 0.9;
-  utterance.volume = 0.8;
+  utterance.voice = voices[voiceId];
+  utterance.pitch = pitch;
+  utterance.rate = rate;
+  utterance.volume = volume;
+
+  // utterance.voice = voices[0];
+  // utterance.pitch = 1;
+  // utterance.rate = 1;
+  // utterance.volume = 1;
 
   // Function that calls the speak method to generate audio for a given message
   synthesis.speak(utterance);
 };
-
-// speechSynthesis(mockData[0]);
 
 exports.speechSynthesis = speechSynthesis;
