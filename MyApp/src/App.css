@@ -26,7 +26,11 @@
   padding-top: 10px;
   line-height: 60px;
   background-color: white;
+  animation-duration: 3s;
+  animation-name: slidein;
+  display: none;
 }
+
 
 .speechComponent {
   margin-top: 12px;

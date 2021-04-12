@@ -5,6 +5,7 @@ import { speechSynthesis } from "../helpers/speechSynthesis";
 import Settings from "./Settings";
 import mockData from "../helpers/mockData";
 import { useState, Fragment, useEffect } from "react";
+import $ from 'jquery'
 
 export default function Speech(props) {
   const { tweets, setTweets } = props;
@@ -16,7 +17,6 @@ export default function Speech(props) {
   });
 
   let currentTweet = 0;
-  console.log("SETTINGS---->", settings);
   const playSpeech = function (settings) {
     for (let i = 0; i < tweets.length; i++) {
       window.speechSynthesis.resume() || speechSynthesis(tweets[i], settings);
@@ -25,7 +25,13 @@ export default function Speech(props) {
   };
 
   useEffect(() => {
-    console.log("TYPE OF WINDOW", typeof window, window.speechSynthesis);
+    $("#settingsButton").click(() => {    
+      if ( $( "div.settingsComponent" ).first().is( ":hidden" ) ) {
+        $( "div.settingsComponent" ).slideDown( "fast" );
+      } else {
+        $( "div.settingsComponent" ).slideUp();
+      }
+    })
   }, []);
 
   const pauseSpeech = function () {
@@ -45,35 +51,36 @@ export default function Speech(props) {
   return (
     <>
       <div
-        class="btn-toolbar mb-3 speechComponent"
+        className="btn-toolbar mb-3 speechComponent"
         role="toolbar"
         aria-label="Toolbar with button groups"
       >
-        <div class="btn-group mr-2" role="group" aria-label="First group">
+        <div className="btn-group mr-2" role="group" aria-label="First group">
           {/* <button onClick={()=>onClick()}>Previous</button> */}
           <button
             type="button"
             className="btn player"
             onClick={() => playSpeech(settings)}
           >
-            <i class="bi bi-play-fill"></i>
+            <i className="bi bi-play-fill"></i>
           </button>
           <button className="btn player" onClick={() => pauseSpeech()}>
-            <i class="bi bi-pause"></i>
+            <i className="bi bi-pause"></i>
           </button>
           <button className="btn player" onClick={() => stopSpeech()}>
-            <i class="bi bi-stop-fill"></i>
+            <i className="bi bi-stop-fill"></i>
           </button>
           <button className="btn player" onClick={() => nextTweet()}>
-            <i class="bi bi-skip-end-fill"></i>
+            <i className="bi bi-skip-end-fill"></i>
           </button>
         </div>
         <div className="btn-group">
-          <button className="btn player" onClick={""}>
+          <button id="settingsButton" className="btn player" onClick={""}>
             Settings
           </button>
         </div>
       </div>
+
       <Settings settings={settings} setSettings={setSettings} />
     </>
   );
