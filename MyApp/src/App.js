@@ -48,7 +48,7 @@ function App() {
         <Header userAccess={userAccess} setUserAccess={setUserAccess} />
         {/* <Loading /> */}
         {userAccess && <Speech tweets={tweets} setTweets={setTweets} />}
-        <Settings />
+        {userAccess && <Settings />}
         {!userAccess && <Auth />}
         {/* <Pull /> */}
         {userAccess && <TweetList tweets={tweets} setTweets={setTweets} />}
