@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 
 export default function Settings(props) {
   
@@ -17,31 +17,54 @@ export default function Settings(props) {
     })
   }
 
+  useEffect(() =>{loadVoices()})
+
+  function loadVoices() {
+    // Get the voice select element.
+    var voiceSelect = document.getElementById('voice');
+    // Fetch the available voices.
+    var voices = speechSynthesis.getVoices();
+    
+    // Loop through each of the voices.
+    voices.forEach(function(voice, i) {
+      // Create a new option element.
+      var option = document.createElement('option');
+      
+      // Set the options value and text.
+      option.value = voice.name;
+      option.innerHTML = voice.name;
+        
+      // Add the option to the voice selector.
+      voiceSelect.appendChild(option);
+    });
+  }
+  // Execute loadVoices.
+
   
   return <div className="settingsComponent">
 
-  <div class="option">
-		<label for="voice">Voice</label>
+  <div className="option">
+		<label style={{marginRight: "20px"}} for="voice">Voice</label>
 		<select name="voice" id="voice" onChange={handleChange}></select>
 	</div>
 
-	<div class="option">
+	<div className="option">
 		<label for="volume">Volume</label>
-		<input type="range" className="form-range" min="0" max="1" step="0.01" name="volume" id="volume" value={settings.volume} onChange={handleChange}/>
+		<input type="range" min="0" max="1" step="0.01" name="volume" id="volume" value={settings.volume} onChange={handleChange}/>
 	</div>
 
-	<div class="option">
+	<div className="option">
 		<label for="rate">Rate</label>
 		<input type="range" min="0.1" max="10" step="0.1" name="rate" id="rate" value={settings.rate} onChange={handleChange}/>
 	</div>
 
-	<div class="option">
+	<div className="option">
 		<label for="pitch">Pitch</label>
 		<input type="range" min="0" max="2" step="0.01" name="pitch" id="pitch" value={settings.pitch} onChange={handleChange}/>
 	</div>
 
   <button className="btn player"
-      onClick={""}>Done</button>
+      onClick={()=> console.log("done click")}>Done</button>
 
   </div>
 }
