@@ -1,20 +1,8 @@
 import { Tweet } from 'react-twitter-widgets'
-import { useEffect } from 'react';
-import axios from 'axios';
-
 
 export default function TweetList(props){
-  const { tweets, setTweets } = props;
-  
-  useEffect(() =>{
-    axios.get(`${process.env.REACT_APP_BACK_END_HOST}/tweets`, {withCredentials: true, headers: {"Access-Control-Allow-Origin": process.env.REACT_APP_FRONT_END_HOST}})
-        .then(tweets => {
-          setTweets(tweets.data)
-          console.log(tweets.data)
-        })
-        .catch(err => console.error(err))
-  }, [])
-  
+  const { tweets } = props;
+
   const mockData = [
     {
         "created_at": "Sat Apr 10 19:53:17 +0000 2021",
