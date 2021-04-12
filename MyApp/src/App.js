@@ -18,6 +18,16 @@ function App() {
     isLoggedIn === "true" ? true : false
   );
   const [tweets, setTweets] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const getTweets = function() {
+    return axios.get(`${process.env.REACT_APP_BACK_END_HOST}/tweets`, {withCredentials: true, headers: {"Access-Control-Allow-Origin": process.env.REACT_APP_FRONT_END_HOST}})
+            .then(tweets => {
+              setTweets(tweets.data)
+              console.log(tweets.data)
+              setTimeout(()=>setLoading(false), 1000);
+            })
+  }
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -36,9 +46,20 @@ function App() {
           } else {
             setUserAccess(false);
             localStorage.removeItem("isLoggedIn");
+            setTimeout(()=>setLoading(false), 1000);
+          }
+          return res.data
+        })
+        .then(data => {
+          if (data === "valid") {
+            return getTweets();
           }
         })
         .catch((err) => console.error(err));
+      }
+    if (isLoggedIn) {
+      getTweets()
+      .catch((err) => console.error(err));
     }
   }, []);
 
@@ -46,12 +67,12 @@ function App() {
     <div className="App">
       <header className="App-header">
         <Header userAccess={userAccess} setUserAccess={setUserAccess} />
-        {/* <Loading /> */}
-        {userAccess && <Speech tweets={tweets} setTweets={setTweets} />}
-        <Settings />
-        {!userAccess && <Auth />}
+        {loading && <Loading>Loading app!</Loading> }
+        {!loading && userAccess && <Speech tweets={tweets} setTweets={setTweets} />}
+        {!loading && userAccess && <Settings />}
+        {!loading && !userAccess && <Auth />}
         {/* <Pull /> */}
-        {userAccess && <TweetList tweets={tweets} setTweets={setTweets} />}
+        {!loading && userAccess && <TweetList tweets={tweets} />}
       </header>
     </div>
   );
