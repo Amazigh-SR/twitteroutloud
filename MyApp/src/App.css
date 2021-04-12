@@ -37,6 +37,10 @@
   background-color: var(--twitter-light-extra-extra-light-gray)
 }
 
+body {
+  background-color: var(--twitter-light-extra-extra-light-gray)
+}
+
 nav {
   display: flex;
   width: 100%;
