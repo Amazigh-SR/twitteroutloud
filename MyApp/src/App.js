@@ -8,7 +8,7 @@ import Pull from "./components/Pull";
 import TweetList from "./components/TweetList";
 import Speech from "./components/Speech";
 import Loading from "./components/Loading";
-import Settings from "./components/Settings";
+// import Settings from "./components/Settings";
 
 function App() {
   console.log(process.env.REACT_APP_FRONT_END_HOST);
@@ -48,7 +48,7 @@ function App() {
         <Header userAccess={userAccess} setUserAccess={setUserAccess} />
         {/* <Loading /> */}
         {userAccess && <Speech tweets={tweets} setTweets={setTweets} />}
-        <Settings />
+        {/* <Settings /> */}
         {!userAccess && <Auth />}
         {/* <Pull /> */}
         {userAccess && <TweetList tweets={tweets} setTweets={setTweets} />}
