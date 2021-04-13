@@ -18,6 +18,12 @@ function App() {
   );
   const [tweets, setTweets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [settings, setSettings] = useState({
+    voice: window.speechSynthesis.getVoices()[0],
+    volume: 5,
+    rate: 1,
+    pitch: 1,
+  });
 
   const getTweets = function () {
     return axios
@@ -71,7 +77,11 @@ function App() {
         <Header userAccess={userAccess} setUserAccess={setUserAccess} />
         {loading && <Loading>Loading app!</Loading>}
         {!loading && userAccess && 
-          <Speech tweets={tweets} setTweets={setTweets} />
+          <Speech 
+            tweets={tweets} 
+            settings={settings} 
+            setSettings={setSettings}
+          />
         }
         {!loading && !userAccess && <Auth />}
         {!loading && userAccess && <TweetList tweets={tweets} />}
