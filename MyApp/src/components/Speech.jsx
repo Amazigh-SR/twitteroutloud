@@ -34,7 +34,7 @@ export default function Speech(props) {
 
   return (
     <>
-      <h1>Now playing: Tweet {`#${currentUtterance}` || 'nothing' }</h1>
+      <h1>Now playing: {`${currentUtterance >= 0 ? "Tweet #" + (currentUtterance + 1) : 'nothing'}`}</h1>
       <div
         className="btn-toolbar mb-3 speechComponent"
         role="toolbar"
