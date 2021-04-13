@@ -3,17 +3,16 @@
 import { speechSynthesis } from "../helpers/speechSynthesis";
 import Settings from "./Settings";
 import mockData from "../helpers/mockData";
-import { useState, useEffect } from "react";
-import fetchEnVoices from "../helpers/fetchEnVoices.js"
+import { useEffect } from "react";
+
 import $ from 'jquery'
 import { usePlayer, playerConstants } from '../hooks/usePlayerControls';
 
 const { PAUSE } = playerConstants;
 
 export default function Speech(props) {
-  let voices = fetchEnVoices(window.speechSynthesis);
   
-  const { tweets, settings, setSettings } = props;
+  const { tweets, voices, settings, setSettings } = props;
 
   const utterances = tweets.map(tweet => speechSynthesis(tweet, settings));
 

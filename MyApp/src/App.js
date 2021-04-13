@@ -1,16 +1,17 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import fetchEnVoices from "./helpers/fetchEnVoices"
 
 import "./App.css";
+
 import Auth from "./components/Auth";
 import Header from "./components/Header";
 import TweetList from "./components/TweetList";
 import Speech from "./components/Speech";
 import Loading from "./components/Loading";
-// import Settings from "./components/Settings";
 
 function App() {
-  // console.log(process.env.REACT_APP_FRONT_END_HOST);
+  const voices = fetchEnVoices(window.speechSynthesis);
   const isLoggedIn = localStorage.getItem("isLoggedIn") || false;
 
   const [userAccess, setUserAccess] = useState(
@@ -79,6 +80,7 @@ function App() {
         {!loading && userAccess && 
           <Speech 
             tweets={tweets} 
+            voices={voices}
             settings={settings} 
             setSettings={setSettings}
           />
