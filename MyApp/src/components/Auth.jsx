@@ -9,8 +9,8 @@ export default function Auth() {
       <li key="4">Full web support</li>
       <li key="5">Open source</li>
       <li key="6">Powered by coffee</li>
-
       </ul>
+      <br/>
       <a key="link" href="http://localhost:3001/auth"><button className="btn btn-primary logout" ><i className="bi bi-twitter"></i> Sign in with Twitter</button></a>
     </div>
   );

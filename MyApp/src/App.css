@@ -14,6 +14,7 @@
   background-color: white;
   color: var(--twitter-blue);
   border: 1px solid var(--twitter-blue);
+  font-size: 1em;
 }
 
 .settingsComponent {
@@ -24,13 +25,20 @@
   padding: 29px;
   padding-bottom: 10px;
   padding-top: 10px;
-  line-height: 60px;
+  line-height: 45px;
   background-color: white;
   animation-duration: 3s;
   animation-name: slidein;
   display: none;
 }
 
+#doneButton {
+  margin-top: 15px;
+}
+
+.voiceDiv {
+  display: inline-grid;
+}
 
 .speechComponent {
   margin-top: 12px;
@@ -73,7 +81,7 @@ button.logout {
 }
 
 .individualTweet {
-  width: 500px !important;
+  /* width: 500px !important; */
   /* display: contents; */
 }
 
@@ -119,11 +127,44 @@ li:before {
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+@media only screen and (max-width: 540px) {
+
+  h1 {
+    font-size: 1.4em;
   }
-  to {
-    transform: rotate(360deg);
+
+  .btn {
+    font-size: 0.5em;
+  }
+
+  .player {
+    background-color: white;
+    color: var(--twitter-blue);
+    border: 1px solid var(--twitter-blue);
+    font-size: 1em;
+  }
+
+  .tweetComponent {
+    width: 100vw;
+  }
+}
+
+@media only screen and (min-width: 540px) {
+
+  .tweetComponent {
+    width: 100vw;
+  }
+  
+  .individualTweet {
+    width: 80% !important;
+  }
+
+  div[twdiv="yes"] {
+    width: 100% !important;
+    text-align: -webkit-center;
+  }
+
+  .twitter-tweet {
+    width: 100% !important;
   }
 }

@@ -84,7 +84,7 @@ export default function Settings(props) {
 // }
   return (
     <div className="settingsComponent">
-      <div class="option">
+      <div class="option voiceDiv">
         <label for="voice">Voice </label>
         <select name="voice" id="voice" onChange={handleVoiceChange}>
           {voiceNameList}
