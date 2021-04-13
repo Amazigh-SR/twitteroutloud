@@ -1,12 +1,9 @@
-// import checkSpeechSynthesis from "../helpers/checkSpeechSynthesis";
+import { usePlayer, playerConstants } from '../hooks/usePlayerControls';
+import $ from 'jquery'
 
 import { speechSynthesis } from "../helpers/speechSynthesis";
-import Settings from "./Settings";
-import mockData from "../helpers/mockData";
-import { useEffect } from "react";
 
-import $ from 'jquery'
-import { usePlayer, playerConstants } from '../hooks/usePlayerControls';
+import Settings from "./Settings";
 
 const { PAUSE } = playerConstants;
 
@@ -26,22 +23,14 @@ export default function Speech(props) {
     next,
     currentUtterance,
   } = usePlayer(utterances);
-  
-  useEffect(() => {
-    $("#settingsButton").click(() => {
-      setSettings({
-        voice: window.speechSynthesis.getVoices()[0],
-        volume: 5,
-        rate: 1,
-        pitch: 1,
-      })
+
+  const handleClick = function(){
       if ( $( "div.settingsComponent" ).first().is( ":hidden" ) ) {
         $( "div.settingsComponent" ).slideDown( "fast" );
       } else {
         $( "div.settingsComponent" ).slideUp();
       }
-    })
-  }, []);
+  }
 
   return (
     <>
@@ -75,12 +64,12 @@ export default function Speech(props) {
           </button>
         </div>
         <div className="btn-group">
-          <button id="settingsButton" className="btn player" onClick={""}>
+          <button id="settingsButton" className="btn player" onClick={()=>{handleClick()}}>
             Settings
           </button>
         </div>
       </div>
-      <Settings settings={settings} setSettings={setSettings} voices={voices}/>
+      <Settings settings={settings} setSettings={setSettings} voices={voices} $={$}/>
     </>
   );
 }
