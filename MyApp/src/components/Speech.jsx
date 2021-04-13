@@ -7,11 +7,11 @@ import { useState, Fragment, useEffect } from "react";
 import fetchEnVoices from "../helpers/fetchEnVoices.js"
 
 export default function Speech(props) {
-  const voices = fetchEnVoices(window.speechSynthesis);
+  let voices = fetchEnVoices(window.speechSynthesis);
 
   const { tweets } = props;
   const [settings, setSettings] = useState({
-    voice: voices[0],
+    voice: null,
     volume: 5,
     rate: 1,
     pitch: 1,
