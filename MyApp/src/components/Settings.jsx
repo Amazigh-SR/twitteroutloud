@@ -95,7 +95,7 @@ export default function Settings(props) {
         <input
           type="range"
           min="0.1"
-          max="10"
+          max="3"
           step="0.1"
           name="rate"
           id="rate"
