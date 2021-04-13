@@ -84,15 +84,15 @@ export default function Settings(props) {
 // }
   return (
     <div className="settingsComponent">
-      <div class="option voiceDiv">
-        <label for="voice">Voice </label>
+      <div className="option voiceDiv">
+        <label htmlFor="voice">Voice </label>
         <select name="voice" id="voice" onChange={handleVoiceChange}>
           {voiceNameList}
         </select>
       </div>
 
       <div className="option">
-        <label for="volume">Volume</label>
+        <label htmlFor="volume">Volume</label>
         <input
           type="range"
           min="0"
@@ -106,7 +106,7 @@ export default function Settings(props) {
       </div>
 
       <div className="option">
-        <label for="rate">Rate</label>
+        <label htmlFor="rate">Rate</label>
         <input
           type="range"
           min="0.1"
@@ -120,7 +120,7 @@ export default function Settings(props) {
       </div>
 
       <div className="option">
-        <label for="pitch">Pitch</label>
+        <label htmlFor="pitch">Pitch</label>
         <input
           type="range"
           min="0"

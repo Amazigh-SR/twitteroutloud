@@ -108,7 +108,7 @@ export default function Speech(props) {
           </button>
         </div>
         <div className="btn-group">
-          <button id="settingsButton" className="btn player" onClick={""}>
+          <button id="settingsButton" className="btn player" >
             Settings
           </button>
         </div>
