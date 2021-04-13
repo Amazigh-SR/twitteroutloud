@@ -10,7 +10,7 @@ const speechSynthesis = function (tweetObject, settings) {
   console.log("Settings in SPEECHSYnthesis:", settings);
   const tweetText = tweetObject.full_text;
   const name = tweetObject.user.name;
-  const finalFormMessage = `${name} tweets ${tweetText}`;
+  const finalFormMessage = `${name} tweets. ${tweetText}`;
   const { voice, pitch, rate, volume } = settings; //voiceId b/w 1 & 17.
 
   //Check browser support
@@ -43,8 +43,6 @@ const speechSynthesis = function (tweetObject, settings) {
   // synthesis.speak(utterance);
 
   return utterance;
-
-
 };
 
 exports.speechSynthesis = speechSynthesis;
