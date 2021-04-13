@@ -21,26 +21,30 @@ const speechSynthesis = function (tweetObject, settings) {
   //Setup synthesis object
   const synthesis = window.speechSynthesis;
 
-  //Fetch english voices
-  const voices = fetchEnVoices(synthesis);
+  // //Fetch english voices
+  // const voices = fetchEnVoices(synthesis);
 
   //Generate the voice for a given text
   // const utterance = new SpeechSynthesisUtterance(finalFormMessage);
   const utterance = new SpeechSynthesisUtterance(finalFormMessage);
 
-  // Static settings
-  utterance.voice = voice;
-  utterance.pitch = pitch;
-  utterance.rate = rate;
-  utterance.volume = volume;
+  // // Static settings
+  // utterance.voice = voice;
+  // utterance.pitch = pitch;
+  // utterance.rate = rate;
+  // utterance.volume = volume;
 
-  // utterance.voice = voices[0];
-  // utterance.pitch = 1;
-  // utterance.rate = 1;
-  // utterance.volume = 1;
+  // // utterance.voice = voices[0];
+  // // utterance.pitch = 1;
+  // // utterance.rate = 1;
+  // // utterance.volume = 1;
 
-  // Function that calls the speak method to generate audio for a given message
-  synthesis.speak(utterance);
+  // // Function that calls the speak method to generate audio for a given message
+  // synthesis.speak(utterance);
+
+  return utterance;
+
+
 };
 
 exports.speechSynthesis = speechSynthesis;
