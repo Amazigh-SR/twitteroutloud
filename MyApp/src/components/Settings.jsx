@@ -1,8 +1,10 @@
 import { useEffect } from 'react'
 import "../App.css";
+import fetchEnVoices from "../helpers/fetchEnVoices.js"
+import $ from 'jquery'
 
+// MyApp/src/helpers/fetchEnVoices.js
 export default function Settings(props) {
-  console.log("props: ", props);
 
   function handleChange(evt) {
     const value = Number(evt.target.value);
@@ -27,6 +29,11 @@ export default function Settings(props) {
   })
 
   // useEffect(() =>{loadVoices()})
+  useEffect(() =>{
+    $("#doneButton").click(() => {
+      $( "div.settingsComponent" ).slideUp( "slow" );
+    })    
+    })
 
   // function loadVoices() {
   //   // Get the voice select element.
@@ -84,7 +91,7 @@ export default function Settings(props) {
         </select>
       </div>
 
-      <div class="option">
+      <div className="option">
         <label for="volume">Volume</label>
         <input
           type="range"
@@ -98,12 +105,12 @@ export default function Settings(props) {
         />
       </div>
 
-      <div class="option">
+      <div className="option">
         <label for="rate">Rate</label>
         <input
           type="range"
           min="0.1"
-          max="10"
+          max="3"
           step="0.1"
           name="rate"
           id="rate"
@@ -112,7 +119,7 @@ export default function Settings(props) {
         />
       </div>
 
-      <div class="option">
+      <div className="option">
         <label for="pitch">Pitch</label>
         <input
           type="range"
@@ -125,8 +132,8 @@ export default function Settings(props) {
           onChange={handleChange}
         />
 
-      <button className="btn player"
-        onClick={()=> console.log("done click")}>Done</button>
+      <button id="doneButton" className="btn player"
+        >Done</button>
 
 
       </div>
