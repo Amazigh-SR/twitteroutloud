@@ -7,10 +7,12 @@ const fetchEnVoices = require("./fetchEnVoices");
 //-----------------------------------------------//
 
 const speechSynthesis = function (tweetObject, settings) {
-  console.log("Settings in SPEECHSYnthesis:", settings);
   const tweetText = tweetObject.full_text;
   const name = tweetObject.user.name;
-  const finalFormMessage = `${name} tweets. ${tweetText}`;
+  const finalFormMessage = `At ${name} tweets. ${tweetText}..`;
+  const linkIndex = finalFormMessage.search(/(http|ftp|https):/i);
+  const endMessage = finalFormMessage.slice(0, linkIndex);
+
   const { voice, pitch, rate, volume } = settings; //voiceId b/w 1 & 17.
 
   //Check browser support
@@ -26,7 +28,7 @@ const speechSynthesis = function (tweetObject, settings) {
 
   //Generate the voice for a given text
   // const utterance = new SpeechSynthesisUtterance(finalFormMessage);
-  const utterance = new SpeechSynthesisUtterance(finalFormMessage);
+  const utterance = new SpeechSynthesisUtterance(endMessage);
 
   // // Static settings
   // utterance.voice = voice;
