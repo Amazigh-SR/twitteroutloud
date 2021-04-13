@@ -3,7 +3,28 @@
 .loading {
   display: flex;
   justify-content: center;
-  color: #1DA1F2;
+  line-height: 1.2;
+}
+
+.linear-wipe {
+  text-align: center;
+  
+  background: linear-gradient(to right, #657786 20%, #1ba1f2 40%, #1ba1f2 60%, #657786 80%);
+  background-size: 200% auto;
+  
+  color: #000;
+  background-clip: text;
+  text-fill-color: transparent;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
+  animation: shine 2s linear infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
 }
 
 .circle{
@@ -13,10 +34,10 @@
 	width: 2em;
 	height: 14em;
 	animation: roll 2s infinite linear;
+  animation-delay: -1.5s;
 }
 .top {
   transform-origin: center bottom 0;
-  animation-delay: -1.5s;
 }
 
 .bottom {
