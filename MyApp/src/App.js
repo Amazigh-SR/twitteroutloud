@@ -1,16 +1,17 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import fetchEnVoices from "./helpers/fetchEnVoices"
 
 import "./App.css";
+
 import Auth from "./components/Auth";
 import Header from "./components/Header";
 import TweetList from "./components/TweetList";
 import Speech from "./components/Speech";
 import Loading from "./components/Loading";
-// import Settings from "./components/Settings";
 
 function App() {
-  // console.log(process.env.REACT_APP_FRONT_END_HOST);
+  const voices = fetchEnVoices(window.speechSynthesis);
   const isLoggedIn = localStorage.getItem("isLoggedIn") || false;
 
   const [userAccess, setUserAccess] = useState(
@@ -18,6 +19,12 @@ function App() {
   );
   const [tweets, setTweets] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [settings, setSettings] = useState({
+    voice: window.speechSynthesis.getVoices()[0],
+    volume: 5,
+    rate: 1,
+    pitch: 1,
+  });
 
   const getTweets = function () {
     return axios
@@ -43,7 +50,8 @@ function App() {
           },
         })
         .then((res) => {
-          if (res.data === "valid") {
+          console.log("APP.js line 53 -> RES DATA: ", res.data)
+          if (res.data.valid) {
             setUserAccess(true);
             localStorage.setItem("isLoggedIn", true);
           } else {
@@ -54,7 +62,7 @@ function App() {
           return res.data;
         })
         .then((data) => {
-          if (data === "valid") {
+          if (data.valid) {
             return getTweets();
           }
         })
@@ -71,7 +79,12 @@ function App() {
         <Header userAccess={userAccess} setUserAccess={setUserAccess} />
         {loading && <Loading>Loading app!</Loading>}
         {!loading && userAccess && 
-          <Speech tweets={tweets} setTweets={setTweets} />
+          <Speech 
+            tweets={tweets} 
+            voices={voices}
+            settings={settings} 
+            setSettings={setSettings}
+          />
         }
         {!loading && !userAccess && <Auth />}
         {!loading && userAccess && <TweetList tweets={tweets} />}

@@ -1,87 +1,31 @@
-import { useEffect } from 'react'
-import "../App.css";
-import fetchEnVoices from "../helpers/fetchEnVoices.js"
-import $ from 'jquery'
-
-// MyApp/src/helpers/fetchEnVoices.js
 export default function Settings(props) {
-
+  const {voices, settings, setSettings, $} = props;
   function handleChange(evt) {
     const value = Number(evt.target.value);
-    props.setSettings((prev) => ({
+    setSettings((prev) => ({
       ...prev,
       [evt.target.name]: (value),
     }));
   }
 
   function handleVoiceChange(evt) {
-    const voice = props.voices.find(voice => voice.name === evt.target.value);
-    props.setSettings((prev) => ({
+    const voice = voices.find(voice => voice.name === evt.target.value);
+    setSettings((prev) => ({
       ...prev, 
       [evt.target.name]: voice,
     }))
   }
 
-  const voiceNameList = props.voices.map((voice, index) => {
+  const voiceNameList = voices.map((voice, index) => {
     return (
       <option value={voice.name} key={index}>{voice.name}</option>
     )
   })
 
-  // useEffect(() =>{loadVoices()})
-  useEffect(() =>{
-    $("#doneButton").click(() => {
-      $( "div.settingsComponent" ).slideUp( "slow" );
-    })    
-    })
+  const handleClick = function() {
+    $( "div.settingsComponent" ).slideUp();
+  }
 
-  // function loadVoices() {
-  //   // Get the voice select element.
-  //   const voiceSelect = document.getElementById('voice');
-  //   // Fetch the available voices.
-  //   const voices = fetchEnVoices(window.speechSynthesis);
-    
-  //   // Loop through each of the voices.
-  //   voices.forEach(function(voice, i) {
-  //     // Create a new option element.
-  //     const option = document.createElement('option');
-      
-  //     // Set the options value and text.
-  //     option.value = voice.name;
-  //     option.innerHTML = voice.name;
-  //     option.voiceId = i
-        
-  //     // Add the option to the voice selector.
-  //     voiceSelect.appendChild(option);
-  //   });
-  // }
-  // Execute loadVoices.
-
-  
-//   return <div className="settingsComponent">
-
-//   <div className="option">
-// 		<label style={{marginRight: "20px"}} htmlFor="voice">Voice</label>
-// 		<select name="voice" id="voice" onChange={handleChange}></select>
-// 	</div>
-
-// 	<div className="option">
-// 		<label htmlFor="volume">Volume</label>
-// 		<input type="range" min="0" max="1" step="0.01" name="volume" id="volume" value={settings.volume} onChange={handleChange}/>
-// 	</div>
-
-// 	<div className="option">
-// 		<label htmlFor="rate">Rate</label>
-// 		<input type="range" min="0.1" max="10" step="0.1" name="rate" id="rate" value={settings.rate} onChange={handleChange}/>
-// 	</div>
-
-// 	<div className="option">
-// 		<label htmlFor="pitch">Pitch</label>
-// 		<input type="range" min="0" max="2" step="0.01" name="pitch" id="pitch" value={settings.pitch} onChange={handleChange}/>
-// 	</div>
-
-
-// }
   return (
     <div className="settingsComponent">
       <div className="option voiceDiv">
@@ -90,7 +34,6 @@ export default function Settings(props) {
           {voiceNameList}
         </select>
       </div>
-
       <div className="option">
         <label htmlFor="volume">Volume</label>
         <input
@@ -100,11 +43,10 @@ export default function Settings(props) {
           step="0.1"
           name="volume"
           id="volume"
-          value={props.settings.volume}
+          value={settings.volume}
           onChange={handleChange}
         />
       </div>
-
       <div className="option">
         <label htmlFor="rate">Rate</label>
         <input
@@ -114,11 +56,10 @@ export default function Settings(props) {
           step="0.1"
           name="rate"
           id="rate"
-          value={props.settings.rate}
+          value={settings.rate}
           onChange={handleChange}
         />
       </div>
-
       <div className="option">
         <label htmlFor="pitch">Pitch</label>
         <input
@@ -128,16 +69,17 @@ export default function Settings(props) {
           step="0.1"
           name="pitch"
           id="pitch"
-          value={props.settings.pitch}
+          value={settings.pitch}
           onChange={handleChange}
         />
-
-      <button id="doneButton" className="btn player"
-        >Done</button>
-
-
+        <button 
+          id="doneButton"
+          className="btn player"
+          onClick={()=>{handleClick()}}
+        >
+          Done
+        </button>
       </div>
-      
     </div>
   );
 }
