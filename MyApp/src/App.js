@@ -50,7 +50,8 @@ function App() {
           },
         })
         .then((res) => {
-          if (res.data === "valid") {
+          console.log("APP.js line 53 -> RES DATA: ", res.data)
+          if (res.data.valid) {
             setUserAccess(true);
             localStorage.setItem("isLoggedIn", true);
           } else {
@@ -61,7 +62,7 @@ function App() {
           return res.data;
         })
         .then((data) => {
-          if (data === "valid") {
+          if (data.valid) {
             return getTweets();
           }
         })
