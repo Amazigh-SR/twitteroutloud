@@ -31,6 +31,7 @@ const usePlayer = function(utterances) {
 
     if (previous) {
       startingTrack -= 2;
+      setNextTrack(prev => prev - 2);
     }
 
     for (let i = startingTrack; i < tracks.length; i++) {
@@ -42,6 +43,7 @@ const usePlayer = function(utterances) {
       
       speech.speak(tracks[i]);
     }
+
   }
 
   const resume = function() {
@@ -70,7 +72,6 @@ const usePlayer = function(utterances) {
     speech.cancel();
 
     if (nextTrack > 1) {
-      setNextTrack(prev => prev - 2);
       play(settings, true)
     }
 
