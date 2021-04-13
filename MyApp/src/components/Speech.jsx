@@ -9,16 +9,16 @@ import $ from 'jquery'
 
 export default function Speech(props) {
   let voices = fetchEnVoices(window.speechSynthesis);
-
+  
   const { tweets } = props;
   const [settings, setSettings] = useState({
-    voice: null,
+    voice: window.speechSynthesis.getVoices()[0],
     volume: 5,
     rate: 1,
     pitch: 1,
   });
-
-
+  
+  
   let currentTweet = 0;
   const playSpeech = function (settings) {
     for (let i = 0; i < tweets.length; i++) {
@@ -26,9 +26,15 @@ export default function Speech(props) {
       // speechSynthesis(tweets[i], settings);
     }
   };
-
+  
   useEffect(() => {
-    $("#settingsButton").click(() => {    
+    $("#settingsButton").click(() => {
+      setSettings({
+        voice: window.speechSynthesis.getVoices()[0],
+        volume: 5,
+        rate: 1,
+        pitch: 1,
+      })
       if ( $( "div.settingsComponent" ).first().is( ":hidden" ) ) {
         $( "div.settingsComponent" ).slideDown( "fast" );
       } else {
