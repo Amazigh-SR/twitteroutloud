@@ -13,7 +13,7 @@ export default function Auth() {
         <li key="6">Powered by coffee</li>
         <li key="6">Play, pause and navigate with voice control </li>
       </ul>
-      <a key="link" href="http://localhost:3001/auth">
+      <a key="link" href={`${process.env.REACT_APP_BACK_END_HOST}/auth`}>
         <button className="btn btn-primary logout">
           <i className="bi bi-twitter"></i> Sign in with Twitter
         </button>

@@ -32,6 +32,7 @@ const usePlayer = function (utterances) {
     //? what does this do exactly?
     if (previous) {
       startingTrack -= 2;
+      setNextTrack((prev) => prev - 2);
     }
 
     for (let i = startingTrack; i < tracks.length; i++) {
@@ -41,6 +42,12 @@ const usePlayer = function (utterances) {
       tracks[i].volume = volume;
 
       speech.speak(tracks[i]);
+
+      if (i === tracks.length - 1) {
+        tracks[i].addEventListener("end", function (event) {
+          console.log("Finished reading loaded tweets");
+        });
+      }
     }
   };
 
@@ -70,7 +77,6 @@ const usePlayer = function (utterances) {
     speech.cancel();
 
     if (nextTrack > 1) {
-      setNextTrack((prev) => prev - 2);
       play(settings, true);
     }
   };

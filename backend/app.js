@@ -92,11 +92,12 @@ app.get("/validate", (req, res) => {
   //? /session/validate => session router?
   const userID = req.session && req.session.userID;
 
+  
   db.getUserByID(userID).then((row) => {
     if (row) {
-      return res.send("valid"); //! this is an opportunity to send back the full profile
+      return res.send({ valid: true, row }); //! this is an opportunity to send back the full profile
     }
-    return res.send("invalid");
+    return res.send({valid: false});
   });
 });
 
