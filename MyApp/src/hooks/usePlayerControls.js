@@ -60,7 +60,8 @@ const usePlayer = function () {
         speech.speak(tracks[i]);
       }
     } else {
-      stop();
+      setMode(STOP)
+      setNextTrack(0);
     }
   };
 
