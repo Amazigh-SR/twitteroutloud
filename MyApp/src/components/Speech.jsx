@@ -47,9 +47,8 @@ export default function Speech(props) {
   ,[nextTrack])
 
   useEffect(()=>{
-    if (appMode) {
+    if (appMode === BINGE) {
       play(settings);
-      console.log("I fired play")
     }
   }, [utterances, appMode])
 
