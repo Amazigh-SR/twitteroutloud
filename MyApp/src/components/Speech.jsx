@@ -1,9 +1,12 @@
 // import checkSpeechSynthesis from "../helpers/checkSpeechSynthesis";
 import axios from "axios";
 import { usePlayer, playerConstants } from "../hooks/usePlayerControls";
-import $ from "jquery";
+import { useAppMode, appModeConstants } from '../hooks/useAppMode';
+
+import $ from 'jquery'
 
 import { speechSynthesis } from "../helpers/speechSynthesis";
+import diffTweets from "../helpers/diffTweets";
 
 import Settings from "./Settings";
 import mockData from "../helpers/mockData";
@@ -13,41 +16,47 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 
-const { PAUSE } = playerConstants;
+const { PAUSE, STOP, RELOAD } = playerConstants;
 
 export default function Speech(props) {
-  const { tweets, voices, settings, setSettings } = props;
 
-  const utterances = tweets.map((tweet) => speechSynthesis(tweet, settings));
+  const { tweets, setTweets, voices, settings, setSettings } = props;
+
+  // const utterances = tweets.map((tweet) => speechSynthesis(tweet, settings));
+
+const { CURATE, BINGE, THREAD } = appModeConstants;
 
   const {
-    mode,
+    playerMode,
+    utterances,
+    updateTracks,
     play,
     resume,
     pause,
     stop,
     previous,
     next,
-    currentUtterance,
-  } = usePlayer(utterances);
+    reload,
+    nextTrack,
+  } = usePlayer();
 
-  let currentTweet = 0;
-  const playSpeech = function (settings) {
-    for (let i = 0; i < tweets.length; i++) {
-      window.speechSynthesis.resume() || speechSynthesis(tweets[i], settings);
-      // speechSynthesis(tweets[i], settings);
-    }
-  };
+  const {
+    appMode,
+    setAppMode,
+  } = useAppMode();
+  
 
-  const handleClick = function () {
-    if ($("div.settingsComponent").first().is(":hidden")) {
-      $("div.settingsComponent").slideDown("fast");
-    } else {
-      $("div.settingsComponent").slideUp();
-    }
-  };
+  // let currentTweet = 0;
+  // const playSpeech = function (settings) {
+  //   for (let i = 0; i < tweets.length; i++) {
+  //     window.speechSynthesis.resume() || speechSynthesis(tweets[i], settings);
+  //     // speechSynthesis(tweets[i], settings);
+  //   }
+  // };
 
-  useEffect(() => {}, [currentTweet]);
+
+
+  // useEffect(() => {}, [currentTweet]);
 
   //Create a helper function file for functions occurring more than once
   const deleteSession = function () {
@@ -121,14 +130,47 @@ export default function Speech(props) {
 
   // ------------------------------------------------------------ //
 
+  
+  useEffect(()=> {
+    updateTracks(tweets.map(tweet => speechSynthesis(tweet, settings)));
+  }, []);
+
+  useEffect(() => {
+    //this use effect calls pings the server every time more tweets are needed
+    if (nextTrack >= (tweets.length) && playerMode !== RELOAD) {
+      reload();
+      props.getTweets()
+      .then((newTweets) => {
+        const mergedTweets = diffTweets(tweets, newTweets)
+        setTweets(mergedTweets);
+        updateTracks(
+          mergedTweets.map(tweet => speechSynthesis(tweet, settings))
+          );
+          setAppMode(BINGE)
+        });
+    }
+  }
+  ,[nextTrack])
+
+  //while bingeing play will be called as long as new utterances are being generated
+  useEffect(()=>{
+    if (appMode === BINGE && playerMode === RELOAD) {
+      play(settings);
+    }
+  }, [utterances, appMode])
+
+  
+  const handleClick = function(){
+      if ( $( "div.settingsComponent" ).first().is( ":hidden" ) ) {
+        $( "div.settingsComponent" ).slideDown( "fast" );
+      } else {
+        $( "div.settingsComponent" ).slideUp();
+      }
+  }
+
   return (
     <>
-      <h1>
-        Now playing:{" "}
-        {`${
-          currentUtterance >= 0 ? "Tweet #" + (currentUtterance + 1) : "nothing"
-        }`}
-      </h1>
+      <h1>Now playing: {`${playerMode !== STOP ? "Tweet #" + (nextTrack) : 'nothing'}`}</h1>
       <div
         className="btn-toolbar mb-3 speechComponent"
         role="toolbar"
@@ -157,9 +199,7 @@ export default function Speech(props) {
           <button
             type="button"
             className="btn player"
-            onClick={() => {
-              mode === PAUSE ? resume() : play(settings);
-            }}
+            onClick={() => { playerMode === PAUSE ? resume() : play(settings) }}
           >
             <i className="bi bi-play-fill"></i>
           </button>
@@ -187,6 +227,11 @@ export default function Speech(props) {
             }}
           >
             Settings
+          </button>
+        </div>
+        <div className="btn-group">
+          <button id="settingsButton" className="btn player" onClick={()=>{props.getTweets()}}>
+            Load More Tweets
           </button>
         </div>
       </div>

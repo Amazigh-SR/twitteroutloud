@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 const speech = window.speechSynthesis;
 
@@ -9,50 +9,63 @@ const playerConstants = {
   PREV: "PREV",
   NEXT: "NEXT",
   RESUME: "RESUME",
+  RELOADING: "RELOADING"
 };
 
-const { PLAY, STOP, RESUME, PAUSE, PREV, NEXT } = playerConstants;
+const { PLAY, STOP, RESUME, PAUSE, PREV, NEXT, RELOAD } = playerConstants;
 
-const usePlayer = function (utterances) {
-  const [mode, setMode] = useState(null);
-  const [tracks, setTracks] = useState([...utterances]);
+const usePlayer = function () {
+  const [mode, setMode] = useState(STOP);
+  const [tracks, setTracks] = useState([]);
   const [nextTrack, setNextTrack] = useState(0);
 
-  for (const utterance of utterances) {
-    utterance.onstart = () => setNextTrack((prev) => prev + 1);
-  }
+  const updateTracks = function (utterances) {
+    //add an event listener to each utterance that increments nextTrack state on SpeechSynthesisUtterance "end" event
+    for (const utterance of utterances) {
+      utterance.onend = () => {
+        setNextTrack((prev) => prev + 1);
+      };
+    }
 
-  const play = function (settings, previous = false) {
+    setTracks([...utterances]);
+  };
+
+  const play = function (settings, func = undefined) {
     const { voice, pitch, rate, volume } = settings;
 
     setMode(PLAY);
 
     let startingTrack = nextTrack;
 
-    //? what does this do exactly?
-    if (previous) {
-      startingTrack -= 2;
-      setNextTrack((prev) => prev - 2);
-    }
-
-    for (let i = startingTrack; i < tracks.length; i++) {
-      tracks[i].voice = voice;
-      tracks[i].pitch = pitch;
-      tracks[i].rate = rate;
-      tracks[i].volume = volume;
-
-      speech.speak(tracks[i]);
-
-      if (i === tracks.length - 1) {
-        tracks[i].addEventListener("end", function (event) {
-          console.log("Finished reading loaded tweets");
-        });
+    if (func) {
+      let modifier = 0;
+      if (func === PREV){
+        //if the calling func is PREV decrement nextTrack by 2
+        modifier = -2;
+        startingTrack -= 1;
+      } else {
+        startingTrack += 1;
       }
+      setNextTrack((prev) => prev + modifier);
+    }
+    if (startingTrack < tracks.length) {
+      for (let i = startingTrack; i < tracks.length; i++) {
+        console.log("Tracks[i]. i=> ", i)
+        tracks[i].voice = voice;
+        tracks[i].pitch = pitch;
+        tracks[i].rate = rate;
+        tracks[i].volume = volume;
+  
+        //utterances are added to the queue here
+        speech.speak(tracks[i]);
+      }
+    } else {
+      stop();
     }
   };
 
   const resume = function () {
-    setMode(RESUME);
+    setMode(PLAY);
 
     speech.resume();
   };
@@ -64,42 +77,47 @@ const usePlayer = function (utterances) {
   };
 
   const stop = function () {
-    setMode(STOP);
+    if (mode !== STOP) {
+      setMode(STOP);
 
     speech.cancel();
 
-    setNextTrack(0);
+    //because the the cancel method triggers an onend event we need to subtract prev from itself - 1 this is a bit like saying setNeckTrack(-1) but using prev seems to be more consistent
+    setNextTrack(prev => prev - nextTrack - 1);
+    }
   };
 
+  //in order to navigate through the queue of utterances we need to cancel it and reinitialize it
   const previous = function (settings) {
-    setMode(PLAY);
-
-    speech.cancel();
-
-    if (nextTrack > 1) {
-      play(settings, true);
+    if (nextTrack >= 1 && mode !== STOP) {
+      speech.cancel();
+      play(settings, PREV);
     }
   };
 
   const next = function (settings) {
-    setMode(PLAY);
-
     speech.cancel();
-
-    if (nextTrack <= tracks.length - 1) {
-      play(settings);
+    if (nextTrack < tracks.length - 1 && mode !== STOP) {
+      play(settings, NEXT);
     }
   };
 
+  const reload = function () {
+    setMode(RELOAD);
+  }
+
   return {
-    mode,
+    playerMode: mode,
+    utterances: tracks,
+    updateTracks,
     play,
     resume,
     pause,
     stop,
     previous,
     next,
-    currentUtterance: nextTrack - 1,
+    reload,
+    nextTrack,
   };
 };
 
