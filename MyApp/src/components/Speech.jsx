@@ -48,10 +48,11 @@ export default function Speech(props) {
     if (nextTrack >= (tweets.length)) {
       preload();
       props.getTweets()
-      .then((tweets) => {
-        setTweets(prev => [...diffTweets(prev, tweets.data)]);
+      .then((newTweets) => {
+        const mergedTweets = diffTweets(tweets, newTweets)
+        setTweets(mergedTweets);
         updateTracks(
-          tweets.data.map((tweet) => speechSynthesis(tweet, settings))
+          mergedTweets.map(tweet => speechSynthesis(tweet, settings))
           );
           setAppMode(BINGE)
         });
