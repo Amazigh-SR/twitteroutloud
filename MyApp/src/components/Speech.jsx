@@ -1,5 +1,5 @@
 // import checkSpeechSynthesis from "../helpers/checkSpeechSynthesis";
-
+import axios from "axios";
 import { speechSynthesis } from "../helpers/speechSynthesis";
 import Settings from "./Settings";
 import mockData from "../helpers/mockData";
@@ -63,10 +63,25 @@ export default function Speech(props) {
 
   useEffect(() => {}, [currentTweet]);
 
+  //Create a helper function file for functions occurring more than once
+  const deleteSession = function () {
+    axios
+      .delete(`${process.env.REACT_APP_BACK_END_HOST}/session`, {
+        withCredentials: true,
+        headers: {
+          "Access-Control-Allow-Origin": process.env.REACT_APP_FRONT_END_HOST,
+        },
+      })
+      .then((res) => {
+        props.setUserAccess(false);
+        localStorage.removeItem("isLoggedIn");
+      })
+      .catch((err) => console.error(err));
+  };
+
   // ------------------------------------------------------------- //
   // Speech Recognition API is currently following a "push to talk" approach.
   let speechListenerIsActive = false;
-  // const { resetTranscript } = useSpeechRecognition();
   const commands = [
     {
       command: ["start"],
@@ -95,6 +110,25 @@ export default function Speech(props) {
       command: ["Previous tweet "],
       callback: () => previous(settings),
     },
+
+    {
+      command: ["log me out"],
+      callback: deleteSession,
+    },
+
+    {
+      command: ["open settings"],
+      callback: () => {
+        document.querySelector(".settingsComponent").style.display = "block";
+      },
+    },
+
+    {
+      command: ["close settings"],
+      callback: () => {
+        document.querySelector(".settingsComponent").style.display = "none";
+      },
+    },
   ];
 
   const { transcript } = useSpeechRecognition({ commands });
@@ -110,6 +144,18 @@ export default function Speech(props) {
         aria-label="Toolbar with button groups"
       >
         <div className="btn-group mr-2" role="group" aria-label="First group">
+          <button
+            className="btn player"
+            onClick={() => {
+              speechListenerIsActive = !speechListenerIsActive;
+              console.log(speechListenerIsActive);
+              SpeechRecognition.startListening({
+                continuous: speechListenerIsActive,
+              });
+            }}
+          >
+            Activate Voice Commands
+          </button>
           <button
             type="button"
             className="btn player"
@@ -148,17 +194,6 @@ export default function Speech(props) {
         </div>
       </div>
       <Settings settings={settings} setSettings={setSettings} voices={voices} />
-      <button
-        onClick={() => {
-          speechListenerIsActive = !speechListenerIsActive;
-          console.log(speechListenerIsActive);
-          SpeechRecognition.startListening({
-            continuous: speechListenerIsActive,
-          });
-        }}
-      >
-        Activate Voice Commands
-      </button>
       <p id="transcript">Transcript: {transcript}</p>
     </>
   );
