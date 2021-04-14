@@ -5,7 +5,7 @@ import { speechSynthesis } from "../helpers/speechSynthesis";
 
 import Settings from "./Settings";
 
-const { PAUSE } = playerConstants;
+const { PAUSE, STOP } = playerConstants;
 
 export default function Speech(props) {
   
@@ -21,6 +21,7 @@ export default function Speech(props) {
     stop,
     previous,
     next,
+    preload,
     nextTrack,
   } = usePlayer();
 
@@ -32,7 +33,7 @@ export default function Speech(props) {
 
   useEffect(() => {
     if (nextTrack >= (tweets.length)) {
-      stop();
+      preload();
       props.getTweets()
       .then((tweets) => {
         setTweets(tweets.data);
@@ -67,7 +68,7 @@ export default function Speech(props) {
 
   return (
     <>
-      <h1>Now playing: {`${nextTrack >= 0 ? "Tweet #" + (nextTrack) : 'nothing'}`}</h1>
+      <h1>Now playing: {`${mode !== STOP ? "Tweet #" + (nextTrack) : 'nothing'}`}</h1>
       <div
         className="btn-toolbar mb-3 speechComponent"
         role="toolbar"

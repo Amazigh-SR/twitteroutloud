@@ -1,6 +1,4 @@
-import { useState, useRef } from "react";
-import getTweets from "../helpers/getTweets";
-import { speechSynthesis } from "../helpers/speechSynthesis";
+import { useState } from "react";
 
 const speech = window.speechSynthesis;
 
@@ -11,9 +9,10 @@ const playerConstants = {
   PREV: "PREV",
   NEXT: "NEXT",
   RESUME: "RESUME",
+  RELOADING: "RELOADING"
 };
 
-const { PLAY, STOP, RESUME, PAUSE, PREV, NEXT } = playerConstants;
+const { PLAY, STOP, RESUME, PAUSE, PREV, NEXT, RELOADING } = playerConstants;
 
 const usePlayer = function () {
   const [mode, setMode] = useState(STOP);
@@ -21,6 +20,7 @@ const usePlayer = function () {
   const [nextTrack, setNextTrack] = useState(0);
 
   const updateTracks = function (utterances) {
+    //add an event listener to each utterance that increments nextTrack state on SpeechSynthesisUtterance "end" event
     for (const utterance of utterances) {
       utterance.onend = () => {
         setNextTrack((prev) => prev + 1);
@@ -30,30 +30,39 @@ const usePlayer = function () {
     setTracks([...utterances]);
   };
 
-  const play = function (settings, previous = false, event) {
+  const play = function (settings, func = undefined) {
     const { voice, pitch, rate, volume } = settings;
 
     setMode(PLAY);
 
     let startingTrack = nextTrack;
 
-    if (previous) {
-      startingTrack -= 2;
-      setNextTrack((prev) => prev - 2);
+    if (func) {
+      let modifier = 0;
+      if (func === PREV){
+        //if the calling func is PREV decrement nextTrack by 2
+        modifier = -2;
+        startingTrack -= 1;
+      } else {
+        startingTrack += 1;
+      }
+      setNextTrack((prev) => prev + modifier);
     }
 
     for (let i = startingTrack; i < tracks.length; i++) {
+      console.log("Tracks[i]. i=> ", i)
       tracks[i].voice = voice;
       tracks[i].pitch = pitch;
       tracks[i].rate = rate;
       tracks[i].volume = volume;
 
+      //utterances are added to the queue here
       speech.speak(tracks[i]);
     }
   };
 
   const resume = function () {
-    setMode(RESUME);
+    setMode(PLAY);
 
     speech.resume();
   };
@@ -65,33 +74,35 @@ const usePlayer = function () {
   };
 
   const stop = function () {
-    setMode(STOP);
+    if (mode !== STOP) {
+      setMode(STOP);
 
     speech.cancel();
 
-    setNextTrack(0);
+    //because the the cancel method triggers an onend event we need to subtract prev from itself - 1 this is a bit like saying setNeckTrack(-1) but using prev seems to be more consistent
+    setNextTrack(prev => prev - nextTrack - 1);
+    }
   };
 
+  //in order to navigate through the queue of utterances we need to cancel it and reinitialize it
   const previous = function (settings) {
-    setMode(PLAY);
-
-    speech.cancel();
-
-    if (nextTrack > 1) {
-      play(settings, true);
+    if (nextTrack >= 1 && mode !== STOP) {
+      speech.cancel();
+      play(settings, PREV);
     }
   };
 
   const next = function (settings) {
-    setMode(PLAY);
-
     speech.cancel();
-
-    if (nextTrack <= tracks.length) {
-      play(settings);
+    if (nextTrack < tracks.length - 1 && mode !== STOP) {
+      play(settings, NEXT);
     }
   };
 
+  const preload = function () {
+    setMode(RELOADING);
+    setNextTrack(0);
+  }
   return {
     mode,
     utterances: tracks,
@@ -102,6 +113,7 @@ const usePlayer = function () {
     stop,
     previous,
     next,
+    preload,
     nextTrack,
   };
 };
