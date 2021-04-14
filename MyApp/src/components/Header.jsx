@@ -5,7 +5,6 @@ export default function Header(props) {
   const deleteSession = function() {
     axios.delete(`${process.env.REACT_APP_BACK_END_HOST}/session`, {withCredentials: true, headers: {"Access-Control-Allow-Origin": process.env.REACT_APP_FRONT_END_HOST}})
     .then(res => {
-      // console.log(res)
       props.setUserAccess(false);
       localStorage.removeItem('isLoggedIn')
     })
