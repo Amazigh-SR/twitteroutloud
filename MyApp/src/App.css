@@ -85,8 +85,7 @@ button.logout {
 	animation-name: fadeInOpacity;
 	animation-iteration-count: 1;
 	animation-timing-function: ease-in;
-	animation-duration: 700ms;
-
+	animation-duration: 800ms;
 }
 
 @keyframes fadeInOpacity {
@@ -101,7 +100,7 @@ button.logout {
 	}
 }
 
-@keyframes fadeOut {
+/* @keyframes fadeOut {
   from { opacity: 1; }
   to   { opacity: 0; }
 }
@@ -117,7 +116,7 @@ button.logout {
 	animation-iteration-count: 1;
 	animation-timing-function: ease-in;
 	animation-duration: 1.5s;
-}
+} */
 
 
 .tweetComponent {
@@ -128,7 +127,7 @@ button.logout {
   flex-direction: column;
   /* max-width: fit-content; */
   /* margin-top: 81px; Add a top margin to avoid content overlay */
-
+  /* transition: 1s; */
 }
 
 h1 {
