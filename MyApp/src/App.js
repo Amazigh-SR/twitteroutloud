@@ -88,7 +88,7 @@ function App() {
           />
         )}
         {!loading && !userAccess && <Auth />}
-        {!loading && userAccess && <TweetList tweets={tweets} />}
+        {/* {!loading && userAccess && <TweetList tweets={tweets} />} */}
       </header>
     </div>
   );

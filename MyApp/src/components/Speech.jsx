@@ -3,12 +3,15 @@ import axios from "axios";
 import { usePlayer, playerConstants } from "../hooks/usePlayerControls";
 import { useAppMode, appModeConstants } from '../hooks/useAppMode';
 
+
 import $ from 'jquery'
 
 import { speechSynthesis } from "../helpers/speechSynthesis";
 import diffTweets from "../helpers/diffTweets";
 
 import Settings from "./Settings";
+import TweetList from "./TweetList";
+
 import mockData from "../helpers/mockData";
 import { useState, Fragment, useEffect } from "react";
 import fetchEnVoices from "../helpers/fetchEnVoices.js";
@@ -170,14 +173,14 @@ const { CURATE, BINGE, THREAD } = appModeConstants;
 
   return (
     <>
-      <h1>Now playing: {`${playerMode !== STOP ? "Tweet #" + (nextTrack) : 'nothing'}`}</h1>
+      {/* <h1>Now playing: {`${playerMode !== STOP ? "Tweet #" + (nextTrack) : 'nothing'}`}</h1> */}
       <div
         className="btn-toolbar mb-3 speechComponent"
         role="toolbar"
         aria-label="Toolbar with button groups"
       >
-        <div className="btn-group mr-2" role="group" aria-label="First group">
-          <button
+        <div className="btn-group">
+        <button
             className="btn player"
             onClick={() => {
               speechListenerIsActive = !speechListenerIsActive;
@@ -187,8 +190,12 @@ const { CURATE, BINGE, THREAD } = appModeConstants;
               });
             }}
           >
-            Activate Voice Commands
+            Voice Control
           </button>
+        </div>
+
+        <div className="btn-group mr-2" role="group" aria-label="First group">
+          
           <button
             type="button"
             className="btn player"
@@ -229,11 +236,8 @@ const { CURATE, BINGE, THREAD } = appModeConstants;
             Settings
           </button>
         </div>
-        <div className="btn-group">
-          <button id="settingsButton" className="btn player" onClick={()=>{props.getTweets()}}>
-            Load More Tweets
-          </button>
-        </div>
+
+
       </div>
       <Settings
         settings={settings}
@@ -241,7 +245,12 @@ const { CURATE, BINGE, THREAD } = appModeConstants;
         voices={voices}
         $={$}
       />
-      <p id="transcript">Transcript: {transcript}</p>
+      {/* <p id="transcript">Transcript: {transcript}</p> */}
+      <TweetList 
+        style={{transition: "1s"}} 
+        key={nextTrack} 
+        tweets={[tweets[nextTrack], tweets[(nextTrack + 1)], tweets[(nextTrack + 2)]]} 
+      />
     </>
   );
 }
