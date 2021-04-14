@@ -1,6 +1,6 @@
 import { usePlayer, playerConstants } from '../hooks/usePlayerControls';
 import $ from 'jquery'
-
+import {useEffect, useState} from 'react'
 import { speechSynthesis } from "../helpers/speechSynthesis";
 
 import Settings from "./Settings";
@@ -9,21 +9,54 @@ const { PAUSE } = playerConstants;
 
 export default function Speech(props) {
   
-  const { tweets, voices, settings, setSettings } = props;
-
-  const utterances = tweets.map(tweet => speechSynthesis(tweet, settings));
-
+  const { tweets, setTweets, voices, settings, setSettings } = props;
+  
   const {
     mode,
+    utterances,
+    updateTracks,
     play,
     resume,
     pause,
     stop,
     previous,
     next,
-    currentUtterance,
-  } = usePlayer(utterances);
+    nextTrack,
+  } = usePlayer();
 
+  const [appMode, setAppMode] = useState(false);
+  
+  useEffect(()=> {
+    updateTracks(tweets.map(tweet => speechSynthesis(tweet, settings)));
+  }, []);
+
+  useEffect(() => {
+    if (nextTrack >= (tweets.length)) {
+      stop();
+      props.getTweets()
+      .then((tweets) => {
+        setTweets(tweets.data);
+        updateTracks(
+          tweets.data.map((tweet) => speechSynthesis(tweet, settings))
+          );
+          setAppMode(true)
+        });
+    }
+  }
+  ,[nextTrack])
+
+  useEffect(()=>{
+    if (appMode) {
+      play(settings);
+      console.log("I fired play")
+    }
+  }, [utterances, appMode])
+
+    // useEffect(() => {
+    //   updateTracks(tweets.map(tweet => speechSynthesis(tweet, settings)));
+  
+    // }, [tweets, settings])
+  
   const handleClick = function(){
       if ( $( "div.settingsComponent" ).first().is( ":hidden" ) ) {
         $( "div.settingsComponent" ).slideDown( "fast" );
@@ -34,7 +67,7 @@ export default function Speech(props) {
 
   return (
     <>
-      <h1>Now playing: {`${currentUtterance >= 0 ? "Tweet #" + (currentUtterance + 1) : 'nothing'}`}</h1>
+      <h1>Now playing: {`${nextTrack >= 0 ? "Tweet #" + (nextTrack) : 'nothing'}`}</h1>
       <div
         className="btn-toolbar mb-3 speechComponent"
         role="toolbar"
@@ -66,6 +99,11 @@ export default function Speech(props) {
         <div className="btn-group">
           <button id="settingsButton" className="btn player" onClick={()=>{handleClick()}}>
             Settings
+          </button>
+        </div>
+        <div className="btn-group">
+          <button id="settingsButton" className="btn player" onClick={()=>{props.getTweets()}}>
+            Load More Tweets
           </button>
         </div>
       </div>

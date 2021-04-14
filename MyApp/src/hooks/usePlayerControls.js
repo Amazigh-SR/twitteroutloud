@@ -1,4 +1,6 @@
 import { useState, useRef } from "react";
+import getTweets from "../helpers/getTweets";
+import { speechSynthesis } from "../helpers/speechSynthesis";
 
 const speech = window.speechSynthesis;
 
@@ -13,16 +15,22 @@ const playerConstants = {
 
 const { PLAY, STOP, RESUME, PAUSE, PREV, NEXT } = playerConstants;
 
-const usePlayer = function (utterances) {
-  const [mode, setMode] = useState(null);
-  const [tracks, setTracks] = useState([...utterances]);
+const usePlayer = function () {
+  const [mode, setMode] = useState(STOP);
+  const [tracks, setTracks] = useState([]);
   const [nextTrack, setNextTrack] = useState(0);
 
-  for (const utterance of utterances) {
-    utterance.onstart = () => setNextTrack((prev) => prev + 1);
-  }
+  const updateTracks = function (utterances) {
+    for (const utterance of utterances) {
+      utterance.onend = () => {
+        setNextTrack((prev) => prev + 1);
+      };
+    }
 
-  const play = function (settings, previous = false) {
+    setTracks([...utterances]);
+  };
+
+  const play = function (settings, previous = false, event) {
     const { voice, pitch, rate, volume } = settings;
 
     setMode(PLAY);
@@ -41,12 +49,6 @@ const usePlayer = function (utterances) {
       tracks[i].volume = volume;
 
       speech.speak(tracks[i]);
-
-      if (i === tracks.length - 1) {
-        tracks[i].addEventListener("end", function (event) {
-          console.log("Finished reading loaded tweets");
-        });
-      }
     }
   };
 
@@ -85,20 +87,22 @@ const usePlayer = function (utterances) {
 
     speech.cancel();
 
-    if (nextTrack <= tracks.length - 1) {
+    if (nextTrack <= tracks.length) {
       play(settings);
     }
   };
 
   return {
     mode,
+    utterances: tracks,
+    updateTracks,
     play,
     resume,
     pause,
     stop,
     previous,
     next,
-    currentUtterance: nextTrack - 1,
+    nextTrack,
   };
 };
 

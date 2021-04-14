@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import fetchEnVoices from "./helpers/fetchEnVoices"
+import fetchEnVoices from "./helpers/fetchEnVoices";
+import getTweets from "./helpers/getTweets";
 
 import "./App.css";
 
@@ -26,20 +27,6 @@ function App() {
     pitch: 1,
   });
 
-  const getTweets = function () {
-    return axios
-      .get(`${process.env.REACT_APP_BACK_END_HOST}/tweets`, {
-        withCredentials: true,
-        headers: {
-          "Access-Control-Allow-Origin": process.env.REACT_APP_FRONT_END_HOST,
-        },
-      })
-      .then((tweets) => {
-        setTweets(tweets.data);
-        setTimeout(() => setLoading(false), 1000);
-      });
-  };
-
   useEffect(() => {
     if (!isLoggedIn) {
       axios
@@ -50,7 +37,7 @@ function App() {
           },
         })
         .then((res) => {
-          console.log("APP.js line 53 -> RES DATA: ", res.data)
+          // console.log("APP.js line 53 -> RES DATA: ", res.data)
           if (res.data.valid) {
             setUserAccess(true);
             localStorage.setItem("isLoggedIn", true);
@@ -63,13 +50,23 @@ function App() {
         })
         .then((data) => {
           if (data.valid) {
-            return getTweets();
+            return getTweets().then((tweets) => {
+              setTweets(tweets.data);
+              setTimeout(() => setLoading(false), 1000);
+            });
+
+            //if x.setting is true setInterval
           }
         })
         .catch((err) => console.error(err));
     }
     if (isLoggedIn) {
-      getTweets().catch((err) => console.error(err));
+      getTweets()
+        .then((tweets) => {
+          setTweets(tweets.data);
+          setTimeout(() => setLoading(false), 1000);
+        })
+        .catch((err) => console.error(err));
     }
   }, [isLoggedIn]);
 
@@ -78,14 +75,16 @@ function App() {
       <header className="App-header">
         <Header userAccess={userAccess} setUserAccess={setUserAccess} />
         {loading && <Loading>Loading app!</Loading>}
-        {!loading && userAccess && 
-          <Speech 
-            tweets={tweets} 
+        {!loading && userAccess && (
+          <Speech
+            tweets={tweets}
+            setTweets={setTweets}
             voices={voices}
-            settings={settings} 
+            settings={settings}
             setSettings={setSettings}
+            getTweets={getTweets}
           />
-        }
+        )}
         {!loading && !userAccess && <Auth />}
         {!loading && userAccess && <TweetList tweets={tweets} />}
       </header>
