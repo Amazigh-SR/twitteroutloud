@@ -2,8 +2,10 @@ import { usePlayer, playerConstants } from '../hooks/usePlayerControls';
 import { useAppMode, appModeConstants } from '../hooks/useAppMode';
 
 import $ from 'jquery'
-import {useEffect, useState} from 'react'
+import { useEffect } from 'react'
+
 import { speechSynthesis } from "../helpers/speechSynthesis";
+import diffTweets from "../helpers/diffTweets";
 
 import Settings from "./Settings";
 
@@ -47,7 +49,7 @@ export default function Speech(props) {
       preload();
       props.getTweets()
       .then((tweets) => {
-        setTweets(tweets.data);
+        setTweets(prev => [...diffTweets(prev, tweets.data)]);
         updateTracks(
           tweets.data.map((tweet) => speechSynthesis(tweet, settings))
           );
