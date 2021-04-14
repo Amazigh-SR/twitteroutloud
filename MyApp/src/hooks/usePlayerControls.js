@@ -12,7 +12,7 @@ const playerConstants = {
   RELOADING: "RELOADING"
 };
 
-const { PLAY, STOP, RESUME, PAUSE, PREV, NEXT, RELOADING } = playerConstants;
+const { PLAY, STOP, RESUME, PAUSE, PREV, NEXT, RELOAD } = playerConstants;
 
 const usePlayer = function () {
   const [mode, setMode] = useState(STOP);
@@ -48,16 +48,19 @@ const usePlayer = function () {
       }
       setNextTrack((prev) => prev + modifier);
     }
-
-    for (let i = startingTrack; i < tracks.length; i++) {
-      console.log("Tracks[i]. i=> ", i)
-      tracks[i].voice = voice;
-      tracks[i].pitch = pitch;
-      tracks[i].rate = rate;
-      tracks[i].volume = volume;
-
-      //utterances are added to the queue here
-      speech.speak(tracks[i]);
+    if (startingTrack < tracks.length) {
+      for (let i = startingTrack; i < tracks.length; i++) {
+        console.log("Tracks[i]. i=> ", i)
+        tracks[i].voice = voice;
+        tracks[i].pitch = pitch;
+        tracks[i].rate = rate;
+        tracks[i].volume = volume;
+  
+        //utterances are added to the queue here
+        speech.speak(tracks[i]);
+      }
+    } else {
+      stop();
     }
   };
 
@@ -99,10 +102,10 @@ const usePlayer = function () {
     }
   };
 
-  const preload = function () {
-    setMode(RELOADING);
-    setNextTrack(0);
+  const reload = function () {
+    setMode(RELOAD);
   }
+
   return {
     playerMode: mode,
     utterances: tracks,
@@ -113,7 +116,7 @@ const usePlayer = function () {
     stop,
     previous,
     next,
-    preload,
+    reload,
     nextTrack,
   };
 };

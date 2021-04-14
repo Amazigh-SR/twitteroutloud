@@ -9,7 +9,7 @@ import diffTweets from "../helpers/diffTweets";
 
 import Settings from "./Settings";
 
-const { PAUSE, STOP } = playerConstants;
+const { PAUSE, STOP, RELOAD } = playerConstants;
 
 
 const { CURATE, BINGE, THREAD } = appModeConstants;
@@ -27,7 +27,7 @@ export default function Speech(props) {
     stop,
     previous,
     next,
-    preload,
+    reload,
     nextTrack,
   } = usePlayer();
 
@@ -45,8 +45,8 @@ export default function Speech(props) {
 
   useEffect(() => {
     //this use effect calls pings the server every time more tweets are needed
-    if (nextTrack >= (tweets.length)) {
-      preload();
+    if (nextTrack >= (tweets.length) && playerMode !== RELOAD) {
+      reload();
       props.getTweets()
       .then((newTweets) => {
         const mergedTweets = diffTweets(tweets, newTweets)
@@ -62,7 +62,7 @@ export default function Speech(props) {
 
   //while bingeing play will be called as long as new utterances are being generated
   useEffect(()=>{
-    if (appMode === BINGE) {
+    if (appMode === BINGE && playerMode === RELOAD) {
       play(settings);
     }
   }, [utterances, appMode])
