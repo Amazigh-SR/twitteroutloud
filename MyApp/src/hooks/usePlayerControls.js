@@ -104,7 +104,7 @@ const usePlayer = function () {
     setNextTrack(0);
   }
   return {
-    mode,
+    playerMode: mode,
     utterances: tracks,
     updateTracks,
     play,

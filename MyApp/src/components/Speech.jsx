@@ -9,29 +9,32 @@ import Settings from "./Settings";
 
 const { PAUSE, STOP } = playerConstants;
 
-const {
-  mode,
-  utterances,
-  updateTracks,
-  play,
-  resume,
-  pause,
-  stop,
-  previous,
-  next,
-  preload,
-  nextTrack,
-} = usePlayer();
 
 const { CURATE, BINGE, THREAD } = appModeConstants;
 
-const {
-  appMode,
-  setAppMode,
-} = useAppMode;
 
 export default function Speech(props) {
+
+  const {
+    playerMode,
+    utterances,
+    updateTracks,
+    play,
+    resume,
+    pause,
+    stop,
+    previous,
+    next,
+    preload,
+    nextTrack,
+  } = usePlayer();
+
+  const {
+    appMode,
+    setAppMode,
+  } = useAppMode();
   
+
   const { tweets, setTweets, voices, settings, setSettings } = props;
   
   useEffect(()=> {
@@ -39,6 +42,7 @@ export default function Speech(props) {
   }, []);
 
   useEffect(() => {
+    //this use effect calls pings the server every time more tweets are needed
     if (nextTrack >= (tweets.length)) {
       preload();
       props.getTweets()
@@ -53,6 +57,7 @@ export default function Speech(props) {
   }
   ,[nextTrack])
 
+  //while bingeing play will be called as long as new utterances are being generated
   useEffect(()=>{
     if (appMode === BINGE) {
       play(settings);
@@ -70,7 +75,7 @@ export default function Speech(props) {
 
   return (
     <>
-      <h1>Now playing: {`${mode !== STOP ? "Tweet #" + (nextTrack) : 'nothing'}`}</h1>
+      <h1>Now playing: {`${playerMode !== STOP ? "Tweet #" + (nextTrack) : 'nothing'}`}</h1>
       <div
         className="btn-toolbar mb-3 speechComponent"
         role="toolbar"
@@ -85,7 +90,7 @@ export default function Speech(props) {
           <button
             type="button"
             className="btn player"
-            onClick={() => { mode === PAUSE ? resume() : play(settings) }}
+            onClick={() => { playerMode === PAUSE ? resume() : play(settings) }}
           >
             <i className="bi bi-play-fill"></i>
           </button>
