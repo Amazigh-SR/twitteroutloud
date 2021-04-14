@@ -51,7 +51,7 @@ function App() {
         .then((data) => {
           if (data.valid) {
             return getTweets().then((tweets) => {
-              setTweets(tweets.data);
+              setTweets(tweets);
               setTimeout(() => setLoading(false), 1000);
             });
 
@@ -63,7 +63,7 @@ function App() {
     if (isLoggedIn) {
       getTweets()
         .then((tweets) => {
-          setTweets(tweets.data);
+          setTweets(tweets);
           setTimeout(() => setLoading(false), 1000);
         })
         .catch((err) => console.error(err));

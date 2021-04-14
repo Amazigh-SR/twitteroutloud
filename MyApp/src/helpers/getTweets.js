@@ -6,5 +6,6 @@ export default function getTweets() {
     headers: {
       "Access-Control-Allow-Origin": process.env.REACT_APP_FRONT_END_HOST,
     },
-  });
+  })
+    .then(res => res.data)
 }
