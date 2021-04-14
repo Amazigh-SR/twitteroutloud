@@ -1,4 +1,6 @@
 import { usePlayer, playerConstants } from '../hooks/usePlayerControls';
+import { useAppMode, appModeConstants } from '../hooks/useAppMode';
+
 import $ from 'jquery'
 import {useEffect, useState} from 'react'
 import { speechSynthesis } from "../helpers/speechSynthesis";
@@ -7,25 +9,30 @@ import Settings from "./Settings";
 
 const { PAUSE, STOP } = playerConstants;
 
+const {
+  mode,
+  utterances,
+  updateTracks,
+  play,
+  resume,
+  pause,
+  stop,
+  previous,
+  next,
+  preload,
+  nextTrack,
+} = usePlayer();
+
+const { CURATE, BINGE, THREAD } = appModeConstants;
+
+const {
+  appMode,
+  setAppMode,
+} = useAppMode;
+
 export default function Speech(props) {
   
   const { tweets, setTweets, voices, settings, setSettings } = props;
-  
-  const {
-    mode,
-    utterances,
-    updateTracks,
-    play,
-    resume,
-    pause,
-    stop,
-    previous,
-    next,
-    preload,
-    nextTrack,
-  } = usePlayer();
-
-  const [appMode, setAppMode] = useState(false);
   
   useEffect(()=> {
     updateTracks(tweets.map(tweet => speechSynthesis(tweet, settings)));
@@ -40,7 +47,7 @@ export default function Speech(props) {
         updateTracks(
           tweets.data.map((tweet) => speechSynthesis(tweet, settings))
           );
-          setAppMode(true)
+          setAppMode(BINGE)
         });
     }
   }
@@ -52,10 +59,6 @@ export default function Speech(props) {
     }
   }, [utterances, appMode])
 
-    // useEffect(() => {
-    //   updateTracks(tweets.map(tweet => speechSynthesis(tweet, settings)));
-  
-    // }, [tweets, settings])
   
   const handleClick = function(){
       if ( $( "div.settingsComponent" ).first().is( ":hidden" ) ) {
