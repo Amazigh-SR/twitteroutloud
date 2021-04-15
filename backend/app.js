@@ -95,13 +95,21 @@ app.get("/validate", (req, res) => {
   
   db.getUserByID(userID).then((row) => {
     if (row) {
-      return res.send({ valid: true, row }); //! this is an opportunity to send back the full profile
+      const profile = {username: row.username, image_url: row.image_url}
+      const dbSettings = row.settings
+      return res.send({ valid: true, dbSettings, profile });
     }
     return res.send({valid: false});
   });
 });
 
 app.delete("/session", (req, res) => {
+  const userID = req.session && req.session.userID;
+  const settings = req.body;
+
+  //store settings in users table on logout
+  db.updateUserSettings(userID, settings);
+  
   req.session.userID = null;
   res.send();
 });
