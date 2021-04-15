@@ -32,7 +32,7 @@ export default function Settings(props) {
     <div className="settingsComponent">
       <div className="option voiceDiv">
         <label htmlFor="voice">Voice </label>
-        <select value={settings.voice.name} name="voice" id="voice" onChange={handleVoiceChange}>
+        <select value={settings.voice && settings.voice.name} name="voice" id="voice" onChange={handleVoiceChange}>
           {voiceNameList}
         </select>
       </div>
