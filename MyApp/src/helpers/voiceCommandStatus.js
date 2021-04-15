@@ -10,16 +10,23 @@ const voiceCommandStatus = function (message) {
   //Setup synthesis object
   const synthesis = window.speechSynthesis;
 
+  // let voices = synthesis.getVoices();
+
+  // Regex to match all types of en e.g. en-US, en-CA etc.
+  // const englishRegex = /^en(-[a-z]{2})?$/i;
+
   //Fetch english voices
-  const voices = fetchEnVoices(synthesis);
+  // voices = voices.filter((voice) => englishRegex.test(voice.lang));
 
   //Generate the voice for a given text
   const utterance = new SpeechSynthesisUtterance(message);
 
-  utterance.voice = voices[2];
-  utterance.pitch = 1;
-  utterance.rate = 1;
-  utterance.volume = 1;
+  // utterance.voice = voices[2];
+  // utterance.pitch = 1;
+  // utterance.rate = 1;
+  // utterance.volume = 1;
+
+  console.log("I EXIST!!");
 
   synthesis.speak(utterance);
 };
