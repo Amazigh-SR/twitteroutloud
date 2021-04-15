@@ -66,7 +66,7 @@ export default function Speech(props) {
   const commands = [
     {
       command: ["start"],
-      callback: () => {
+      callback: ({ resetTranscript }) => {
         play(settings);
         resetTranscript();
       },
@@ -74,25 +74,40 @@ export default function Speech(props) {
 
     {
       command: ["stop"],
-      callback: stop,
+      callback: ({ resetTranscript }) => {
+        stop();
+        resetTranscript();
+      },
     },
     {
       command: ["pause"],
-      callback: pause,
+      callback: ({ resetTranscript }) => {
+        pause();
+        resetTranscript();
+      },
     },
     {
       command: ["resume"],
-      callback: resume,
+      callback: ({ resetTranscript }) => {
+        resume();
+        resetTranscript();
+      },
     },
 
     {
       command: ["Next tweet"],
-      callback: () => next(settings),
+      callback: ({ resetTranscript }) => {
+        next(settings);
+        resetTranscript();
+      },
     },
 
     {
-      command: ["Previous tweet "],
-      callback: () => previous(settings),
+      command: ["Previous tweet"],
+      callback: ({ resetTranscript }) => {
+        previous(settings);
+        resetTranscript();
+      },
     },
 
     {
@@ -176,13 +191,13 @@ export default function Speech(props) {
             }).then((response) => {
               console.log(newSpeechListenerIsActive);
               if (newSpeechListenerIsActive) {
-                voiceCommandStatus("Voice command enabled");
+                voiceCommandStatus("Voice command enabled", voices);
                 document.querySelector("#voice-commands").innerHTML =
                   "Deactivate Voice Commands";
               }
               if (!newSpeechListenerIsActive) {
                 SpeechRecognition.abortListening();
-                voiceCommandStatus("Voice command disabled");
+                voiceCommandStatus("Voice command disabled", voices);
                 document.querySelector("#voice-commands").innerHTML =
                   "Activate Voice Commands";
               }
