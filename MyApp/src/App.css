@@ -21,6 +21,10 @@
   
 } */
 
+.mode-list {
+  display: flex;
+}
+
 .VC-list {
   display: flex;
   font-size: 24px;
@@ -28,13 +32,21 @@
 
 #transcript {
   font-size: 26px;
+  word-wrap: break-word;
+  width: 100%;
 }
 
-/* .invisible {
-  display: none;
-  height: 0px;
-  transition: height 2s ease-out;
-} */
+.invisible {
+  /* display: none; */
+  height: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  transition: 0.5s ease-in;
+  overflow: hidden;
+  /* height: 0px;
+  transition: height 2s ease-out; */
+}
 
 /* .visible {
   display: block;
@@ -53,6 +65,17 @@
   line-height: 45px;
   background-color: white;
   display: none;
+}
+
+.drawer {
+  border: 1px solid var(--twitter-blue);
+  border-radius: 11px;
+  background-color: white;
+  margin: 10px;
+  padding: 29px;
+  /* display: block; */
+  transition: 0.5s ease-in;
+  overflow: hidden;
 }
 
 #doneButton {
@@ -101,6 +124,16 @@ h1.nav {
 button.logout {
   font-weight: 700;
   font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+button.modeButton {
+  font-size: 0.7em;
+  background-color: var(--twitter-blue);
+  margin: 5px;
+}
+
+.fas {
+  margin-right: 5px;
 }
 
 .individualTweet {

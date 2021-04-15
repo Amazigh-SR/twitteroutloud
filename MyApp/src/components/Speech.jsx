@@ -185,7 +185,8 @@ export default function Speech(props) {
           className="btn player"
           id="voice-commands"
           onClick={() => {
-            // document.querySelector("#VC-drawer").classList.toggle(".invisible");
+            document.querySelector("#VC-drawer").classList.toggle("invisible");
+            document.querySelector("#VC-drawer").classList.toggle("drawer");
             const newSpeechListenerIsActive = !speechListenerIsActive;
             setSpeechListenerIsActive(!speechListenerIsActive);
 
@@ -257,10 +258,15 @@ export default function Speech(props) {
             id="settingsButton"
             className="btn player"
             onClick={() => {
-              props.getTweets();
+              document
+                .querySelector("#appMode-drawer")
+                .classList.toggle("invisible");
+              document
+                .querySelector("#appMode-drawer")
+                .classList.toggle("drawer");
             }}
           >
-            Load More Tweets
+            App Mode
           </button>
         </div>
       </div>
@@ -271,7 +277,7 @@ export default function Speech(props) {
         $={$}
       />
       {/* Create a component for list of commands to clean up this disasta */}
-      <div id="VC-drawer">
+      <div id="VC-drawer" className="invisible">
         <h2>List of Voice Commands</h2>
         <div className="VC-list">
           <div>
@@ -301,10 +307,35 @@ export default function Speech(props) {
         </p>
       </div>
       {/* <p id="transcript">Transcript: {transcript}</p> */}
-      <TweetList 
-        style={{transition: "1s"}} 
-        key={nextTrack} 
-        tweets={[tweets[nextTrack], tweets[(nextTrack + 1)], tweets[(nextTrack + 2)]]} 
+      <div id="appMode-drawer" className="invisible">
+        {/* <h2>App Modes</h2> */}
+        <div className="mode-list">
+          <div>
+            {/* <ul> */}
+            <button className="btn btn-primary modeButton" onClick={() => {}}>
+              <i className="fas fa-infinity"></i>
+              Binge
+            </button>
+            {/* </ul> */}
+          </div>
+          <div>
+            {/* <ul> */}
+            <button className="btn btn-primary modeButton" onClick={() => {}}>
+              <i className="fas fa-stopwatch"></i>
+              Timer
+            </button>
+            {/* </ul> */}
+          </div>
+        </div>
+      </div>
+      <TweetList
+        style={{ transition: "1s" }}
+        key={nextTrack}
+        tweets={[
+          tweets[nextTrack],
+          tweets[nextTrack + 1],
+          tweets[nextTrack + 2],
+        ]}
       />
     </>
   );
