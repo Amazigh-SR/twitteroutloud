@@ -75,6 +75,28 @@ const updateUserTokens = function (
 exports.updateUserTokens = updateUserTokens;
 
 /**
+ * update user settings if user is already in database
+ * @param 
+ * @returns the new user id.
+ */
+ const updateUserSettings = function (
+  twitter_id,
+  settings
+  ) {
+    queryParams = [twitter_id, settings];
+    queryString = `
+    UPDATE users SET settings = $2
+    WHERE twitter_id = $1
+    RETURNING *;
+    `;
+  return db.query(queryString, queryParams).then(res => {
+    console.log(`Updated settings for Twitter User: ${twitter_id} successfully!`)
+    return res.rows[0]
+  });
+};
+exports.updateUserSettings = updateUserSettings;
+
+/**
  * Query db by twitter_id
  * @param number
  * @returns the new user id.
