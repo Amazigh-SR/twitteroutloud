@@ -62,10 +62,14 @@ export default function Speech(props) {
   // ------------------------------------------------------------- //
   // Speech Recognition API is currently following a "push to talk" approach.
   // let speechListenerIsActive = false; //! I commented this out as well
+  const { resetTranscript } = useSpeechRecognition();
   const commands = [
     {
       command: ["start"],
-      callback: () => play(settings),
+      callback: () => {
+        play(settings);
+        resetTranscript();
+      },
     },
 
     {
