@@ -15,7 +15,9 @@ export default function Header(props) {
     .then(res => {
       setUserAccess(false);
       localStorage.removeItem('isLoggedIn')
-      localStorage.removeItem('previousSettings')
+      for (const [key] of Object.entries(settings)) {
+        localStorage.removeItem(key)
+      }
     })
     .catch(err => console.error(err))
   };
