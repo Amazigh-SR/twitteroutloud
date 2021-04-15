@@ -10,21 +10,22 @@ import Header from "./components/Header";
 import TweetList from "./components/TweetList";
 import Speech from "./components/Speech";
 import Loading from "./components/Loading";
+import Welcome from "./components/Welcome";
 
 function App() {
-  
   const isLoggedIn = localStorage.getItem("isLoggedIn");
-  
+
   const [userAccess, setUserAccess] = useState(
     isLoggedIn === "true" ? true : false
-    );
+  );
   const [tweets, setTweets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState({});
   const [voices, setVoices] = useState([]);
 
+  const [userData, setUserData] = useState(localStorage.getItem("userData"));
+
   useEffect(() => {
-    
     if (!isLoggedIn) {
       axios
         .get(`${process.env.REACT_APP_BACK_END_HOST}/validate`, {
@@ -34,7 +35,7 @@ function App() {
           },
         })
         .then((res) => {
-          const {valid, dbSettings, profile} = res.data;
+          const { valid, dbSettings, profile } = res.data;
           if (valid) {
             setUserAccess(valid);
             localStorage.setItem("isLoggedIn", true);
@@ -42,12 +43,17 @@ function App() {
             for (const [key, value] of Object.entries(dbSettings)) {
               localStorage.setItem(key, value);
             }
-            fetchEnVoices(window.speechSynthesis, setVoices, setSettings, dbSettings)
+            fetchEnVoices(
+              window.speechSynthesis,
+              setVoices,
+              setSettings,
+              dbSettings
+            );
           } else {
             setUserAccess(valid);
             localStorage.removeItem("isLoggedIn");
-            for (const [key] of Object.entries(settings)){
-              localStorage.removeItem(key)
+            for (const [key] of Object.entries(settings)) {
+              localStorage.removeItem(key);
             }
             setTimeout(() => setLoading(false), 1000);
           }
@@ -69,9 +75,14 @@ function App() {
         rate: Number(localStorage.getItem("rate")),
         pitch: Number(localStorage.getItem("pitch")),
         volume: Number(localStorage.getItem("volume")),
-        voice: localStorage.getItem("voice")
-      }
-      fetchEnVoices(window.speechSynthesis, setVoices, setSettings, localSettings)
+        voice: localStorage.getItem("voice"),
+      };
+      fetchEnVoices(
+        window.speechSynthesis,
+        setVoices,
+        setSettings,
+        localSettings
+      );
       getTweets()
         .then((tweets) => {
           setTweets(tweets);
@@ -84,8 +95,13 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Header userAccess={userAccess} setUserAccess={setUserAccess} settings={settings} />
+        <Header
+          userAccess={userAccess}
+          setUserAccess={setUserAccess}
+          settings={settings}
+        />
         {loading && <Loading>Loading app!</Loading>}
+        {!loading && userAccess && <Welcome userData={userData} />}
         {!loading && userAccess && (
           <Speech
             tweets={tweets}
@@ -99,7 +115,7 @@ function App() {
           />
         )}
         {!loading && !userAccess && <Auth />}
-        {!loading && userAccess && <TweetList tweets={tweets} />}
+        {/* {!loading && userAccess && <TweetList tweets={tweets} />} */}
       </header>
     </div>
   );

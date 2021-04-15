@@ -126,7 +126,7 @@ app.get("/tweets", (req, res) => {
       access_token_secret: secret_token,
     });
 
-    const params = { tweet_mode: "extended", count: 5 };
+    const params = { tweet_mode: "extended", count: 200 };
 
     client
       .get(`statuses/home_timeline`, params)

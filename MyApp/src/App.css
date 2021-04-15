@@ -52,8 +52,6 @@
   padding-top: 10px;
   line-height: 45px;
   background-color: white;
-  animation-duration: 3s;
-  animation-name: slidein;
   display: none;
 }
 
@@ -108,7 +106,44 @@ button.logout {
 .individualTweet {
   /* width: 500px !important; */
   /* display: contents; */
+	opacity: 1;
+	animation-name: fadeInOpacity;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+	animation-duration: 1.5s;
+  transition: 1s;
 }
+
+@keyframes fadeInOpacity {
+	0% {
+		opacity: 0;
+    -webkit-transform: translateY(100%);
+	}
+	100% {
+		opacity: 1;
+    -webkit-transform: translateY(0);
+    
+	}
+}
+
+/* @keyframes fadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+.animateOut{
+  animation-name: fadeOut;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+	animation-duration: 1.5s;
+}
+.animateIn{
+  animation-name: fadeInOpacity;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+	animation-duration: 1.5s;
+} */
+
 
 .tweetComponent {
   /* width: 100% !important; */
@@ -118,6 +153,7 @@ button.logout {
   flex-direction: column;
   /* max-width: fit-content; */
   /* margin-top: 81px; Add a top margin to avoid content overlay */
+  /* transition: 1s; */
 }
 
 h1 {
@@ -150,6 +186,11 @@ li:before {
 
 .App-link {
   color: #61dafb;
+}
+
+.player.focus, .player:focus, .player:hover {
+    color: var(--twitter-dark-gray);
+    text-decoration: none;
 }
 
 @media only screen and (max-width: 540px) {

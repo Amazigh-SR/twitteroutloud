@@ -9,6 +9,8 @@ import { speechSynthesis } from "../helpers/speechSynthesis";
 import diffTweets from "../helpers/diffTweets";
 
 import Settings from "./Settings";
+import TweetList from "./TweetList";
+
 import mockData from "../helpers/mockData";
 import { useState, Fragment, useEffect } from "react";
 import fetchEnVoices from "../helpers/fetchEnVoices.js";
@@ -298,6 +300,12 @@ export default function Speech(props) {
           <strong>Transcript:</strong> {transcript}
         </p>
       </div>
+      {/* <p id="transcript">Transcript: {transcript}</p> */}
+      <TweetList 
+        style={{transition: "1s"}} 
+        key={nextTrack} 
+        tweets={[tweets[nextTrack], tweets[(nextTrack + 1)], tweets[(nextTrack + 2)]]} 
+      />
     </>
   );
 }
