@@ -1,13 +1,15 @@
-export default function Welcome(props) {
-  console.log("welcome props: ", props)
+export default function Welcome() {
+  const username = localStorage.getItem("username");
+  const image_url = localStorage.getItem("image_url");
+
   return <div 
             style={{display: "-webkit-inline-box", marginTop: "9px"}} 
             id="welcomeComponent">
-          {props.userData.row && <h4 style={{marginRight: "15px"}}>Logged in as @{props.userData.row.username}</h4>}
-          {props.userData.row && <img 
+          <h4 style={{marginRight: "15px"}}>Logged in as @{username}</h4>
+          <img 
             style={{borderRadius: "100px"}} 
             id="profileImage" 
-            src={props.userData.row.image_url} 
-            alt="profile"/> }
+            src={image_url} 
+            alt="profile"/>
           </div>
 }

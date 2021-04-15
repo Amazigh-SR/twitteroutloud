@@ -23,8 +23,6 @@ function App() {
   const [settings, setSettings] = useState({});
   const [voices, setVoices] = useState([]);
 
-  const [userData, setUserData] = useState(localStorage.getItem("userData"));
-
   useEffect(() => {
     if (!isLoggedIn) {
       axios
@@ -36,10 +34,13 @@ function App() {
         })
         .then((res) => {
           const { valid, dbSettings, profile } = res.data;
+          const {username, image_url} = profile;
+
           if (valid) {
             setUserAccess(valid);
             localStorage.setItem("isLoggedIn", true);
-
+            localStorage.setItem("username", username);
+            localStorage.setItem("image_url", image_url);
             for (const [key, value] of Object.entries(dbSettings)) {
               localStorage.setItem(key, value);
             }
@@ -55,6 +56,8 @@ function App() {
             for (const [key] of Object.entries(settings)) {
               localStorage.removeItem(key);
             }
+            localStorage.removeItem("username");
+            localStorage.removeItem("image_url");
             setTimeout(() => setLoading(false), 1000);
           }
           return res.data;
@@ -77,6 +80,7 @@ function App() {
         volume: Number(localStorage.getItem("volume")),
         voice: localStorage.getItem("voice"),
       };
+      setUserAccess(localStorage.getItem("profile"));
       fetchEnVoices(
         window.speechSynthesis,
         setVoices,
@@ -101,7 +105,7 @@ function App() {
           settings={settings}
         />
         {loading && <Loading>Loading app!</Loading>}
-        {!loading && userAccess && <Welcome userData={userData} />}
+        {!loading && userAccess && <Welcome />}
         {!loading && userAccess && (
           <Speech
             tweets={tweets}
