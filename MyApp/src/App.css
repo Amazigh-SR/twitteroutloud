@@ -82,10 +82,10 @@ button.logout {
   /* width: 500px !important; */
   /* display: contents; */
 	opacity: 1;
-	animation-name: fadeInOpacity;
+	/* animation-name: fadeInOpacity;
 	animation-iteration-count: 1;
 	animation-timing-function: ease-in;
-	animation-duration: 800ms;
+	animation-duration: 800ms; */
 }
 
 @keyframes fadeInOpacity {
