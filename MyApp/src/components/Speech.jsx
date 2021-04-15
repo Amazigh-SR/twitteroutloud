@@ -172,13 +172,13 @@ export default function Speech(props) {
             }).then((response) => {
               console.log(newSpeechListenerIsActive);
               if (newSpeechListenerIsActive) {
-                voiceCommandStatus("Voice command enabled");
+                voiceCommandStatus("Voice command enabled", voices);
                 document.querySelector("#voice-commands").innerHTML =
                   "Deactivate Voice Commands";
               }
               if (!newSpeechListenerIsActive) {
                 SpeechRecognition.abortListening();
-                voiceCommandStatus("Voice command disabled");
+                voiceCommandStatus("Voice command disabled", voices);
                 document.querySelector("#voice-commands").innerHTML =
                   "Activate Voice Commands";
               }

@@ -1,7 +1,7 @@
-const fetchEnVoices = require("./fetchEnVoices");
+// const fetchEnVoices = require("./fetchEnVoices");
 const checkSpeechSynthesis = require("./checkSpeechSynthesis");
 
-const voiceCommandStatus = function (message) {
+const voiceCommandStatus = function (message, voices) {
   //Check browser support
   if (!checkSpeechSynthesis()) {
     return "Sorry this browser does not support speechSynthesis";
@@ -21,12 +21,12 @@ const voiceCommandStatus = function (message) {
   //Generate the voice for a given text
   const utterance = new SpeechSynthesisUtterance(message);
 
-  // utterance.voice = voices[2];
-  // utterance.pitch = 1;
-  // utterance.rate = 1;
-  // utterance.volume = 1;
+  utterance.voice = voices[2];
+  utterance.pitch = 1;
+  utterance.rate = 1;
+  utterance.volume = 1;
 
-  console.log("I EXIST!!");
+  // console.log("I EXIST!!");
 
   synthesis.speak(utterance);
 };
