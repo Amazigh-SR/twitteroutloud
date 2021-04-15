@@ -43,11 +43,10 @@ function App() {
               localStorage.setItem(key, value);
             }
             fetchEnVoices(window.speechSynthesis, setVoices, setSettings, dbSettings)
-            console.log("In axios call: ", {...settings, voice: voices.find(voice => voice.name === settings.voice)})
           } else {
             setUserAccess(valid);
             localStorage.removeItem("isLoggedIn");
-            for (const [key] of Object.entries.settings){
+            for (const [key] of Object.entries(settings)){
               localStorage.removeItem(key)
             }
             setTimeout(() => setLoading(false), 1000);
