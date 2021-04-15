@@ -6,6 +6,7 @@ export default function Settings(props) {
       ...prev,
       [evt.target.name]: (value),
     }));
+    localStorage.setItem(evt.target.name, value)
   }
 
   function handleVoiceChange(evt) {
@@ -14,6 +15,7 @@ export default function Settings(props) {
       ...prev, 
       [evt.target.name]: voice,
     }))
+    localStorage.setItem("voice", voice.name)
   }
 
   const voiceNameList = voices.map((voice, index) => {
@@ -30,7 +32,7 @@ export default function Settings(props) {
     <div className="settingsComponent">
       <div className="option voiceDiv">
         <label htmlFor="voice">Voice </label>
-        <select name="voice" id="voice" onChange={handleVoiceChange}>
+        <select value={settings.voice && settings.voice.name} name="voice" id="voice" onChange={handleVoiceChange}>
           {voiceNameList}
         </select>
       </div>

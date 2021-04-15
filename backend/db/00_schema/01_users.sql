@@ -7,5 +7,6 @@ CREATE TABLE users (
   email VARCHAR(255) NOT NULL,
   token VARCHAR(255),
   secret_token VARCHAR(255),
-  image_url VARCHAR(255)
+  image_url VARCHAR(255),
+  settings JSON
 );

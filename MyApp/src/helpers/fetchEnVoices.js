@@ -1,17 +1,18 @@
 //Function 2 - a function that fetches all the EN voices (from a total of 67) that the API has to offer
-const fetchEnVoices = function (synthesis) {
-  let voices = synthesis.getVoices()
+const fetchEnVoices = function (synthesis, setVoices, setSettings, settings) {
+  const voices = synthesis.getVoices();
   
   if (voices.length > 0) {
-    return filterEnVoices(voices);
+    setVoices([...filterEnVoices(voices)]);
+    setSettings({...settings, voice: voices.find(voice => voice.name === settings.voice)})
+  } else {
+    //chrome requires this event to be handled somewhat inconsistently
+    window.speechSynthesis.onvoiceschanged = (event) => {
+      const voices = event.target.getVoices();
+      setVoices([...filterEnVoices(voices)])
+      setSettings({...settings, voice: voices.find(voice => voice.name === settings.voice)})
+    }
   }
-    
-  window.speechSynthesis.onvoiceschanged = (event) => {
-    voices = event.target.getVoices();
-    return filterEnVoices(voices)
-  }
-
-  return voices;
 };
 
 const filterEnVoices= function(voices) {
