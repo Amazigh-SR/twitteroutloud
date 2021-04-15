@@ -10,8 +10,14 @@ const speechSynthesis = function (tweetObject, settings) {
   const tweetText = tweetObject.full_text;
   const name = tweetObject.user.name;
   const finalFormMessage = `At ${name} tweets. ${tweetText}..`;
-  const linkIndex = finalFormMessage.search(/(http|ftp|https):/i);
-  const endMessage = finalFormMessage.slice(0, linkIndex);
+  // console.log("pre-regex", finalFormMessage);
+  const regexReplaceLinks = finalFormMessage.replace(
+    /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])?/i,
+    ""
+  );
+  const regexHashtag = regexReplaceLinks.replace(/#/i, "hashtag ");
+  // console.log("post-regex", regexHashtag);
+  const endMessage = regexHashtag;
 
   const { voice, pitch, rate, volume } = settings; //voiceId b/w 1 & 17.
 
