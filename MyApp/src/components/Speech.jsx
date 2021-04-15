@@ -1,9 +1,9 @@
 // import checkSpeechSynthesis from "../helpers/checkSpeechSynthesis";
 import axios from "axios";
 import { usePlayer, playerConstants } from "../hooks/usePlayerControls";
-import { useAppMode, appModeConstants } from '../hooks/useAppMode';
+import { useAppMode, appModeConstants } from "../hooks/useAppMode";
 
-import $ from 'jquery'
+import $ from "jquery";
 
 import { speechSynthesis } from "../helpers/speechSynthesis";
 import diffTweets from "../helpers/diffTweets";
@@ -15,16 +15,16 @@ import fetchEnVoices from "../helpers/fetchEnVoices.js";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
+import { voiceCommandStatus } from "../helpers/voiceCommandStatus";
 
 const { PAUSE, STOP, RELOAD } = playerConstants;
 
 export default function Speech(props) {
-
   const { tweets, setTweets, voices, settings, setSettings } = props;
 
   // const utterances = tweets.map((tweet) => speechSynthesis(tweet, settings));
 
-const { CURATE, BINGE, THREAD } = appModeConstants;
+  const { CURATE, BINGE, THREAD } = appModeConstants;
 
   const {
     playerMode,
@@ -40,23 +40,8 @@ const { CURATE, BINGE, THREAD } = appModeConstants;
     nextTrack,
   } = usePlayer();
 
-  const {
-    appMode,
-    setAppMode,
-  } = useAppMode();
-  
-
-  // let currentTweet = 0;
-  // const playSpeech = function (settings) {
-  //   for (let i = 0; i < tweets.length; i++) {
-  //     window.speechSynthesis.resume() || speechSynthesis(tweets[i], settings);
-  //     // speechSynthesis(tweets[i], settings);
-  //   }
-  // };
-
-
-
-  // useEffect(() => {}, [currentTweet]);
+  const { appMode, setAppMode } = useAppMode();
+  const [speechListenerIsActive, setSpeechListenerIsActive] = useState(false); //! Added this here
 
   //Create a helper function file for functions occurring more than once
   const deleteSession = function () {
@@ -76,7 +61,7 @@ const { CURATE, BINGE, THREAD } = appModeConstants;
 
   // ------------------------------------------------------------- //
   // Speech Recognition API is currently following a "push to talk" approach.
-  let speechListenerIsActive = false;
+  // let speechListenerIsActive = false; //! I commented this out as well
   const commands = [
     {
       command: ["start"],
@@ -130,65 +115,81 @@ const { CURATE, BINGE, THREAD } = appModeConstants;
 
   // ------------------------------------------------------------ //
 
-  
-  useEffect(()=> {
-    updateTracks(tweets.map(tweet => speechSynthesis(tweet, settings)));
+  useEffect(() => {
+    updateTracks(tweets.map((tweet) => speechSynthesis(tweet, settings)));
   }, []);
 
   useEffect(() => {
     //this use effect calls pings the server every time more tweets are needed
-    if (nextTrack >= (tweets.length) && playerMode !== RELOAD) {
+    if (nextTrack >= tweets.length && playerMode !== RELOAD) {
       reload();
-      props.getTweets()
-      .then((newTweets) => {
-        const mergedTweets = diffTweets(tweets, newTweets)
+      props.getTweets().then((newTweets) => {
+        const mergedTweets = diffTweets(tweets, newTweets);
         setTweets(mergedTweets);
         updateTracks(
-          mergedTweets.map(tweet => speechSynthesis(tweet, settings))
-          );
-          setAppMode(BINGE)
-        });
+          mergedTweets.map((tweet) => speechSynthesis(tweet, settings))
+        );
+        setAppMode(BINGE);
+      });
     }
-  }
-  ,[nextTrack])
+  }, [nextTrack]);
 
   //while bingeing play will be called as long as new utterances are being generated
-  useEffect(()=>{
+  useEffect(() => {
     if (appMode === BINGE && playerMode === RELOAD) {
       play(settings);
     }
-  }, [utterances, appMode])
+  }, [utterances, appMode]);
 
-  
-  const handleClick = function(){
-      if ( $( "div.settingsComponent" ).first().is( ":hidden" ) ) {
-        $( "div.settingsComponent" ).slideDown( "fast" );
-      } else {
-        $( "div.settingsComponent" ).slideUp();
-      }
-  }
+  const handleClick = function () {
+    if ($("div.settingsComponent").first().is(":hidden")) {
+      $("div.settingsComponent").slideDown("fast");
+    } else {
+      $("div.settingsComponent").slideUp();
+    }
+  };
 
   return (
     <>
-      <h1>Now playing: {`${playerMode !== STOP ? "Tweet #" + (nextTrack) : 'nothing'}`}</h1>
+      <h1>
+        Now playing:{" "}
+        {`${playerMode !== STOP ? "Tweet #" + nextTrack : "nothing"}`}
+      </h1>
       <div
         className="btn-toolbar mb-3 speechComponent"
         role="toolbar"
         aria-label="Toolbar with button groups"
       >
+        <button
+          className="btn player"
+          id="voice-commands"
+          onClick={() => {
+            const newSpeechListenerIsActive = !speechListenerIsActive; //! I commented this out
+            // console.log(speechListenerIsActive); //! I commented this out
+            // console.log("----------BEFORE", speechListenerIsActive)
+            setSpeechListenerIsActive(!speechListenerIsActive);
+            // console.log("------------AFTER SET", speechListenerIsActive)
+            voiceCommandStatus("Voice command enabled");
+
+            SpeechRecognition.startListening({
+              continuous: newSpeechListenerIsActive,
+            }).then((response) => {
+              console.log(newSpeechListenerIsActive);
+              if (newSpeechListenerIsActive) {
+                document.querySelector("#voice-commands").innerHTML =
+                  "Deactivate Voice Commands";
+              }
+              if (!newSpeechListenerIsActive) {
+                SpeechRecognition.abortListening();
+                document.querySelector("#voice-commands").innerHTML =
+                  "Activate Voice Commands";
+              }
+            });
+          }}
+        >
+          Activate Voice Commands
+        </button>
         <div className="btn-group mr-2" role="group" aria-label="First group">
-          <button
-            className="btn player"
-            onClick={() => {
-              speechListenerIsActive = !speechListenerIsActive;
-              console.log(speechListenerIsActive);
-              SpeechRecognition.startListening({
-                continuous: speechListenerIsActive,
-              });
-            }}
-          >
-            Activate Voice Commands
-          </button>
           <button
             type="button"
             className="btn player"
@@ -199,7 +200,9 @@ const { CURATE, BINGE, THREAD } = appModeConstants;
           <button
             type="button"
             className="btn player"
-            onClick={() => { playerMode === PAUSE ? resume() : play(settings) }}
+            onClick={() => {
+              playerMode === PAUSE ? resume() : play(settings);
+            }}
           >
             <i className="bi bi-play-fill"></i>
           </button>
@@ -230,7 +233,13 @@ const { CURATE, BINGE, THREAD } = appModeConstants;
           </button>
         </div>
         <div className="btn-group">
-          <button id="settingsButton" className="btn player" onClick={()=>{props.getTweets()}}>
+          <button
+            id="settingsButton"
+            className="btn player"
+            onClick={() => {
+              props.getTweets();
+            }}
+          >
             Load More Tweets
           </button>
         </div>
