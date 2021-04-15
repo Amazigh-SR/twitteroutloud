@@ -12,22 +12,19 @@ import Speech from "./components/Speech";
 import Loading from "./components/Loading";
 
 function App() {
-  const voices = fetchEnVoices(window.speechSynthesis);
-  const isLoggedIn = localStorage.getItem("isLoggedIn") || false;
-
+  
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+  
   const [userAccess, setUserAccess] = useState(
     isLoggedIn === "true" ? true : false
-  );
+    );
   const [tweets, setTweets] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [settings, setSettings] = useState({
-    voice: window.speechSynthesis.getVoices()[0],
-    volume: 5,
-    rate: 1,
-    pitch: 1,
-  });
+  const [settings, setSettings] = useState({});
+  const [voices, setVoices] = useState([]);
 
   useEffect(() => {
+    
     if (!isLoggedIn) {
       axios
         .get(`${process.env.REACT_APP_BACK_END_HOST}/validate`, {
@@ -37,13 +34,22 @@ function App() {
           },
         })
         .then((res) => {
-          // console.log("APP.js line 53 -> RES DATA: ", res.data)
-          if (res.data.valid) {
-            setUserAccess(true);
+          const {valid, dbSettings, profile} = res.data;
+          if (valid) {
+            setUserAccess(valid);
             localStorage.setItem("isLoggedIn", true);
+
+            for (const [key, value] of Object.entries(settings)) {
+              localStorage.setItem(key, value);
+            }
+            fetchEnVoices(window.speechSynthesis, setVoices, setSettings, dbSettings)
+            console.log("In axios call: ", {...settings, voice: voices.find(voice => voice.name === settings.voice)})
           } else {
-            setUserAccess(false);
+            setUserAccess(valid);
             localStorage.removeItem("isLoggedIn");
+            for (const [key] of Object.entries.settings){
+              localStorage.removeItem(key)
+            }
             setTimeout(() => setLoading(false), 1000);
           }
           return res.data;
@@ -59,8 +65,14 @@ function App() {
           }
         })
         .catch((err) => console.error(err));
-    }
-    if (isLoggedIn) {
+    } else {
+      const localSettings = {
+        rate: Number(localStorage.getItem("rate")),
+        pitch: Number(localStorage.getItem("pitch")),
+        volume: Number(localStorage.getItem("volume")),
+        voice: localStorage.getItem("voice")
+      }
+      fetchEnVoices(window.speechSynthesis, setVoices, setSettings, localSettings)
       getTweets()
         .then((tweets) => {
           setTweets(tweets);
@@ -68,12 +80,12 @@ function App() {
         })
         .catch((err) => console.error(err));
     }
-  }, [isLoggedIn]);
+  }, []);
 
   return (
     <div className="App">
       <header className="App-header">
-        <Header userAccess={userAccess} setUserAccess={setUserAccess} />
+        <Header userAccess={userAccess} setUserAccess={setUserAccess} settings={settings} />
         {loading && <Loading>Loading app!</Loading>}
         {!loading && userAccess && (
           <Speech
