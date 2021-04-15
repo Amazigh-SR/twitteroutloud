@@ -1,8 +1,6 @@
 // Import mock data - tested and validated
 // const mockData = require("./mockData");
 const checkSpeechSynthesis = require("./checkSpeechSynthesis");
-const fetchEnVoices = require("./fetchEnVoices");
-// const speechSettings = require("./speechSettings");
 
 //-----------------------------------------------//
 
