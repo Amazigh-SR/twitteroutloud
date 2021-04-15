@@ -247,7 +247,7 @@ const { CURATE, BINGE, THREAD } = appModeConstants;
       />
       {/* <p id="transcript">Transcript: {transcript}</p> */}
       <TweetList 
-        // style={{transition: "1s"}} 
+        style={{transition: "1s"}} 
         key={nextTrack} 
         tweets={[tweets[nextTrack], tweets[(nextTrack + 1)], tweets[(nextTrack + 2)]]} 
       />
