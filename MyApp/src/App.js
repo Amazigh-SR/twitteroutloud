@@ -10,6 +10,7 @@ import Header from "./components/Header";
 import TweetList from "./components/TweetList";
 import Speech from "./components/Speech";
 import Loading from "./components/Loading";
+import Welcome from "./components/Welcome";
 
 function App() {
   const voices = fetchEnVoices(window.speechSynthesis);
@@ -27,6 +28,8 @@ function App() {
     pitch: 1,
   });
 
+  const [userData, setUserData] = useState(localStorage.getItem("userData"));
+
   useEffect(() => {
     if (!isLoggedIn) {
       axios
@@ -41,9 +44,12 @@ function App() {
           if (res.data.valid) {
             setUserAccess(true);
             localStorage.setItem("isLoggedIn", true);
+            setUserData(res.data);
+            localStorage.setItem("userData", res.data);
           } else {
             setUserAccess(false);
             localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("userData");
             setTimeout(() => setLoading(false), 1000);
           }
           return res.data;
@@ -75,6 +81,7 @@ function App() {
       <header className="App-header">
         <Header userAccess={userAccess} setUserAccess={setUserAccess} />
         {loading && <Loading>Loading app!</Loading>}
+        {!loading && userAccess && <Welcome userData={userData} />}
         {!loading && userAccess && (
           <Speech
             tweets={tweets}
