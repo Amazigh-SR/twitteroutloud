@@ -164,23 +164,21 @@ export default function Speech(props) {
           className="btn player"
           id="voice-commands"
           onClick={() => {
-            const newSpeechListenerIsActive = !speechListenerIsActive; //! I commented this out
-            // console.log(speechListenerIsActive); //! I commented this out
-            // console.log("----------BEFORE", speechListenerIsActive)
+            const newSpeechListenerIsActive = !speechListenerIsActive;
             setSpeechListenerIsActive(!speechListenerIsActive);
-            // console.log("------------AFTER SET", speechListenerIsActive)
-            voiceCommandStatus("Voice command enabled");
 
             SpeechRecognition.startListening({
               continuous: newSpeechListenerIsActive,
             }).then((response) => {
               console.log(newSpeechListenerIsActive);
               if (newSpeechListenerIsActive) {
+                voiceCommandStatus("Voice command enabled");
                 document.querySelector("#voice-commands").innerHTML =
                   "Deactivate Voice Commands";
               }
               if (!newSpeechListenerIsActive) {
                 SpeechRecognition.abortListening();
+                voiceCommandStatus("Voice command disabled");
                 document.querySelector("#voice-commands").innerHTML =
                   "Activate Voice Commands";
               }
