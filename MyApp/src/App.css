@@ -17,6 +17,31 @@
   font-size: 1em;
 }
 
+/* #VC-drawer {
+  
+} */
+
+.VC-list {
+  display: flex;
+  font-size: 24px;
+}
+
+#transcript {
+  font-size: 26px;
+}
+
+/* .invisible {
+  display: none;
+  height: 0px;
+  transition: height 2s ease-out;
+} */
+
+/* .visible {
+  display: block;
+  height: 237px;
+  transition: height 2s ease-in-out;
+} */
+
 .settingsComponent {
   margin: 10px;
   border: 1px solid var(--twitter-blue);
@@ -51,7 +76,7 @@
 }
 
 body {
-  background-color: var(--twitter-light-extra-extra-light-gray)
+  background-color: var(--twitter-light-extra-extra-light-gray);
 }
 
 nav {
@@ -88,7 +113,7 @@ button.logout {
 .tweetComponent {
   /* width: 100% !important; */
   display: flex;
-  justify-content:center !important;
+  justify-content: center !important;
   align-items: center;
   flex-direction: column;
   /* max-width: fit-content; */
@@ -128,7 +153,6 @@ li:before {
 }
 
 @media only screen and (max-width: 540px) {
-
   h1 {
     font-size: 1.4em;
   }
@@ -150,11 +174,10 @@ li:before {
 }
 
 @media only screen and (min-width: 540px) {
-
   .tweetComponent {
     width: 100vw;
   }
-  
+
   .individualTweet {
     width: 80% !important;
   }

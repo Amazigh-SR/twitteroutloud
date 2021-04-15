@@ -62,33 +62,52 @@ export default function Speech(props) {
   // ------------------------------------------------------------- //
   // Speech Recognition API is currently following a "push to talk" approach.
   // let speechListenerIsActive = false; //! I commented this out as well
+  const { resetTranscript } = useSpeechRecognition();
   const commands = [
     {
       command: ["start"],
-      callback: () => play(settings),
+      callback: ({ resetTranscript }) => {
+        play(settings);
+        resetTranscript();
+      },
     },
 
     {
       command: ["stop"],
-      callback: stop,
+      callback: ({ resetTranscript }) => {
+        stop();
+        resetTranscript();
+      },
     },
     {
       command: ["pause"],
-      callback: pause,
+      callback: ({ resetTranscript }) => {
+        pause();
+        resetTranscript();
+      },
     },
     {
       command: ["resume"],
-      callback: resume,
+      callback: ({ resetTranscript }) => {
+        resume();
+        resetTranscript();
+      },
     },
 
     {
       command: ["Next tweet"],
-      callback: () => next(settings),
+      callback: ({ resetTranscript }) => {
+        next(settings);
+        resetTranscript();
+      },
     },
 
     {
-      command: ["Previous tweet "],
-      callback: () => previous(settings),
+      command: ["Previous tweet"],
+      callback: ({ resetTranscript }) => {
+        previous(settings);
+        resetTranscript();
+      },
     },
 
     {
@@ -164,6 +183,7 @@ export default function Speech(props) {
           className="btn player"
           id="voice-commands"
           onClick={() => {
+            // document.querySelector("#VC-drawer").classList.toggle(".invisible");
             const newSpeechListenerIsActive = !speechListenerIsActive;
             setSpeechListenerIsActive(!speechListenerIsActive);
 
@@ -248,7 +268,36 @@ export default function Speech(props) {
         voices={voices}
         $={$}
       />
-      <p id="transcript">Transcript: {transcript}</p>
+      {/* Create a component for list of commands to clean up this disasta */}
+      <div id="VC-drawer">
+        <h2>List of Voice Commands</h2>
+        <div className="VC-list">
+          <div>
+            <ul>
+              <li>Start</li>
+              <li>Stop</li>
+              <li>Log me Out</li>
+            </ul>
+          </div>
+          <div>
+            <ul>
+              <li>Next Tweet</li>
+              <li>Previous Tweet</li>
+              <li>Pause</li>
+            </ul>
+          </div>
+          <div>
+            <ul>
+              <li>Resume</li>
+              <li>Open Settings</li>
+              <li>Close Settings</li>
+            </ul>
+          </div>
+        </div>
+        <p id="transcript">
+          <strong>Transcript:</strong> {transcript}
+        </p>
+      </div>
     </>
   );
 }
