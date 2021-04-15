@@ -39,7 +39,7 @@ function App() {
             setUserAccess(valid);
             localStorage.setItem("isLoggedIn", true);
 
-            for (const [key, value] of Object.entries(settings)) {
+            for (const [key, value] of Object.entries(dbSettings)) {
               localStorage.setItem(key, value);
             }
             fetchEnVoices(window.speechSynthesis, setVoices, setSettings, dbSettings)
