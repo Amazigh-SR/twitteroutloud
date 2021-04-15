@@ -95,8 +95,8 @@ app.get("/validate", (req, res) => {
   
   db.getUserByID(userID).then((row) => {
     if (row) {
-      const profile = {username: row.username, image_url: row.image_url}
-      const dbSettings = row.settings
+      const profile = {username: row.username, image_url: row.image_url};
+      const dbSettings = row.settings;
       return res.send({ valid: true, dbSettings, profile });
     }
     return res.send({valid: false});

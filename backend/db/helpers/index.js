@@ -38,10 +38,12 @@ const addUser = function (
   secret_token,
   image_url
 ) {
-  queryParams = [twitter_id, username, email, token, secret_token, image_url];
+  
+  const defaultSettings = '{"rate":1,"pitch":0.9,"volume":0.7,"voice":"Daniel"}';
+  queryParams = [twitter_id, username, email, token, secret_token, image_url, defaultSettings];
   queryString = `
-    INSERT INTO users (twitter_id, username, email, token, secret_token, image_url)
-    VALUES ($1, $2, $3, $4, $5, $6)
+    INSERT INTO users (twitter_id, username, email, token, secret_token, image_url, settings)
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
     RETURNING *;
   `;
   return db.query(queryString, queryParams).then(res => {
@@ -83,6 +85,7 @@ exports.updateUserTokens = updateUserTokens;
   twitter_id,
   settings
   ) {
+    console.log("Settings update: ", settings)
     queryParams = [twitter_id, settings];
     queryString = `
     UPDATE users SET settings = $2
