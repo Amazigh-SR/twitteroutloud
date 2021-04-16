@@ -5,8 +5,8 @@ const checkSpeechSynthesis = require("./checkSpeechSynthesis");
 //-----------------------------------------------//
 
 const speechSynthesis = function (tweetObject, settings) {
-  const tweetText = tweetObject.full_text;
-  const name = tweetObject.user.name;
+  const tweetText = tweetObject.full_text || tweetObject.text;
+  const name = tweetObject.user ? tweetObject.user.name : "";
   let finalFormMessage;
   name
     ? (finalFormMessage = `At ${name} tweets. ${tweetText}..`)

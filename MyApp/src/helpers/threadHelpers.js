@@ -53,6 +53,10 @@ export default async function threadHelper(timelineArray) {
 
     const orderedThreads = uniqueThreads.reverse();
 
+    if (orderedThreads.length > 99) {
+      orderedThreads.splice(98);
+    }
+
     // orderedThreads.length = 99;
 
     const queryForTweetText = orderedThreads.join(",");
@@ -69,8 +73,20 @@ export default async function threadHelper(timelineArray) {
       )
       .then((res) => {
         console.log(res);
+
+        const includeID_str = [];
+
+        res.data.data.forEach((tweet) =>
+          includeID_str.push({
+            ...tweet,
+            id_str: tweet.id,
+            full_text: tweet.text,
+          })
+        );
+
+        console.log(includeID_str);
         // threadArrayObjectified = res;
-        return res;
+        return includeID_str;
         // return threadArrayObjectified;
       });
   };
@@ -89,7 +105,7 @@ export default async function threadHelper(timelineArray) {
           }
         )
         .then((res) => {
-          // console.log("res: ", res);
+          // console.log("res from 108 THREADHELPERS ", res);
           if (res.data.data !== undefined) {
             res.data.data.forEach((response) => {
               //if part of thread (and not other user reply)

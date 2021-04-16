@@ -2,6 +2,7 @@ import { Tweet } from 'react-twitter-widgets';
 import { useEffect, useState } from 'react';
 
 const generateNewTweet = function(tweet, nextTrack) {
+  console.log("tweet in generate new tweet: ", tweet)
   return (
         <div key={nextTrack} className="individualTweet">
           <Tweet options={{width: 350}} key={tweet.id} tweetId={tweet.id_str}/>
@@ -15,6 +16,7 @@ export default function TweetList(props){
   const [tweetList, setTweetList] = useState([]);
  
   useEffect(()=>{
+    console.log("tweets in useEffect", tweets);
     if (nextTrack !== -1) {
       //When we are calling previous, or stop early in the utterance queue nextTrack will be set to -1 - we don't want to update in this case
 
@@ -26,7 +28,7 @@ export default function TweetList(props){
         //Will only happen on page load
         setTweetList(prev=>[...prev, generateNewTweet(tweets[nextTrack], nextTrack), generateNewTweet(tweets[nextTrack+1], nextTrack+1)])
 
-      } else if (tweetList.length === 2) {
+      } else if (tweetList.length === 2 && nextTrack + 1 < tweets.length) {
         setTweetList(prev=>[...prev, generateNewTweet(tweets[nextTrack+1], nextTrack+1)])
 
       } else if (tweetList.length === 3 && nextTrack === 0 && tweetListIndices[0] === 0){
@@ -41,7 +43,15 @@ export default function TweetList(props){
 
         if (tweetListIndices[2] === nextTrack){
           //when next is called
-          setTweetList(prev=>[...prev.slice(1), generateNewTweet(tweets[nextTrack+1], nextTrack+1)])
+          
+          if(nextTrack + 1 >= tweets.length) {
+            // when nextTrack + 1 is undefined
+            setTweetList(prev=>[...prev.slice(1)])
+
+          } else {
+            setTweetList(prev=>[...prev.slice(1), generateNewTweet(tweets[nextTrack+1], nextTrack+1)])
+
+          }
 
         } else if(tweetListIndices[0] === nextTrack) {
           //when previous is called with a full queue

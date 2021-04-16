@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import fetchEnVoices from "./helpers/fetchEnVoices";
 import threadHelper from "./helpers/threadHelpers";
 import getTweets from "./helpers/getTweets";
+import { useAppMode, appModeConstants } from "./hooks/useAppMode";
 
 import "./App.css";
 
@@ -14,6 +15,8 @@ import Loading from "./components/Loading";
 import Welcome from "./components/Welcome";
 
 function App() {
+  const { CURATE, BINGE, THREAD } = appModeConstants;
+
   const isLoggedIn =
     localStorage.getItem("isLoggedIn") === "true" ? true : false;
   const [userAccess, setUserAccess] = useState(isLoggedIn);
@@ -21,6 +24,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState({});
   const [voices, setVoices] = useState([]);
+  const [appMode, setAppMode] = useState(THREAD);
 
   // useEffect(() => {
   //   // if(MODE ==="Thread")
@@ -80,10 +84,23 @@ function App() {
         })
         .then((data) => {
           if (data.valid) {
+            // IF BASED ON MODE:
+
             return getTweets().then((tweets) => {
+              if (appMode === THREAD) {
+                threadHelper(tweets).then((res) => {
+                  console.log("res from threadHelper", res);
+                  setTweets(res);
+                  setTimeout(() => setLoading(false), 1000);
+                });
+              } else if (appMode === BINGE) {
+                setTweets(tweets);
+                setTimeout(() => setLoading(false), 1000);
+              }
+
               // threadHelper(tweets);
-              setTweets(tweets);
-              setTimeout(() => setLoading(false), 1000);
+              // setTweets(tweets);
+              // setTimeout(() => setLoading(false), 1000);
             });
             //if x.setting is true setInterval
           }
@@ -102,17 +119,27 @@ function App() {
         setSettings,
         localSettings
       );
+
+      // IF BASED ON MODE
+
       getTweets()
         .then((tweets) => {
-          setTweets(tweets);
-          // threadHelper(tweets);
-          setTimeout(() => setLoading(false), 1000);
+          if (appMode === THREAD) {
+            threadHelper(tweets).then((res) => {
+              console.log("res from threadHelper", res);
+              setTweets(res);
+              setTimeout(() => setLoading(false), 1000);
+            });
+          } else if (appMode === BINGE) {
+            setTweets(tweets);
+            setTimeout(() => setLoading(false), 1000);
+          }
         })
         .catch((err) => console.error(err));
     }
 
     return window.removeEventListener("onbeforeunload", handleWindowClose);
-  }, []);
+  }, [appMode]);
 
   return (
     <div className="App">
@@ -122,8 +149,8 @@ function App() {
           setUserAccess={setUserAccess}
           settings={settings}
         />
+        {userAccess && <Welcome />}
         {loading && <Loading>Loading app!</Loading>}
-        {!loading && userAccess && <Welcome />}
         {!loading && userAccess && (
           <Speech
             tweets={tweets}
@@ -134,6 +161,9 @@ function App() {
             userAccess={userAccess}
             setUserAccess={setUserAccess}
             getTweets={getTweets}
+            appMode={appMode}
+            setAppMode={setAppMode}
+            setLoading={setLoading}
           />
         )}
         {!loading && !userAccess && <Auth />}

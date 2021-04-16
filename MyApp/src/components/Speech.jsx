@@ -1,7 +1,7 @@
 // import checkSpeechSynthesis from "../helpers/checkSpeechSynthesis";
 import axios from "axios";
 import { usePlayer, playerConstants } from "../hooks/usePlayerControls";
-import { useAppMode, appModeConstants } from "../hooks/useAppMode";
+import { appModeConstants } from '../hooks/useAppMode'
 
 import $ from "jquery";
 
@@ -22,7 +22,7 @@ import { voiceCommandStatus } from "../helpers/voiceCommandStatus";
 const { PAUSE, STOP, RELOAD } = playerConstants;
 
 export default function Speech(props) {
-  const { tweets, setTweets, voices, settings, setSettings } = props;
+  const { tweets, setTweets, voices, settings, setSettings, appMode, setAppMode, setLoading } = props;
 
   // const utterances = tweets.map((tweet) => speechSynthesis(tweet, settings));
 
@@ -42,7 +42,6 @@ export default function Speech(props) {
     nextTrack,
   } = usePlayer();
 
-  const { appMode, setAppMode } = useAppMode();
   const [speechListenerIsActive, setSpeechListenerIsActive] = useState(false); //! Added this here
 
   //Create a helper function file for functions occurring more than once
@@ -137,12 +136,13 @@ export default function Speech(props) {
   // ------------------------------------------------------------ //
 
   useEffect(() => {
+    console.log("Line 139 from speech",tweets);
     updateTracks(tweets.map((tweet) => speechSynthesis(tweet, settings)));
   }, []);
 
   useEffect(() => {
     //this use effect calls pings the server every time more tweets are needed
-    if (nextTrack >= tweets.length && playerMode !== RELOAD) {
+    if (nextTrack >= tweets.length && playerMode !== RELOAD && appMode === BINGE) {
       reload();
       props.getTweets().then((newTweets) => {
         const mergedTweets = diffTweets(tweets, newTweets);
@@ -321,7 +321,10 @@ export default function Speech(props) {
         <div className="mode-list">
           <div>
             {/* <ul> */}
-            <button className="btn btn-primary modeButton" onClick={() => {}}>
+            <button className="btn btn-primary modeButton" onClick={() => {
+              setLoading(true);
+              setAppMode(BINGE);
+            }}>
               <i className="fas fa-infinity"></i>
               Binge
             </button>
@@ -329,9 +332,12 @@ export default function Speech(props) {
           </div>
           <div>
             {/* <ul> */}
-            <button className="btn btn-primary modeButton" onClick={() => {}}>
-              <i className="fas fa-stopwatch"></i>
-              Timer
+            <button className="btn btn-primary modeButton" onClick={() => {
+              setLoading(true);
+              setAppMode(THREAD);
+            }}>
+              <i className="fas fa-list-ul"></i>
+              Thread
             </button>
             {/* </ul> */}
           </div>

@@ -1,18 +1,18 @@
-import { useState } from 'react'
+import { useState } from "react";
 
 const appModeConstants = {
   CURATE: "CURATE",
   BINGE: "BINGE",
-  THREAD: "THREADS"
+  THREAD: "THREAD",
 };
 
-const useAppMode = function() {
-  const [appMode, setAppMode] = useState(null);
+const useAppMode = function (initialMode) {
+  const [appMode, setAppMode] = useState(initialMode);
 
   return {
     appMode,
-    setAppMode
-  }
-}
+    setAppMode,
+  };
+};
 
 export { useAppMode, appModeConstants };

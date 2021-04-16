@@ -180,7 +180,7 @@ app.get("/tweet2/:id", (req, res) => {
   const params = {
     ids: req.params.id,
     tweet: {
-      fields: ["conversation_id"],
+      fields: ["conversation_id", "id_str"],
     },
   };
 
