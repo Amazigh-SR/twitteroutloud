@@ -19,7 +19,7 @@ import SpeechRecognition, {
 } from "react-speech-recognition";
 import { voiceCommandStatus } from "../helpers/voiceCommandStatus";
 
-const { PAUSE, STOP, RELOAD } = playerConstants;
+const { ONLOAD, PAUSE, STOP, RELOAD } = playerConstants;
 
 export default function Speech(props) {
   const { tweets, setTweets, voices, settings, setSettings } = props;
@@ -173,8 +173,7 @@ export default function Speech(props) {
   return (
     <>
       <h1>
-        Now playing:{" "}
-        {`${playerMode !== STOP ? "Tweet #" + nextTrack : "nothing"}`}
+        Now playing:{`${playerMode !== ONLOAD && playerMode !== STOP ? " Tweet #" + nextTrack : " nothing"}`}
       </h1>
       <div
         className="btn-toolbar mb-3 speechComponent"
@@ -332,7 +331,7 @@ export default function Speech(props) {
         style={{ transition: "1s" }}
         tweets={tweets}
         nextTrack={nextTrack}
-        payerMode={playerMode}
+        playerMode={playerMode}
         STOP={STOP}
       />
     </>
