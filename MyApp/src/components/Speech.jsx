@@ -332,6 +332,8 @@ export default function Speech(props) {
         style={{ transition: "1s" }}
         tweets={tweets}
         nextTrack={nextTrack}
+        payerMode={playerMode}
+        STOP={STOP}
       />
     </>
   );
