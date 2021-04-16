@@ -3,6 +3,7 @@ let {
   PORT,
   TWITTER_API_SECRET_KEY,
   TWITTER_API_KEY,
+  BEARER_TOKEN,
   ACCESS_TOKEN_SECRET, //? is this necessary?
   ACCESS_TOKEN, //? is this necessary?
   FRONT_END_PATH,
@@ -20,6 +21,7 @@ const path = require("path");
 const passport = require("passport");
 const { Strategy } = require("passport-twitter");
 const Twitter = require("twitter");
+const Twitter2 = require("twitter-v2");
 
 const db = require("./db/helpers/index");
 
@@ -92,14 +94,13 @@ app.get("/validate", (req, res) => {
   //? /session/validate => session router?
   const userID = req.session && req.session.userID;
 
-  
   db.getUserByID(userID).then((row) => {
     if (row) {
-      const profile = {username: row.username, image_url: row.image_url}
-      const dbSettings = row.settings
+      const profile = { username: row.username, image_url: row.image_url };
+      const dbSettings = row.settings;
       return res.send({ valid: true, dbSettings, profile });
     }
-    return res.send({valid: false});
+    return res.send({ valid: false });
   });
 });
 
@@ -109,7 +110,7 @@ app.delete("/session", (req, res) => {
 
   //store settings in users table on logout
   db.updateUserSettings(userID, settings);
-  
+
   req.session.userID = null;
   res.send();
 });
@@ -137,6 +138,123 @@ app.get("/tweets", (req, res) => {
       })
       .catch((error) => res.send(error));
   });
+});
+
+app.get("/thread/:id", (req, res) => {
+  const params = {
+    query: `conversation_id:${req.params.id} -is:retweet lang:en`,
+    max_results: 100,
+    tweet: {
+      fields: [
+        "created_at",
+        // "entities",
+        "in_reply_to_user_id",
+        "referenced_tweets",
+        // "referenced_tweets",
+        // "source",
+        "author_id",
+      ],
+    },
+  };
+
+  const client = new Twitter2({
+    consumer_key: TWITTER_API_KEY,
+    consumer_secret: TWITTER_API_SECRET_KEY,
+    // access_token_key: ACCESS_TOKEN,
+    // access_token_secret: ACCESS_TOKEN_SECRET,
+    bearer_token:
+      "AAAAAAAAAAAAAAAAAAAAADqHOQEAAAAAUXcLKpwk3sLx904qgLtKxnOLmA8%3D8AhyKakoWFg3aPIGmgGtW72bg8wPReNhYdnSedRX6JbsVUYV4G",
+  });
+
+  client
+    .get(`tweets/search/recent`, params)
+    .then((timeline) => {
+      cache = timeline;
+
+      res.send(timeline);
+    })
+    .catch((error) => res.send(error));
+});
+
+app.get("/tweet2/:id", (req, res) => {
+  const params = {
+    ids: req.params.id,
+    tweet: {
+      fields: ["conversation_id"],
+    },
+  };
+
+  const client = new Twitter2({
+    consumer_key: TWITTER_API_KEY,
+    consumer_secret: TWITTER_API_SECRET_KEY,
+    // access_token_key: ACCESS_TOKEN,
+    // access_token_secret: ACCESS_TOKEN_SECRET,
+    bearer_token: BEARER_TOKEN,
+  });
+
+  client
+    .get(`tweets`, params)
+    .then((timeline) => {
+      cache = timeline;
+
+      res.send(timeline);
+    })
+    .catch((error) => res.send(error));
+});
+
+app.get("/tweets2/:ids", (req, res) => {
+  const params = {
+    ids: req.params.ids,
+    tweet: {
+      fields: ["conversation_id", "in_reply_to_user_id"],
+    },
+    user: {
+      fields: ["created_at", "username", "name"],
+    },
+  };
+
+  const client = new Twitter2({
+    consumer_key: TWITTER_API_KEY,
+    consumer_secret: TWITTER_API_SECRET_KEY,
+    // access_token_key: ACCESS_TOKEN,
+    // access_token_secret: ACCESS_TOKEN_SECRET,
+    bearer_token: BEARER_TOKEN,
+  });
+
+  client
+    .get(`tweets`, params)
+    .then((timeline) => {
+      cache = timeline;
+
+      res.send(timeline);
+    })
+    .catch((error) => res.send(error));
+});
+
+app.get("/usertimeline/:id", (req, res) => {
+  const params = {
+    // id: req.params.id,
+    tweet: {
+      fields: ["conversation_id"],
+    },
+  };
+
+  const client = new Twitter2({
+    consumer_key: TWITTER_API_KEY,
+    consumer_secret: TWITTER_API_SECRET_KEY,
+    // access_token_key: ACCESS_TOKEN,
+    // access_token_secret: ACCESS_TOKEN_SECRET,
+    bearer_token: BEARER_TOKEN,
+  });
+
+  client
+    .get(`users/${req.params.id}/tweets`, params)
+    .then((timeline) => {
+      cache = timeline;
+
+      res.send(timeline);
+    })
+    .catch((error) => res.send(error));
 });
 
 app.listen(PORT || 8000, () => {

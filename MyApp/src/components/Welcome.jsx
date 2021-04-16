@@ -1,5 +1,5 @@
 export default function Welcome(props) {
-  console.log("welcome props: ", props)
+  // console.log("welcome props: ", props)
   return <div 
             style={{display: "-webkit-inline-box", marginTop: "9px"}} 
             id="welcomeComponent">

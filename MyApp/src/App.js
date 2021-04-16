@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import fetchEnVoices from "./helpers/fetchEnVoices";
+import threadHelper from "./helpers/threadHelpers";
 import getTweets from "./helpers/getTweets";
 
 import "./App.css";
@@ -62,10 +63,10 @@ function App() {
         .then((data) => {
           if (data.valid) {
             return getTweets().then((tweets) => {
+              threadHelper(tweets);
               setTweets(tweets);
               setTimeout(() => setLoading(false), 1000);
             });
-
             //if x.setting is true setInterval
           }
         })
@@ -86,6 +87,7 @@ function App() {
       getTweets()
         .then((tweets) => {
           setTweets(tweets);
+          threadHelper(tweets);
           setTimeout(() => setLoading(false), 1000);
         })
         .catch((err) => console.error(err));
