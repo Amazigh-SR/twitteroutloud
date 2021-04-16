@@ -23,8 +23,12 @@ function App() {
   const [voices, setVoices] = useState([]);
 
   // useEffect(() => {
+  //   // if(MODE ==="Thread")
   //   getTweets(tweets).then((tweets) => {
-  //     threadHelper(tweets);
+  //     threadHelper(tweets).then((tweets) => {
+  //       console.log("Line 28 of App => Tweets: ", tweets);
+  //       setTweets(tweets);
+  //     });
   //   });
   // }, []);
 

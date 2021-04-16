@@ -7,7 +7,11 @@ const checkSpeechSynthesis = require("./checkSpeechSynthesis");
 const speechSynthesis = function (tweetObject, settings) {
   const tweetText = tweetObject.full_text;
   const name = tweetObject.user.name;
-  const finalFormMessage = `At ${name} tweets. ${tweetText}..`;
+  let finalFormMessage;
+  name
+    ? (finalFormMessage = `At ${name} tweets. ${tweetText}..`)
+    : (finalFormMessage = `${tweetText}..`);
+  // const finalFormMessage = `At ${name} tweets. ${tweetText}..`;
   // console.log("pre-regex", finalFormMessage);
   const regexReplaceLinks = finalFormMessage.replace(
     /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])?/gim,
@@ -15,7 +19,7 @@ const speechSynthesis = function (tweetObject, settings) {
   );
   const regexHashtag = regexReplaceLinks.replace(/#/i, "hashtag ");
   const regexRetweet = regexHashtag.replace(/tweets. RT/i, "retweeted. ");
-  const regexAt = regexRetweet.replace(/@/i, "at. ");
+  const regexAt = regexRetweet.replace(/@/i, "at ");
   // console.log("post-regex", regexAt);
   const endMessage = regexAt;
 
