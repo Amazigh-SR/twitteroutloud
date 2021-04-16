@@ -208,6 +208,7 @@ app.get("/tweets2/:ids", (req, res) => {
     tweet: {
       fields: ["conversation_id", "in_reply_to_user_id"],
     },
+    expansions: "author_id",
     user: {
       fields: ["created_at", "username", "name"],
     },
