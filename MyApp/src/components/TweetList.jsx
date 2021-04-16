@@ -10,23 +10,29 @@ const generateNewTweet = function(tweet, nextTrack) {
   }
 
 export default function TweetList(props){
-  const { tweets, nextTrack } = props;
+  const { tweets, nextTrack, playerMode, STOP } = props;
 
   const [tweetList, setTweetList] = useState([]);
  
   useEffect(()=>{
-    if (nextTrack !== -1) {
-      //When we are calling previous, or stop early in the utterance queue nextTrack will be set to -1 - we don't want to update in this case
+    // console.log("outside tweetList conditionals => nextTrack: ", nextTrack)
+    // console.log(playerMode)
 
+    if (nextTrack !== -1 && playerMode !== STOP) {
+      //nextTrack !== -1 => When we are calling previous, or stop early in the utterance queue nextTrack will be set to -1 - we don't want to update in this case
+      // appMode !== STOP => when mode is  we should STOP should not advance the carousel
+      
       const tweetListIndices = tweetList.map(tweet=> Number(tweet.key));
-      console.log("Tweetlist keys: ", tweetListIndices)
-      console.log("nextTrack: ", nextTrack)
+      // console.log("Tweetlist keys: ", tweetListIndices)
+      // console.log("inside Tweetlist conditionals => nextTrack : ", nextTrack)
+      // console.log(playerMode)
 
-      if (tweetList.length < 2) {
+      if (tweetList.length < 1){
         //Will only happen on page load
         setTweetList(prev=>[...prev, generateNewTweet(tweets[nextTrack], nextTrack), generateNewTweet(tweets[nextTrack+1], nextTrack+1)])
 
-      } else if (tweetList.length === 2) {
+      } else if (tweetList.length === 2 && nextTrack > 0) {
+        // the condition nextTrack > 0 avoids a situation where play is called from stop and nextTrack is 1
         setTweetList(prev=>[...prev, generateNewTweet(tweets[nextTrack+1], nextTrack+1)])
 
       } else if (tweetList.length === 3 && nextTrack === 0 && tweetListIndices[0] === 0){
