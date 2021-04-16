@@ -330,12 +330,8 @@ export default function Speech(props) {
       </div>
       <TweetList
         style={{ transition: "1s" }}
-        key={nextTrack}
-        tweets={[
-          tweets[nextTrack],
-          tweets[nextTrack + 1],
-          tweets[nextTrack + 2],
-        ]}
+        tweets={tweets}
+        nextTrack={nextTrack}
       />
     </>
   );

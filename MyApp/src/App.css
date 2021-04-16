@@ -137,7 +137,7 @@ button.modeButton {
 }
 
 .individualTweet {
-  /* width: 500px !important; */
+  width: 30% !important;
   /* display: contents; */
 	opacity: 1;
 	animation-name: fadeInOpacity;
@@ -145,6 +145,8 @@ button.modeButton {
 	animation-timing-function: ease-in;
 	animation-duration: 1.5s;
   transition: 1s;
+  margin-left: 1.5%;
+  margin-right: 1.5%;
 }
 
 @keyframes fadeInOpacity {
@@ -180,10 +182,11 @@ button.modeButton {
 
 .tweetComponent {
   /* width: 100% !important; */
+  width: 90%;
   display: flex;
-  justify-content: center !important;
-  align-items: center;
-  flex-direction: column;
+  justify-content: flex-end !important;
+  align-items: flex-start;
+  flex-direction: row;
   /* max-width: fit-content; */
   /* margin-top: 81px; Add a top margin to avoid content overlay */
   /* transition: 1s; */
@@ -225,7 +228,12 @@ li:before {
     color: var(--twitter-dark-gray);
     text-decoration: none;
 }
-
+@media only screen and (max-width: 980px) {
+  .tweetComponent {
+    width: 980px;
+    overflow-y: auto;
+  }
+}
 @media only screen and (max-width: 540px) {
   h1 {
     font-size: 1.4em;
@@ -241,20 +249,12 @@ li:before {
     border: 1px solid var(--twitter-blue);
     font-size: 1em;
   }
-
-  .tweetComponent {
-    width: 100vw;
-  }
 }
 
 @media only screen and (min-width: 540px) {
-  .tweetComponent {
-    width: 100vw;
-  }
-
-  .individualTweet {
-    width: 80% !important;
-  }
+  /* .tweetComponent {
+    width: 90%;
+  } */
 
   div[twdiv="yes"] {
     width: 100% !important;
