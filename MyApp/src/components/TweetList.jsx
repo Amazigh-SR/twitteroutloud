@@ -45,6 +45,7 @@ export default function TweetList(props){
           //when next is called
           
           if(nextTrack + 1 >= tweets.length) {
+            //! conditionally apply css to tweetComponent
             // when nextTrack + 1 is undefined
             setTweetList(prev=>[...prev.slice(1)])
 
