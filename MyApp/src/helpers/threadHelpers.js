@@ -20,7 +20,23 @@ export default function threadHelper(timelineArray) {
     }
   };
 
-  const tweetOrganizer = async function (timelineArray) {
+  // const getRootTweetText = function (tweetText, id) {
+  //   // if (tweetText === undefined) {
+  //   return axios
+  //     .get(`${process.env.REACT_APP_BACK_END_HOST}/tweet2/${id}`, {
+  //       withCredentials: true,
+  //       headers: {
+  //         "Access-Control-Allow-Origin": process.env.REACT_APP_FRONT_END_HOST,
+  //       },
+  //     })
+  //     .then((res) => {
+  //       return res;
+  //     });
+  //   // }
+  //   // return tweetText;
+  // };
+
+  const tweetOrganizer = function (timelineArray) {
     const arrayOfThreadTweetIDs = [];
     const arrayOfConversationIDs = [];
     const arrayOfThreadedTweets = [];
@@ -35,7 +51,7 @@ export default function threadHelper(timelineArray) {
     });
 
     const tweets2Params = arrayOfThreadTweetIDs.join(",");
-    // console.log("tweets2Params:", tweets2Params);
+
     axios
       .get(`${process.env.REACT_APP_BACK_END_HOST}/tweets2/${tweets2Params}`, {
         withCredentials: true,
@@ -48,8 +64,8 @@ export default function threadHelper(timelineArray) {
       });
 
     const conversationIDsToTweets = (conversationObject) => {
-      conversationObject.data.forEach((tweet) => {
-        axios
+      const promiseMap = conversationObject.data.map((tweet) => {
+        return axios
           .get(
             `${process.env.REACT_APP_BACK_END_HOST}/thread/${tweet.conversation_id}`,
             {
@@ -61,20 +77,25 @@ export default function threadHelper(timelineArray) {
             }
           )
           .then((res) => {
+            // console.log("res: ", res);
             if (res.data.data !== undefined) {
               res.data.data.forEach((response) => {
+                //if part of thread (and not other user reply)
                 if (repliedToSelfInConversation(response)) {
                   arrayOfThreadedTweets.push(response);
+                  // console.log("arrayOfThreadedTweets: ", arrayOfThreadedTweets);
                 }
               });
             }
-
-            getAndInsertRootTweets(arrayOfThreadedTweets);
           });
+      });
+
+      Promise.all(promiseMap).then(() => {
+        getAndInsertRootTweets(arrayOfThreadedTweets);
       });
     };
 
-    const getAndInsertRootTweets = (arrayOfThreadedTweets) => {
+    const getAndInsertRootTweets = function (arrayOfThreadedTweets) {
       const threadedTweetsWithRoot = [];
 
       arrayOfThreadedTweets.forEach((tweet) => {
@@ -91,13 +112,29 @@ export default function threadHelper(timelineArray) {
 
       const orderedThreads = uniqueThreads.reverse();
 
-      const threadArrayObjectified = [];
+      orderedThreads.length = 99;
 
-      orderedThreads.forEach((id) => {
-        threadArrayObjectified.push({ id_str: id });
-      });
+      const queryForTweetText = orderedThreads.join(",");
 
-      console.log(threadArrayObjectified);
+      let threadArrayObjectified = [];
+
+      axios
+        .get(
+          `${process.env.REACT_APP_BACK_END_HOST}/tweets2/${queryForTweetText}`,
+          {
+            withCredentials: true,
+            headers: {
+              "Access-Control-Allow-Origin":
+                process.env.REACT_APP_FRONT_END_HOST,
+            },
+          }
+        )
+        .then((res) => {
+          // console.log(res);
+          threadArrayObjectified = res;
+          return res;
+          // return threadArrayObjectified;
+        });
 
       return threadArrayObjectified;
     };
