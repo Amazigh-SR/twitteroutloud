@@ -305,7 +305,7 @@ export default function Speech(props) {
 
         <div id="transcript-container">
           <div id="transcript-header">
-            <img src="https://i.imgur.com/EiZiRou.gif" alt="waves" />
+            <img src="https://i.imgur.com/jO5RuGh.gif" alt="waves" />
             <span>
               <strong> Transcript:</strong>
             </span>
@@ -324,6 +324,14 @@ export default function Speech(props) {
             <button className="btn btn-primary modeButton" onClick={() => {}}>
               <i className="fas fa-infinity"></i>
               Binge
+            </button>
+            {/* </ul> */}
+          </div>
+          <div>
+            {/* <ul> */}
+            <button className="btn btn-primary modeButton" onClick={() => {}}>
+              <i className="fas fa-stopwatch"></i>
+              Thread
             </button>
             {/* </ul> */}
           </div>
