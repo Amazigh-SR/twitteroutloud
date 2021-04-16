@@ -113,7 +113,7 @@ export default function Speech(props) {
     },
 
     {
-      command: ["log me out"],
+      command: ["log me out", "pumpkin time"],
       callback: deleteSession,
     },
 
@@ -302,9 +302,18 @@ export default function Speech(props) {
             </ul>
           </div>
         </div>
-        <p id="transcript">
-          <strong>Transcript:</strong> {transcript}
-        </p>
+
+        <div id="transcript-container">
+          <div id="transcript-header">
+            <img src="https://i.imgur.com/EiZiRou.gif" alt="waves" />
+            <span>
+              <strong> Transcript:</strong>
+            </span>
+          </div>
+          <div id="transcript-text">
+            <p id="transcript">{transcript}</p>
+          </div>
+        </div>
       </div>
       {/* <p id="transcript">Transcript: {transcript}</p> */}
       <div id="appMode-drawer" className="invisible">
@@ -330,12 +339,8 @@ export default function Speech(props) {
       </div>
       <TweetList
         style={{ transition: "1s" }}
-        key={nextTrack}
-        tweets={[
-          tweets[nextTrack],
-          tweets[nextTrack + 1],
-          tweets[nextTrack + 2],
-        ]}
+        tweets={tweets}
+        nextTrack={nextTrack}
       />
     </>
   );

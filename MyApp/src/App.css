@@ -17,10 +17,6 @@
   font-size: 1em;
 }
 
-/* #VC-drawer {
-  
-} */
-
 .mode-list {
   display: flex;
 }
@@ -30,10 +26,52 @@
   font-size: 24px;
 }
 
+#VC-drawer {
+  width: 700px;
+  /* height: 290px; */
+}
+
+#transcript-container {
+  display: flex;
+}
+
 #transcript {
   font-size: 26px;
   word-wrap: break-word;
-  width: 100%;
+  overflow: hidden;
+  direction: rtl;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+/* 
+#transcript::after {
+  position: relative;
+  left: 0px;
+  content: "...";
+  word-wrap: break-word;
+  overflow: hidden;
+  direction: rtl;
+  white-space: nowrap;
+} */
+
+#transcript-text {
+  text-align: left;
+  width: 75%;
+  margin-left: 2%;
+  word-wrap: break-word;
+  overflow: hidden;
+  direction: rtl;
+  white-space: nowrap;
+  position: relative;
+  left: 0px;
+
+  /* content: "..."; */
+  /* content: "..."; */
+}
+
+#transcript-header {
+  display: flex;
+  font-size: 26px;
 }
 
 .invisible {
@@ -137,26 +175,27 @@ button.modeButton {
 }
 
 .individualTweet {
-  /* width: 500px !important; */
+  width: 30% !important;
   /* display: contents; */
-	opacity: 1;
-	animation-name: fadeInOpacity;
-	animation-iteration-count: 1;
-	animation-timing-function: ease-in;
-	animation-duration: 1.5s;
+  opacity: 1;
+  animation-name: fadeInOpacity;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in;
+  animation-duration: 1.5s;
   transition: 1s;
+  margin-left: 1.5%;
+  margin-right: 1.5%;
 }
 
 @keyframes fadeInOpacity {
-	0% {
-		opacity: 0;
+  0% {
+    opacity: 0;
     -webkit-transform: translateY(100%);
-	}
-	100% {
-		opacity: 1;
+  }
+  100% {
+    opacity: 1;
     -webkit-transform: translateY(0);
-    
-	}
+  }
 }
 
 /* @keyframes fadeOut {
@@ -177,13 +216,13 @@ button.modeButton {
 	animation-duration: 1.5s;
 } */
 
-
 .tweetComponent {
   /* width: 100% !important; */
+  width: 90%;
   display: flex;
-  justify-content: center !important;
-  align-items: center;
-  flex-direction: column;
+  justify-content: flex-end !important;
+  align-items: flex-start;
+  flex-direction: row;
   /* max-width: fit-content; */
   /* margin-top: 81px; Add a top margin to avoid content overlay */
   /* transition: 1s; */
@@ -221,11 +260,18 @@ li:before {
   color: #61dafb;
 }
 
-.player.focus, .player:focus, .player:hover {
-    color: var(--twitter-dark-gray);
-    text-decoration: none;
+.player.focus,
+.player:focus,
+.player:hover {
+  color: var(--twitter-dark-gray);
+  text-decoration: none;
 }
-
+@media only screen and (max-width: 980px) {
+  .tweetComponent {
+    width: 980px;
+    overflow-y: auto;
+  }
+}
 @media only screen and (max-width: 540px) {
   h1 {
     font-size: 1.4em;
@@ -241,20 +287,12 @@ li:before {
     border: 1px solid var(--twitter-blue);
     font-size: 1em;
   }
-
-  .tweetComponent {
-    width: 100vw;
-  }
 }
 
 @media only screen and (min-width: 540px) {
-  .tweetComponent {
-    width: 100vw;
-  }
-
-  .individualTweet {
-    width: 80% !important;
-  }
+  /* .tweetComponent {
+    width: 90%;
+  } */
 
   div[twdiv="yes"] {
     width: 100% !important;

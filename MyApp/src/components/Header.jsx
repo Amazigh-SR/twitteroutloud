@@ -18,6 +18,9 @@ export default function Header(props) {
       for (const [key] of Object.entries(settings)) {
         localStorage.removeItem(key)
       }
+      localStorage.removeItem('username')
+      localStorage.removeItem('image_url')
+      window.speechSynthesis.cancel()
     })
     .catch(err => console.error(err))
   };

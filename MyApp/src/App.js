@@ -14,19 +14,20 @@ import Loading from "./components/Loading";
 import Welcome from "./components/Welcome";
 
 function App() {
-  const isLoggedIn = localStorage.getItem("isLoggedIn");
-
-  const [userAccess, setUserAccess] = useState(
-    isLoggedIn === "true" ? true : false
-  );
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true" ? true : false;
+  const [userAccess, setUserAccess] = useState(isLoggedIn);
   const [tweets, setTweets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState({});
   const [voices, setVoices] = useState([]);
 
-  const [userData, setUserData] = useState(localStorage.getItem("userData"));
-
   useEffect(() => {
+    const handleWindowClose = function() {
+      window.speechSynthesis.cancel()
+    };
+
+    window.addEventListener('onbeforeunload', handleWindowClose);
+
     if (!isLoggedIn) {
       axios
         .get(`${process.env.REACT_APP_BACK_END_HOST}/validate`, {
@@ -38,9 +39,12 @@ function App() {
         .then((res) => {
           const { valid, dbSettings, profile } = res.data;
           if (valid) {
+            const {username, image_url} = profile;
+
             setUserAccess(valid);
             localStorage.setItem("isLoggedIn", true);
-
+            localStorage.setItem("username", username);
+            localStorage.setItem("image_url", image_url);
             for (const [key, value] of Object.entries(dbSettings)) {
               localStorage.setItem(key, value);
             }
@@ -52,10 +56,13 @@ function App() {
             );
           } else {
             setUserAccess(valid);
-            localStorage.removeItem("isLoggedIn");
-            for (const [key] of Object.entries(settings)) {
-              localStorage.removeItem(key);
-            }
+            //!  we need to look at the error that this code is causing
+            // localStorage.removeItem("isLoggedIn");
+            // for (const [key] of Object.entries(settings)) {
+            //   localStorage.removeItem(key);
+            // }
+            // localStorage.removeItem("username");
+            // localStorage.removeItem("image_url");
             setTimeout(() => setLoading(false), 1000);
           }
           return res.data;
@@ -92,6 +99,8 @@ function App() {
         })
         .catch((err) => console.error(err));
     }
+
+    return window.removeEventListener('onbeforeunload', handleWindowClose);
   }, []);
 
   return (
@@ -103,7 +112,7 @@ function App() {
           settings={settings}
         />
         {loading && <Loading>Loading app!</Loading>}
-        {!loading && userAccess && <Welcome userData={userData} />}
+        {!loading && userAccess && <Welcome />}
         {!loading && userAccess && (
           <Speech
             tweets={tweets}

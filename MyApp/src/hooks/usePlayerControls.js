@@ -9,7 +9,7 @@ const playerConstants = {
   PREV: "PREV",
   NEXT: "NEXT",
   RESUME: "RESUME",
-  RELOADING: "RELOADING",
+  RELOAD: "RELOAD",
 };
 
 const { PLAY, STOP, RESUME, PAUSE, PREV, NEXT, RELOAD } = playerConstants;
@@ -40,14 +40,26 @@ const usePlayer = function () {
     let startingTrack = nextTrack;
 
     if (func) {
+
       let modifier = 0;
       if (func === PREV) {
+
         //if the calling func is PREV decrement nextTrack by 2
         modifier = -2;
         startingTrack -= 1;
+
+      } else if (func === STOP) {
+        
+        //if calling func is prev with STOP decrement nextTrack by 1
+        modifier = -1;
+        startingTrack -= 1;
+
       } else {
+
         startingTrack += 1;
+
       }
+      
       setNextTrack((prev) => prev + modifier);
     }
     if (startingTrack < tracks.length) {
@@ -92,9 +104,11 @@ const usePlayer = function () {
 
   //in order to navigate through the queue of utterances we need to cancel it and reinitialize it
   const previous = function (settings) {
-    if (nextTrack >= 1 /*&& mode !== STOP*/) {
+    if (nextTrack >= 1 && mode !== STOP) {
       speech.cancel();
       play(settings, PREV);
+    } else if (nextTrack >= 1 && mode === STOP) {
+      play(settings, STOP);
     }
   };
 
