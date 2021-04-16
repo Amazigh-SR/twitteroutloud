@@ -7,7 +7,7 @@ import "./App.css";
 
 import Auth from "./components/Auth";
 import Header from "./components/Header";
-import TweetList from "./components/TweetList";
+// import TweetList from "./components/TweetList";
 import Speech from "./components/Speech";
 import Loading from "./components/Loading";
 import Welcome from "./components/Welcome";
@@ -109,7 +109,7 @@ function App() {
           setUserAccess={setUserAccess}
           settings={settings}
         />
-        {loading && <Loading>Loading app!</Loading>}
+        {loading && <Loading>Fetching scones!</Loading>}
         {!loading && userAccess && <Welcome />}
         {!loading && userAccess && (
           <Speech
