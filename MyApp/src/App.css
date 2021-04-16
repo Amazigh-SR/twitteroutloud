@@ -190,11 +190,11 @@ button.modeButton {
 @keyframes fadeInOpacity {
   0% {
     opacity: 0;
-    -webkit-transform: translateY(100%);
+    -webkit-transform: translateX(100%);
   }
   100% {
     opacity: 1;
-    -webkit-transform: translateY(0);
+    -webkit-transform: translateX(0);
   }
 }
 
@@ -223,6 +223,7 @@ button.modeButton {
   justify-content: flex-end !important;
   align-items: flex-start;
   flex-direction: row;
+  
   /* max-width: fit-content; */
   /* margin-top: 81px; Add a top margin to avoid content overlay */
   /* transition: 1s; */
