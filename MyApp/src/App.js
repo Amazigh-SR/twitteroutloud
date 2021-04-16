@@ -21,6 +21,12 @@ function App() {
   const [voices, setVoices] = useState([]);
 
   useEffect(() => {
+    const handleWindowClose = function() {
+      window.speechSynthesis.cancel()
+    };
+
+    window.addEventListener('onbeforeunload', handleWindowClose);
+
     if (!isLoggedIn) {
       axios
         .get(`${process.env.REACT_APP_BACK_END_HOST}/validate`, {
@@ -91,6 +97,8 @@ function App() {
         })
         .catch((err) => console.error(err));
     }
+
+    return window.removeEventListener('onbeforeunload', handleWindowClose);
   }, []);
 
   return (
