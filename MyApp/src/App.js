@@ -14,19 +14,26 @@ import Loading from "./components/Loading";
 import Welcome from "./components/Welcome";
 
 function App() {
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true" ? true : false;
+  const isLoggedIn =
+    localStorage.getItem("isLoggedIn") === "true" ? true : false;
   const [userAccess, setUserAccess] = useState(isLoggedIn);
   const [tweets, setTweets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState({});
   const [voices, setVoices] = useState([]);
 
+  // useEffect(() => {
+  //   getTweets(tweets).then((tweets) => {
+  //     threadHelper(tweets);
+  //   });
+  // }, []);
+
   useEffect(() => {
-    const handleWindowClose = function() {
-      window.speechSynthesis.cancel()
+    const handleWindowClose = function () {
+      window.speechSynthesis.cancel();
     };
 
-    window.addEventListener('onbeforeunload', handleWindowClose);
+    window.addEventListener("onbeforeunload", handleWindowClose);
 
     if (!isLoggedIn) {
       axios
@@ -39,7 +46,7 @@ function App() {
         .then((res) => {
           const { valid, dbSettings, profile } = res.data;
           if (valid) {
-            const {username, image_url} = profile;
+            const { username, image_url } = profile;
 
             setUserAccess(valid);
             localStorage.setItem("isLoggedIn", true);
@@ -70,7 +77,7 @@ function App() {
         .then((data) => {
           if (data.valid) {
             return getTweets().then((tweets) => {
-              threadHelper(tweets);
+              // threadHelper(tweets);
               setTweets(tweets);
               setTimeout(() => setLoading(false), 1000);
             });
@@ -94,13 +101,13 @@ function App() {
       getTweets()
         .then((tweets) => {
           setTweets(tweets);
-          threadHelper(tweets);
+          // threadHelper(tweets);
           setTimeout(() => setLoading(false), 1000);
         })
         .catch((err) => console.error(err));
     }
 
-    return window.removeEventListener('onbeforeunload', handleWindowClose);
+    return window.removeEventListener("onbeforeunload", handleWindowClose);
   }, []);
 
   return (
