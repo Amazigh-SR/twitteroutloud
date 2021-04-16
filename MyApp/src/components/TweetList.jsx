@@ -19,8 +19,8 @@ export default function TweetList(props){
       //When we are calling previous, or stop early in the utterance queue nextTrack will be set to -1 - we don't want to update in this case
 
       const tweetListIndices = tweetList.map(tweet=> Number(tweet.key));
-      console.log("Tweetlist keys: ", tweetListIndices)
-      console.log("nextTrack: ", nextTrack)
+      // console.log("Tweetlist keys: ", tweetListIndices)
+      // console.log("nextTrack: ", nextTrack)
 
       if (tweetList.length < 2) {
         //Will only happen on page load
