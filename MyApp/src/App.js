@@ -16,6 +16,7 @@ import Welcome from "./components/Welcome";
 import Countdown from "./components/Countdown";
 
 import mockData from "./helpers/mockData";
+import Footer from "./components/Footer";
 
 function App() {
   const { CURATE, BINGE, THREAD } = appModeConstants;
@@ -201,6 +202,7 @@ function App() {
         )}
         {!loading && !userAccess && <Auth />}
         {/* {!loading && userAccess && <TweetList tweets={tweets} />} */}
+        <Footer />
       </header>
     </div>
   );
