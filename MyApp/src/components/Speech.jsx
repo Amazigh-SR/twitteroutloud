@@ -332,7 +332,7 @@ export default function Speech(props) {
         tweets={tweets}
         nextTrack={nextTrack}
         playerMode={playerMode}
-        STOP={STOP}
+        ONLOAD={ONLOAD}
         PLAY={PLAY}
       />
     </>
