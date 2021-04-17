@@ -196,15 +196,19 @@ export default function Speech(props) {
             }).then((response) => {
               console.log(newSpeechListenerIsActive);
               if (newSpeechListenerIsActive) {
+                if (playerMode === PLAY || PAUSE) stop();
                 voiceCommandStatus("Voice command enabled", voices);
                 document.querySelector("#voice-commands").innerHTML =
                   "Deactivate Voice Commands";
+                if (playerMode === PLAY || PAUSE) play(settings, STOP);
               }
               if (!newSpeechListenerIsActive) {
+                if (playerMode === PLAY || PAUSE) stop();
                 SpeechRecognition.abortListening();
                 voiceCommandStatus("Voice command disabled", voices);
                 document.querySelector("#voice-commands").innerHTML =
                   "Activate Voice Commands";
+                if (playerMode === PLAY || PAUSE) play(settings, STOP);
               }
             });
           }}
