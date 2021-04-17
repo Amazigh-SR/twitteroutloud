@@ -10,7 +10,7 @@ const generateNewTweet = function(tweet, nextTrack) {
   }
 
 export default function TweetList(props){
-  const { tweets, nextTrack, playerMode, STOP } = props;
+  const { tweets, nextTrack, playerMode, STOP, PLAY } = props;
 
   const [tweetList, setTweetList] = useState([]);
  
@@ -18,7 +18,7 @@ export default function TweetList(props){
     // console.log("outside tweetList conditionals => nextTrack: ", nextTrack)
     // console.log(playerMode)
 
-    if (nextTrack !== -1 && playerMode !== STOP) {
+    if (nextTrack !== -1 && playerMode === PLAY) {
       //nextTrack !== -1 => When we are calling previous, or stop early in the utterance queue nextTrack will be set to -1 - we don't want to update in this case
       // appMode !== STOP => when mode is  we should STOP should not advance the carousel
       
@@ -56,7 +56,7 @@ export default function TweetList(props){
         } 
       }
     }
-  },[nextTrack])
+  },[nextTrack, playerMode])
   
   return (
     <div className="tweetComponent">

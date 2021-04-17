@@ -19,7 +19,7 @@ import SpeechRecognition, {
 } from "react-speech-recognition";
 import { voiceCommandStatus } from "../helpers/voiceCommandStatus";
 
-const { ONLOAD, PAUSE, STOP, RELOAD } = playerConstants;
+const { ONLOAD, PAUSE, STOP, RELOAD, PLAY } = playerConstants;
 
 export default function Speech(props) {
   const { tweets, setTweets, voices, settings, setSettings } = props;
@@ -333,6 +333,7 @@ export default function Speech(props) {
         nextTrack={nextTrack}
         playerMode={playerMode}
         STOP={STOP}
+        PLAY={PLAY}
       />
     </>
   );
