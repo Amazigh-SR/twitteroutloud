@@ -20,7 +20,7 @@ export default function Header(props) {
       }
       localStorage.removeItem('username')
       localStorage.removeItem('image_url')
-      localStorage.removeItem('countdown')
+      localStorage.removeItem('counter')
       window.speechSynthesis.cancel()
     })
     .catch(err => console.error(err))
