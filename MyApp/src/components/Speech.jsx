@@ -22,7 +22,7 @@ import { voiceCommandStatus } from "../helpers/voiceCommandStatus";
 const { ONLOAD, PAUSE, STOP, RELOAD, PLAY } = playerConstants;
 
 export default function Speech(props) {
-  const { tweets, setTweets, voices, settings, setSettings, appMode, setAppMode, setLoading } = props;
+  const { tweets, setTweets, voices, settings, setSettings, appMode, updateAppMode, setLoading } = props;
 
   // const utterances = tweets.map((tweet) => speechSynthesis(tweet, settings));
 
@@ -325,7 +325,7 @@ export default function Speech(props) {
             {/* <ul> */}
             <button className="btn btn-primary modeButton" onClick={() => {
               setLoading(true);
-              setAppMode(BINGE);
+              updateAppMode(BINGE, stop);
             }}>
               <i className="fas fa-infinity"></i>
               Binge
@@ -336,7 +336,7 @@ export default function Speech(props) {
             {/* <ul> */}
             <button className="btn btn-primary modeButton" onClick={() => {
               setLoading(true);
-              setAppMode(THREAD);
+              updateAppMode(THREAD, stop);
             }}>
               <i className="fas fa-list-ul"></i>
               Thread
