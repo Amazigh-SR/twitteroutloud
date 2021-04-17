@@ -141,6 +141,7 @@ export default function Speech(props) {
   }, []);
 
   useEffect(() => {
+    //! this use effect causes problems and is no longer idiomatic with how this app is poised to updateAppMode
     //this use effect calls pings the server every time more tweets are needed
     if (nextTrack >= tweets.length && playerMode !== RELOAD && appMode === BINGE) {
       reload();
@@ -150,7 +151,7 @@ export default function Speech(props) {
         updateTracks(
           mergedTweets.map((tweet) => speechSynthesis(tweet, settings))
         );
-        setAppMode(BINGE);
+        updateAppMode(BINGE);
       });
     }
   }, [nextTrack]);
