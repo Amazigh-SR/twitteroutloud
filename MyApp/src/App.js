@@ -9,10 +9,13 @@ import "./App.css";
 
 import Auth from "./components/Auth";
 import Header from "./components/Header";
-import TweetList from "./components/TweetList";
+// import TweetList from "./components/TweetList";
 import Speech from "./components/Speech";
 import Loading from "./components/Loading";
 import Welcome from "./components/Welcome";
+import Countdown from "./components/Countdown"
+
+import mockData from './helpers/mockData'
 
 function App() {
   const { CURATE, BINGE, THREAD } = appModeConstants;
@@ -20,7 +23,7 @@ function App() {
   const isLoggedIn =
     localStorage.getItem("isLoggedIn") === "true" ? true : false;
   const [userAccess, setUserAccess] = useState(isLoggedIn);
-  const [tweets, setTweets] = useState([]);
+  const [tweets, setTweets] = useState();
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState({});
   const [voices, setVoices] = useState([]);
@@ -35,6 +38,7 @@ function App() {
   //     });
   //   });
   // }, []);
+  const [rateLimitExceeded, setRateLimitExceeded] = useState(false);
 
   useEffect(() => {
     const handleWindowClose = function () {
@@ -94,14 +98,23 @@ function App() {
                   setTimeout(() => setLoading(false), 1000);
                 });
               } else if (appMode === BINGE) {
-                setTweets(tweets);
-                setTimeout(() => setLoading(false), 1000);
+                //? commented out code below was prexisting master code => new if block handles rate limit on binge
+                // setTweets(tweets);
+                // setTimeout(() => setLoading(false), 1000);
+                if (tweets[0].message && tweets[0].message === "Rate limit exceeded") {
+                  setRateLimitExceeded(true);
+                  setTimeout(() => setLoading(false), 1000);
+                } else {
+                  setTweets(tweets)
+                  setTimeout(() => setLoading(false), 1000);
+                } 
               }
+            });
 
               // threadHelper(tweets);
               // setTweets(tweets);
               // setTimeout(() => setLoading(false), 1000);
-            });
+            // });
             //if x.setting is true setInterval
           }
         })
@@ -131,9 +144,16 @@ function App() {
               setTimeout(() => setLoading(false), 1000);
             });
           } else if (appMode === BINGE) {
-            setTweets(tweets);
-            setTimeout(() => setLoading(false), 1000);
-          }
+            //? commented out code below was prexisting master code => new if block handles rate limit on binge
+            // setTweets(tweets);
+            if (tweets[0].message && tweets[0].message === "Rate limit exceeded") {
+              setRateLimitExceeded(true);
+              setTimeout(() => setLoading(false), 1000);
+            } else {
+              setTweets(tweets)
+              setTimeout(() => setLoading(false), 1000);
+            }
+          } 
         })
         .catch((err) => console.error(err));
     }
@@ -149,9 +169,19 @@ function App() {
           setUserAccess={setUserAccess}
           settings={settings}
         />
-        {userAccess && <Welcome />}
-        {loading && <Loading>Loading app!</Loading>}
-        {!loading && userAccess && (
+        {!loading && userAccess && <Welcome />}
+        {rateLimitExceeded && 
+          <>
+            <h1>Rate limit exceeded: try again later!</h1>
+            <Loading>
+              <Countdown 
+                setRateLimitExceeded={setRateLimitExceeded}
+              />
+            </Loading>
+          </>
+          }
+        {loading && <Loading>Fetching scones!</Loading>}
+        {!rateLimitExceeded && !loading && userAccess && (
           <Speech
             tweets={tweets}
             setTweets={setTweets}

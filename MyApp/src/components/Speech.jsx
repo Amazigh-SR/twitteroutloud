@@ -19,7 +19,7 @@ import SpeechRecognition, {
 } from "react-speech-recognition";
 import { voiceCommandStatus } from "../helpers/voiceCommandStatus";
 
-const { PAUSE, STOP, RELOAD } = playerConstants;
+const { ONLOAD, PAUSE, STOP, RELOAD, PLAY } = playerConstants;
 
 export default function Speech(props) {
   const { tweets, setTweets, voices, settings, setSettings, appMode, setAppMode, setLoading } = props;
@@ -235,7 +235,7 @@ export default function Speech(props) {
           >
             <i className="bi bi-pause"></i>
           </button>
-          <button className="btn player" onClick={() => stop()}>
+          <button className="btn player" onClick={() => playerMode === ONLOAD ? null : stop() }>
             <i className="bi bi-stop-fill"></i>
           </button>
           <button className="btn player" onClick={() => next(settings)}>
@@ -349,6 +349,9 @@ export default function Speech(props) {
         style={{ transition: "1s" }}
         tweets={tweets}
         nextTrack={nextTrack}
+        playerMode={playerMode}
+        ONLOAD={ONLOAD}
+        PLAY={PLAY}
       />
     </>
   );
