@@ -234,7 +234,7 @@ export default function Speech(props) {
           >
             <i className="bi bi-pause"></i>
           </button>
-          <button className="btn player" onClick={() => stop()}>
+          <button className="btn player" onClick={() => playerMode === ONLOAD ? null : stop() }>
             <i className="bi bi-stop-fill"></i>
           </button>
           <button className="btn player" onClick={() => next(settings)}>
