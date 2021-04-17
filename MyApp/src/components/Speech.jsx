@@ -172,10 +172,10 @@ export default function Speech(props) {
 
   return (
     <>
-      <h1>
-        Now playing:{" "}
-        {`${playerMode !== STOP ? "Tweet #" + nextTrack : "nothing"}`}
-      </h1>
+      {/* <h1> */}
+        {/* Now playing:{" "} */}
+        {/* {`${playerMode !== STOP ? "Tweet #" + nextTrack : "nothing"}`} */}
+      {/* </h1> */}
       <div
         className="btn-toolbar mb-3 speechComponent"
         role="toolbar"
@@ -242,6 +242,7 @@ export default function Speech(props) {
             <i className="bi bi-skip-forward-fill"></i>
           </button>
         </div>
+        <div className="button-row btn-group mr-2">
         <div className="btn-group">
           <button
             id="settingsButton"
@@ -268,6 +269,7 @@ export default function Speech(props) {
           >
             App Mode
           </button>
+        </div>
         </div>
       </div>
       <Settings
