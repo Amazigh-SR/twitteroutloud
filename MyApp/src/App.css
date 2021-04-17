@@ -172,6 +172,8 @@ h1.nav:hover {
   display: inline-block;
   color: white;
   --d: 100%;
+  border-radius: 4px;
+  
   /* color: #fff; */
 }
 
