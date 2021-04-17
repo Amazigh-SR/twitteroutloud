@@ -5,7 +5,7 @@ export default function Welcome() {
   return <div 
             style={{display: "-webkit-inline-box", marginTop: "9px"}} 
             id="welcomeComponent">
-          <h4 style={{marginRight: "15px"}}>Logged in as @{username}</h4>
+          <h4 style={{marginRight: "15px"}}>@{username}</h4>
           <img 
             style={{borderRadius: "100px"}} 
             id="profileImage" 

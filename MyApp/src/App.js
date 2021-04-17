@@ -13,9 +13,9 @@ import Header from "./components/Header";
 import Speech from "./components/Speech";
 import Loading from "./components/Loading";
 import Welcome from "./components/Welcome";
-import Countdown from "./components/Countdown"
+import Countdown from "./components/Countdown";
 
-import mockData from './helpers/mockData'
+import mockData from "./helpers/mockData";
 
 function App() {
   const { CURATE, BINGE, THREAD } = appModeConstants;
@@ -101,19 +101,22 @@ function App() {
                 //? commented out code below was prexisting master code => new if block handles rate limit on binge
                 // setTweets(tweets);
                 // setTimeout(() => setLoading(false), 1000);
-                if (tweets[0].message && tweets[0].message === "Rate limit exceeded") {
+                if (
+                  tweets[0].message &&
+                  tweets[0].message === "Rate limit exceeded"
+                ) {
                   setRateLimitExceeded(true);
                   setTimeout(() => setLoading(false), 1000);
                 } else {
-                  setTweets(tweets)
+                  setTweets(tweets);
                   setTimeout(() => setLoading(false), 1000);
-                } 
+                }
               }
             });
 
-              // threadHelper(tweets);
-              // setTweets(tweets);
-              // setTimeout(() => setLoading(false), 1000);
+            // threadHelper(tweets);
+            // setTweets(tweets);
+            // setTimeout(() => setLoading(false), 1000);
             // });
             //if x.setting is true setInterval
           }
@@ -146,14 +149,17 @@ function App() {
           } else if (appMode === BINGE) {
             //? commented out code below was prexisting master code => new if block handles rate limit on binge
             // setTweets(tweets);
-            if (tweets[0].message && tweets[0].message === "Rate limit exceeded") {
+            if (
+              tweets[0].message &&
+              tweets[0].message === "Rate limit exceeded"
+            ) {
               setRateLimitExceeded(true);
               setTimeout(() => setLoading(false), 1000);
             } else {
-              setTweets(tweets)
+              setTweets(tweets);
               setTimeout(() => setLoading(false), 1000);
             }
-          } 
+          }
         })
         .catch((err) => console.error(err));
     }
@@ -169,17 +175,14 @@ function App() {
           setUserAccess={setUserAccess}
           settings={settings}
         />
-        {!loading && userAccess && <Welcome />}
-        {rateLimitExceeded && 
+        {rateLimitExceeded && (
           <>
             <h1>Rate limit exceeded: try again later!</h1>
             <Loading>
-              <Countdown 
-                setRateLimitExceeded={setRateLimitExceeded}
-              />
+              <Countdown setRateLimitExceeded={setRateLimitExceeded} />
             </Loading>
           </>
-          }
+        )}
         {loading && <Loading>Fetching scones!</Loading>}
         {!rateLimitExceeded && !loading && userAccess && (
           <Speech

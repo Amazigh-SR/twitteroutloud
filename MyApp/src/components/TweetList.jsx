@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 const generateNewTweet = function(tweet, nextTrack) {
   return (
         <div key={nextTrack} className="individualTweet">
-          <Tweet options={{width: 350}} key={tweet.id} tweetId={tweet.id_str}/>
+          <Tweet options={{width: 350, conversation: "none"}} key={tweet.id} tweetId={tweet.id_str}/>
         </div>
       )
   }

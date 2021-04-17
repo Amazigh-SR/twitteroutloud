@@ -1,6 +1,9 @@
 import axios from 'axios';
+// import Welcome from './Welcome'
 
 export default function Header(props) {
+  const image_url = localStorage.getItem("image_url");
+  const username = localStorage.getItem("username");
   
   const { userAccess, setUserAccess, settings } = props;
 
@@ -27,18 +30,20 @@ export default function Header(props) {
   };
 
   return (<nav>
-    <h1 className="nav">#TwitterOutLoud 🔊</h1>
+    <h1 className="nav">#TwitterOutLoud <i style={{marginLeft: "10px"}} className="fas fa-volume-up"></i></h1>
     
-    <div className="signInOrOut">
+    <div style={{display: "-webkit-inline-box"}} className="signInOrOut">
 
     {!userAccess && <a href={`${process.env.REACT_APP_BACK_END_HOST}/auth`}><button className="btn btn-primary logout" ><i className="bi bi-twitter"></i> Sign in with Twitter</button></a>}
 
-    {userAccess && <button onClick={()=>deleteSession()} className="btn btn-primary logout">Logout 👋</button>}
+
+    <div>{userAccess && image_url && <img style={{borderRadius: "100px", marginRight: "15px"}} src={image_url} alt="user"/>}</div>
+    {userAccess && <button onClick={()=>deleteSession()} className="btn btn-primary logout">Logout {username ? "@" + username : ""} 👋</button>}
 
     </div>
 
 
 
-
+    
   </nav>)
 }
