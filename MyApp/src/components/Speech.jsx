@@ -197,6 +197,15 @@ export default function Speech(props) {
     }
   };
 
+  useEffect(() => {
+    if (appMode === BINGE) {
+      document.getElementById("mode-binge").setAttribute("disabled", "");
+    }
+    if (appMode === THREAD) {
+      document.getElementById("mode-thread").setAttribute("disabled", "");
+    }
+  });
+
   return (
     <>
       {/* <h1> */}
