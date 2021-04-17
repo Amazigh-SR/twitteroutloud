@@ -4,6 +4,7 @@ import fetchEnVoices from "./helpers/fetchEnVoices";
 import threadHelper from "./helpers/threadHelpers";
 import getTweets from "./helpers/getTweets";
 import { useAppMode, appModeConstants } from "./hooks/useAppMode";
+import { mockData } from "./helpers/mockData";
 
 import "./App.css";
 
@@ -20,11 +21,12 @@ function App() {
   const isLoggedIn =
     localStorage.getItem("isLoggedIn") === "true" ? true : false;
   const [userAccess, setUserAccess] = useState(isLoggedIn);
-  const [tweets, setTweets] = useState([]);
+  // const [tweets, setTweets] = useState([]);
+  const [tweets, setTweets] = useState(mockData);
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState({});
   const [voices, setVoices] = useState([]);
-  const [appMode, setAppMode] = useState(THREAD);
+  const [appMode, setAppMode] = useState(BINGE);
 
   // useEffect(() => {
   //   // if(MODE ==="Thread")
