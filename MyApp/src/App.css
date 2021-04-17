@@ -187,6 +187,21 @@ button.modeButton {
   margin-right: 1.5%;
 }
 
+.btn-toolbar.mb-3.speechComponent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--twitter-light-extra-light-gray);
+  color: var(--twitter-blue);
+  border: 1px solid var(--twitter-blue);
+  border-radius: 11px;
+  
+}
+
+.btn-toolbar>.btn, .btn-toolbar>.btn-group, .btn-toolbar>.input-group {
+  margin: 5px;
+}
+
 @keyframes fadeInOpacity {
   0% {
     opacity: 0;
