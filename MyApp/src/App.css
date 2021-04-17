@@ -24,6 +24,7 @@
 .VC-list {
   display: flex;
   font-size: 24px;
+  justify-content: center;
 }
 
 #VC-drawer {
@@ -224,6 +225,10 @@ li:before {
   content: "✓";
   margin-left: -20px;
   margin-right: 10px;
+}
+
+.VC-list li::before {
+  content: "▸";
 }
 
 .App-header {
