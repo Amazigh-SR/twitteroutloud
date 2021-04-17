@@ -40,8 +40,8 @@ const usePlayer = function () {
     let startingTrack = nextTrack;
     let modifier = 0;
     
-    if (func) {
-      
+    if (func === PREV || func === NEXT) {
+
       if (func === PREV && mode === PLAY) {
         
         //if the calling func is PREV decrement nextTrack by 2
@@ -68,9 +68,10 @@ const usePlayer = function () {
         setMode(PLAY);
       }
       
-    } else if (mode === STOP){
-      
-      //func has not been passed as an argument and mode is STOP
+    } else if (func === STOP){
+      modifier =-1;
+
+    } else if (mode === STOP ){
       
       modifier =-1
       startingTrack -= 1;

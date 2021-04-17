@@ -22,7 +22,7 @@ import { voiceCommandStatus } from "../helpers/voiceCommandStatus";
 const { ONLOAD, PAUSE, STOP, RELOAD, PLAY } = playerConstants;
 
 export default function Speech(props) {
-  const { tweets, setTweets, voices, settings, setSettings, appMode, setAppMode, setLoading } = props;
+  const { tweets, setTweets, voices, settings, setSettings, appMode, updateAppMode, setLoading } = props;
 
   // const utterances = tweets.map((tweet) => speechSynthesis(tweet, settings));
 
@@ -141,6 +141,7 @@ export default function Speech(props) {
   }, []);
 
   useEffect(() => {
+    //! this use effect causes problems and is no longer idiomatic with how this app is poised to updateAppMode
     //this use effect calls pings the server every time more tweets are needed
     if (nextTrack >= tweets.length && playerMode !== RELOAD && appMode === BINGE) {
       reload();
@@ -150,7 +151,7 @@ export default function Speech(props) {
         updateTracks(
           mergedTweets.map((tweet) => speechSynthesis(tweet, settings))
         );
-        setAppMode(BINGE);
+        updateAppMode(BINGE);
       });
     }
   }, [nextTrack]);
@@ -195,15 +196,19 @@ export default function Speech(props) {
             }).then((response) => {
               console.log(newSpeechListenerIsActive);
               if (newSpeechListenerIsActive) {
+                if (playerMode === PLAY || PAUSE) stop();
                 voiceCommandStatus("Voice command enabled", voices);
                 document.querySelector("#voice-commands").innerHTML =
                   "Deactivate Voice Commands";
+                if (playerMode === PLAY || PAUSE) play(settings, STOP);
               }
               if (!newSpeechListenerIsActive) {
+                if (playerMode === PLAY || PAUSE) stop();
                 SpeechRecognition.abortListening();
                 voiceCommandStatus("Voice command disabled", voices);
                 document.querySelector("#voice-commands").innerHTML =
                   "Activate Voice Commands";
+                if (playerMode === PLAY || PAUSE) play(settings, STOP);
               }
             });
           }}
@@ -325,7 +330,7 @@ export default function Speech(props) {
             {/* <ul> */}
             <button className="btn btn-primary modeButton" onClick={() => {
               setLoading(true);
-              setAppMode(BINGE);
+              updateAppMode(BINGE, stop);
             }}>
               <i className="fas fa-infinity"></i>
               Binge
@@ -336,7 +341,7 @@ export default function Speech(props) {
             {/* <ul> */}
             <button className="btn btn-primary modeButton" onClick={() => {
               setLoading(true);
-              setAppMode(THREAD);
+              updateAppMode(THREAD, stop);
             }}>
               <i className="fas fa-list-ul"></i>
               Thread
