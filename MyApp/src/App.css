@@ -74,6 +74,10 @@
   font-size: 26px;
 }
 
+#header-logo a {
+  text-decoration: none;
+}
+
 .invisible {
   /* display: none; */
   height: 0;
@@ -195,10 +199,11 @@ button.modeButton {
   color: var(--twitter-blue);
   border: 1px solid var(--twitter-blue);
   border-radius: 11px;
-  
 }
 
-.btn-toolbar>.btn, .btn-toolbar>.btn-group, .btn-toolbar>.input-group {
+.btn-toolbar > .btn,
+.btn-toolbar > .btn-group,
+.btn-toolbar > .input-group {
   margin: 5px;
 }
 
@@ -238,7 +243,7 @@ button.modeButton {
   justify-content: flex-end !important;
   align-items: flex-start;
   flex-direction: row;
-  
+
   /* max-width: fit-content; */
   /* margin-top: 81px; Add a top margin to avoid content overlay */
   /* transition: 1s; */
