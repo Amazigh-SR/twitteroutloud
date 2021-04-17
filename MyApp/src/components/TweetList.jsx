@@ -2,7 +2,6 @@ import { Tweet } from 'react-twitter-widgets';
 import { useEffect, useState } from 'react';
 
 const generateNewTweet = function(tweet, nextTrack) {
-  console.log("tweet in generate new tweet: ", tweet)
   return (
         <div key={nextTrack} className="individualTweet">
           <Tweet options={{width: 350}} key={tweet.id} tweetId={tweet.id_str}/>
@@ -16,7 +15,6 @@ export default function TweetList(props){
   const [tweetList, setTweetList] = useState([]);
  
   useEffect(()=>{
-    console.log("tweets in useEffect", tweets);
     if (nextTrack !== -1) {
       //When we are calling previous, or stop early in the utterance queue nextTrack will be set to -1 - we don't want to update in this case
 
