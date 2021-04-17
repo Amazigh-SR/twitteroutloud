@@ -20,8 +20,9 @@ const speechSynthesis = function (tweetObject, settings) {
   const regexHashtag = regexReplaceLinks.replace(/#/i, "hashtag ");
   const regexRetweet = regexHashtag.replace(/tweets. RT/i, "retweeted. ");
   const regexAt = regexRetweet.replace(/@/i, "at ");
+  const regexAnd = regexAt.replace(/&amp/i, "and");
   // console.log("post-regex", regexAt);
-  const endMessage = regexAt;
+  const endMessage = regexAnd;
 
   const { voice, pitch, rate, volume } = settings; //voiceId b/w 1 & 17.
 
