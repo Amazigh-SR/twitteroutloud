@@ -319,7 +319,10 @@ export default function Speech(props) {
       />
       {/* Create a component for list of commands to clean up this disasta */}
       <div id="VC-drawer" className="invisible">
-        <h2>List of Voice Commands</h2>
+        <h2>
+          {" "}
+          <i class="fas fa-microphone-alt"></i>List of Voice Commands{" "}
+        </h2>
         <div className="VC-list">
           <div>
             <ul>
