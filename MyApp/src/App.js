@@ -11,16 +11,18 @@ import Header from "./components/Header";
 import Speech from "./components/Speech";
 import Loading from "./components/Loading";
 import Welcome from "./components/Welcome";
+import Countdown from "./components/Countdown"
 
 import mockData from './helpers/mockData'
 
 function App() {
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true" ? true : false;
   const [userAccess, setUserAccess] = useState(isLoggedIn);
-  const [tweets, setTweets] = useState([...mockData]);
+  const [tweets, setTweets] = useState();
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState({});
   const [voices, setVoices] = useState([]);
+  const [rateLimitExceeded, setRateLimitExceeded] = useState(false);
 
   useEffect(() => {
     const handleWindowClose = function() {
@@ -71,8 +73,13 @@ function App() {
         .then((data) => {
           if (data.valid) {
             return getTweets().then((tweets) => {
-              setTweets(tweets);
-              setTimeout(() => setLoading(false), 1000);
+              if (tweets[0].message && tweets[0].message === "Rate limit exceeded") {
+                setRateLimitExceeded(true);
+                setTimeout(() => setLoading(false), 1000);
+              } else {
+                setTweets(tweets)
+                setTimeout(() => setLoading(false), 1000);
+              } 
             });
 
             //if x.setting is true setInterval
@@ -94,8 +101,13 @@ function App() {
       );
       getTweets()
         .then((tweets) => {
-          setTweets(tweets);
-          setTimeout(() => setLoading(false), 1000);
+          if (tweets[0].message && tweets[0].message === "Rate limit exceeded") {
+            setRateLimitExceeded(true);
+            setTimeout(() => setLoading(false), 1000);
+          } else {
+            setTweets(tweets)
+            setTimeout(() => setLoading(false), 1000);
+          }
         })
         .catch((err) => console.error(err));
     }
@@ -111,9 +123,19 @@ function App() {
           setUserAccess={setUserAccess}
           settings={settings}
         />
+        {rateLimitExceeded && 
+          <>
+            <h1>Rate limit exceeded: try again later!</h1>
+            <Loading>
+              <Countdown 
+                setRateLimitExceeded={setRateLimitExceeded}
+              />
+            </Loading>
+          </>
+          }
         {loading && <Loading>Fetching scones!</Loading>}
-        {!loading && userAccess && <Welcome />}
-        {!loading && userAccess && (
+        {!rateLimitExceeded && !loading && userAccess && <Welcome />}
+        {!rateLimitExceeded && !loading && userAccess && (
           <Speech
             tweets={tweets}
             setTweets={setTweets}
