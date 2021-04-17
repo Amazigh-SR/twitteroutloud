@@ -24,7 +24,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState({});
   const [voices, setVoices] = useState([]);
-  const [appMode, setAppMode] = useState(THREAD);
+  const [appMode, setAppMode] = useState(BINGE);
 
   // useEffect(() => {
   //   // if(MODE ==="Thread")
