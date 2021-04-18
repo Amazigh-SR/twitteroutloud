@@ -37,7 +37,7 @@ export default function Header(props) {
         <i style={{ marginLeft: "10px" }} className="fas fa-volume-up"></i>
       </h1>
 
-      <div style={{ display: "-webkit-inline-box" }} className="signInOrOut">
+      <div className="signInOrOut">
         {!userAccess && (
           <a href={`${process.env.REACT_APP_BACK_END_HOST}/auth`}>
             <button className="btn btn-primary logout">
