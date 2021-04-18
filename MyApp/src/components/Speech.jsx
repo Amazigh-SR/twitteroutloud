@@ -3,12 +3,9 @@ import axios from "axios";
 import { usePlayer, playerConstants } from "../hooks/usePlayerControls";
 import { appModeConstants } from "../hooks/useAppMode";
 
-import $ from "jquery";
-
 import { speechSynthesis } from "../helpers/speechSynthesis";
 import diffTweets from "../helpers/diffTweets";
 import { slideToggle } from "../helpers/slideToggle";
-
 import Settings from "./Settings";
 import TweetList from "./TweetList";
 
@@ -192,11 +189,7 @@ export default function Speech(props) {
   }, [utterances, appMode]);
 
   const handleClick = function () {
-    if ($("div.settingsComponent").first().is(":hidden")) {
-      $("div.settingsComponent").slideDown("fast");
-    } else {
-      $("div.settingsComponent").slideUp();
-    }
+    slideToggle(document.querySelector(".settingsComponent"), 300);
   };
 
   useEffect(() => {
@@ -210,10 +203,6 @@ export default function Speech(props) {
 
   return (
     <>
-      {/* <h1> */}
-      {/* Now playing:{" "} */}
-      {/* {`${playerMode !== STOP ? "Tweet #" + nextTrack : "nothing"}`} */}
-      {/* </h1> */}
       <div
         className="btn-toolbar mb-3 speechComponent"
         role="toolbar"
@@ -325,13 +314,8 @@ export default function Speech(props) {
           </div>
         </div>
       </div>
-      <Settings
-        settings={settings}
-        setSettings={setSettings}
-        voices={voices}
-        $={$}
-      />
-      {/* Create a component for list of commands to clean up this disasta */}
+      <Settings settings={settings} setSettings={setSettings} voices={voices} />
+      {/* Create a component for list of commands to increase code clarity */}
       <div id="VC-drawer" className="invisible">
         <h2>
           <div id="VC-header-hideToggle">
@@ -408,12 +392,9 @@ export default function Speech(props) {
           </div>
         </div>
       </div>
-      {/* <p id="transcript">Transcript: {transcript}</p> */}
       <div id="appMode-drawer" className="invisible">
-        {/* <h2>App Modes</h2> */}
         <div className="mode-list">
           <div>
-            {/* <ul> */}
             <button
               id="mode-binge"
               className="btn player"
@@ -425,10 +406,8 @@ export default function Speech(props) {
               <i className="fas fa-infinity"></i>
               Timeline
             </button>
-            {/* </ul> */}
           </div>
           <div>
-            {/* <ul> */}
             <button
               id="mode-thread"
               className="btn player"
