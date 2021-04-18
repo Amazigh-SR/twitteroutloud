@@ -32,14 +32,14 @@
 
 .VC-list {
   display: flex;
-  font-size: 24px;
+  font-size: 0.8em;
   justify-content: space-between;
   /* border: 1px grey solid; */
   /* border: hidden; */
 }
 
 #VC-drawer {
-  width: 700px;
+  width: 61%;
   /* height: 290px; */
 }
 
@@ -541,6 +541,10 @@ li:before {
   .tweetComponent {
     width: 980px;
     overflow-y: auto;
+  }
+
+  #VC-drawer {
+    width: 90%;
   }
 }
 @media only screen and (max-width: 540px) {
