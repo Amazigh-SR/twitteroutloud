@@ -12,9 +12,18 @@
 
 .player {
   background-color: white;
-  color: var(--twitter-blue);
-  border: 1px solid var(--twitter-blue);
+  color: var(--twitter-dark-gray);
+  /* border: 1px solid var(--twitter-blue); */
   font-size: 1em;
+}
+
+.btn.player:hover {
+  background-color: #ecf5fe;
+  color: var(--twitter-blue);
+  /* border: 1px solid var(--twitter-blue); */
+  font-size: 1em;
+  border-radius: 100px;
+  transition: 0.3s
 }
 
 .mode-list {
@@ -234,9 +243,9 @@ button.modeButton {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: var(--twitter-light-extra-light-gray);
+  background-color: white;
   color: var(--twitter-blue);
-  border: 1px solid var(--twitter-blue);
+  border: 1px solid var(--twitter-light-light-gray);
   border-radius: 11px;
   
 }
@@ -324,7 +333,7 @@ li:before {
 .player.focus,
 .player:focus,
 .player:hover {
-  color: var(--twitter-dark-gray);
+  color: var(--twitter-blue);
   text-decoration: none;
 }
 @media only screen and (max-width: 980px) {
