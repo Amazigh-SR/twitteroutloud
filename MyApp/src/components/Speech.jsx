@@ -7,6 +7,7 @@ import $ from "jquery";
 
 import { speechSynthesis } from "../helpers/speechSynthesis";
 import diffTweets from "../helpers/diffTweets";
+import { slideToggle } from "../helpers/slideToggle";
 
 import Settings from "./Settings";
 import TweetList from "./TweetList";
@@ -329,17 +330,23 @@ export default function Speech(props) {
               id="toggle-VCs"
               onClick={() => {
                 const isVCsVisible = isVoiceCommandsVisible;
+                const target = document.querySelector(".VC-list");
+                slideToggle(target, 300);
 
                 if (isVCsVisible) {
                   document.querySelector("#toggle-VCs").innerHTML =
                     "<i id='toggle-icon' class='fas fa-plus-circle'></i>";
                   setIsVoiceCommandsVisible(!isVCsVisible);
+                  document.getElementById("hr-top").style.display = "none";
+                  document.getElementById("hr-bottom").style.display = "none";
                 }
 
                 if (!isVCsVisible) {
                   document.querySelector("#toggle-VCs").innerHTML =
                     "<i id='toggle-icon' class='fas fa-minus-circle'></i>";
                   setIsVoiceCommandsVisible(!isVCsVisible);
+                  document.getElementById("hr-top").style.display = "block";
+                  document.getElementById("hr-bottom").style.display = "block";
                 }
 
                 // console.log("Hello minus is clicked");
@@ -349,8 +356,8 @@ export default function Speech(props) {
             </button>
           </div>
         </h2>
-        <hr />
         {/* <i class="fas fa-minus"></i> */}
+        <hr id="hr-top" />
         <div className="VC-list">
           <div>
             <ul>
@@ -374,7 +381,7 @@ export default function Speech(props) {
             </ul>
           </div>
         </div>
-        <hr />
+        <hr id="hr-bottom" />
         <div id="transcript-container">
           <div id="transcript-header">
             <img src="https://i.imgur.com/EiZiRou.gif" alt="waves" />
