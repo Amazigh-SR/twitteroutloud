@@ -138,9 +138,21 @@
 }
 
 #auth-header-text span {
-  color: #1da1f2;
-  text-decoration: underline;
+    font-style: italic;
+    text-decoration-line: underline;
+  text-decoration-style: wavy;
+
+
+  /* color: #1da1f2; */
+  /* text-decoration: underline; */
 }
+
+@keyframes wavy-slide {
+	to {
+		margin-left: -51%;
+	}
+}
+
 
 #auth-list {
   display: flex;
@@ -151,7 +163,7 @@
 }
 
 #auth-options {
-  margin-top: 20px;
+  /* margin-top: 20px; */
   margin-bottom: 40px;
 }
 
