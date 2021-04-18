@@ -236,6 +236,7 @@ export default function Speech(props) {
                 if (playerMode === PLAY || playerMode === PAUSE) stop();
                 voiceCommandStatus("Voice command enabled", voices);
                 document.querySelector("#voice-commands").innerHTML =
+                  "<i class='fas fa-microphone-slash'></i>" +
                   "Deactivate Voice Commands";
                 if (playerMode === PLAY || playerMode === PAUSE) play(settings, STOP);
               }
@@ -244,12 +245,13 @@ export default function Speech(props) {
                 SpeechRecognition.abortListening();
                 voiceCommandStatus("Voice command disabled", voices);
                 document.querySelector("#voice-commands").innerHTML =
+                  "<i class='fas fa-microphone'></i>" +
                   "Activate Voice Commands";
                 if (playerMode === PLAY || playerMode === PAUSE) play(settings, STOP);
               }
             });
           }}
-        >
+        > <i className="fas fa-microphone"></i>
           Activate Voice Commands
         </button>
         <div className="btn-group mr-2" role="group" aria-label="First group">
@@ -293,7 +295,7 @@ export default function Speech(props) {
               onClick={() => {
                 handleClick();
               }}
-            >
+            > <i className="fas fa-cogs"></i>
               Settings
             </button>
           </div>
@@ -309,7 +311,7 @@ export default function Speech(props) {
                   .querySelector("#appMode-drawer")
                   .classList.toggle("drawer");
               }}
-            >
+            > <i className="fas fa-toggle-on"></i>
               App Mode
             </button>
           </div>
@@ -404,7 +406,7 @@ export default function Speech(props) {
             {/* <ul> */}
             <button
               id="mode-binge"
-              className="btn btn-primary modeButton"
+              className="btn player"
               onClick={() => {
                 setLoading(true);
                 updateAppMode(BINGE, stop);
@@ -419,7 +421,7 @@ export default function Speech(props) {
             {/* <ul> */}
             <button
               id="mode-thread"
-              className="btn btn-primary modeButton"
+              className="btn player"
               onClick={() => {
                 setLoading(true);
                 updateAppMode(THREAD, stop);
