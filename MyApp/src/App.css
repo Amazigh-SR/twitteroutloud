@@ -243,10 +243,32 @@ button.modeButton {
   margin: 5px;
 }
 
+.left-transition {
+  opacity: 1;
+  animation-name: fadeInOpacityLeft;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in;
+  animation-duration: 1.5s;
+  transition: 1s;
+  margin-left: 1.5%;
+  margin-right: 1.5%;
+}
+
 @keyframes fadeInOpacity {
   0% {
     opacity: 0;
     -webkit-transform: translateX(100%);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateX(0);
+  }
+}
+
+@keyframes fadeInOpacityLeft {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateX(-100%);
   }
   100% {
     opacity: 1;
