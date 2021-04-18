@@ -271,8 +271,9 @@ nav {
   0 100px 80px rgba(143, 112, 112, 0.12);
 }
 
-div.auth-container {
-  height: 100vh;
+div#auth-container {
+  /* height: 100vh; */
+  background-color: transparent;
 }
 
 /* h1.nav {
@@ -295,7 +296,7 @@ h1.nav:hover {
 h1.nav {
   color: white;
   display: flex;
-  text-align: center;
+  align-items: center;
 }
 
 h1.nav > .fa-volume-up{
