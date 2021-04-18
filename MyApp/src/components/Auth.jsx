@@ -3,15 +3,19 @@ export default function Auth() {
     <div id="auth-container">
       <div id="auth-image">
         {" "}
-        <img src="TOW_logo_auth_page.png" alt="bird_headphones_logo" />
+        <img src="bird_headphones.png" alt="bird_headphones_logo" />
       </div>
       <div id="auth-header-text">
-        <h3>Give scrolling a break.</h3>
-        <h3>
-          <span>Listen</span> to your Twitter feed instead!
-        </h3>
+        <p>Give scrolling a break.</p>
+        <p>
+          <span>
+            {" "}
+            <strong>Listen</strong>{" "}
+          </span>{" "}
+          to your Twitter feed instead!
+        </p>
       </div>
-      <div id="auth-lis">
+      <div id="auth-list">
         <div className="list-features">
           <ul>
             <li>Hands free Twitter</li>
@@ -27,7 +31,10 @@ export default function Auth() {
           </ul>
         </div>
       </div>
-      <div id="auth-options"></div>
+      <div id="auth-options">
+        <button>Sign in</button>
+        <button>Sign up</button>
+      </div>
     </div>
 
     // <div className="auth-container">
