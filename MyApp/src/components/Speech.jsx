@@ -320,9 +320,22 @@ export default function Speech(props) {
       {/* Create a component for list of commands to clean up this disasta */}
       <div id="VC-drawer" className="invisible">
         <h2>
-          {" "}
-          <i class="fas fa-microphone-alt"></i>List of Voice Commands{" "}
+          <div id="VC-header-hideToggle">
+            <span>
+              <i class="fas fa-microphone-alt"></i>List of Voice Commands
+            </span>
+            <button
+              id="toggle-VCs"
+              onClick={() => {
+                console.log("Hello minus is clicked");
+              }}
+            >
+              <i id="toggle-icon" class="fas fa-minus-circle"></i>
+            </button>
+          </div>
         </h2>
+        <hr />
+        {/* <i class="fas fa-minus"></i> */}
         <div className="VC-list">
           <div>
             <ul>
@@ -346,7 +359,7 @@ export default function Speech(props) {
             </ul>
           </div>
         </div>
-
+        <hr />
         <div id="transcript-container">
           <div id="transcript-header">
             <img src="https://i.imgur.com/EiZiRou.gif" alt="waves" />
