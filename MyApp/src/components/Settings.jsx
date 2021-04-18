@@ -78,7 +78,7 @@ export default function Settings(props) {
           id="doneButton"
           className="btn player"
           onClick={()=>{handleClick()}}
-        >
+        > <i className="fas fa-check-square"></i>
           Done
         </button>
       </div>
