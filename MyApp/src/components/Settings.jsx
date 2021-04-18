@@ -1,38 +1,47 @@
+import { slideUp } from "../helpers/slideUp";
+
 export default function Settings(props) {
-  const {voices, settings, setSettings, $} = props;
+  const { voices, settings, setSettings } = props;
   function handleChange(evt) {
     const value = Number(evt.target.value);
     setSettings((prev) => ({
       ...prev,
-      [evt.target.name]: (value),
+      [evt.target.name]: value,
     }));
-    localStorage.setItem(evt.target.name, value)
+    localStorage.setItem(evt.target.name, value);
   }
 
   function handleVoiceChange(evt) {
-    const voice = voices.find(voice => voice.name === evt.target.value);
+    const voice = voices.find((voice) => voice.name === evt.target.value);
     setSettings((prev) => ({
-      ...prev, 
+      ...prev,
       [evt.target.name]: voice,
-    }))
-    localStorage.setItem("voice", voice.name)
+    }));
+    localStorage.setItem("voice", voice.name);
   }
 
   const voiceNameList = voices.map((voice, index) => {
     return (
-      <option value={voice.name} key={index}>{voice.name}</option>
-    )
-  })
+      <option value={voice.name} key={index}>
+        {voice.name}
+      </option>
+    );
+  });
 
-  const handleClick = function() {
-    $( "div.settingsComponent" ).slideUp();
-  }
+  const handleClick = function () {
+    slideUp(document.querySelector(".settingsComponent"), 400);
+  };
 
   return (
     <div className="settingsComponent">
       <div className="option voiceDiv">
         <label htmlFor="voice">Voice </label>
-        <select value={settings.voice && settings.voice.name} name="voice" id="voice" onChange={handleVoiceChange}>
+        <select
+          value={settings.voice && settings.voice.name}
+          name="voice"
+          id="voice"
+          onChange={handleVoiceChange}
+        >
           {voiceNameList}
         </select>
       </div>
@@ -74,11 +83,15 @@ export default function Settings(props) {
           value={settings.pitch}
           onChange={handleChange}
         />
-        <button 
+        <button
           id="doneButton"
           className="btn player"
-          onClick={()=>{handleClick()}}
-        > <i className="fas fa-check-square"></i>
+          onClick={() => {
+            handleClick();
+          }}
+        >
+          {" "}
+          <i className="fas fa-check-square"></i>
           Done
         </button>
       </div>
