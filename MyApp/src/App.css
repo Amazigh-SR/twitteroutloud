@@ -24,12 +24,23 @@
 .VC-list {
   display: flex;
   font-size: 24px;
-  justify-content: center;
+  justify-content: space-between;
+  /* border: 1px grey solid; */
+  /* border: hidden; */
 }
 
 #VC-drawer {
   width: 700px;
   /* height: 290px; */
+}
+
+#transcript-header img {
+  margin-right: 5px;
+}
+
+#VC-header-hideToggle .fas {
+  margin-right: 8px;
+  /* color: #1da1f2; */
 }
 
 #transcript-container {
@@ -55,6 +66,19 @@
   white-space: nowrap;
   position: relative;
   left: 0px;
+}
+
+#VC-header-hideToggle {
+  display: flex;
+  justify-content: space-between;
+}
+
+#toggle-VCs {
+  border: none;
+  background-color: white;
+  font-size: 18px;
+  color: #1da1f2;
+  /* color: var(--twitter-blue); */
 }
 
 #transcript-header {
