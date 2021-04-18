@@ -51,7 +51,8 @@ export default function Speech(props) {
     nextTrack,
   } = usePlayer();
 
-  const [speechListenerIsActive, setSpeechListenerIsActive] = useState(false); //! Added this here
+  const [speechListenerIsActive, setSpeechListenerIsActive] = useState(false);
+  const [isVoiceCommandsVisible, setIsVoiceCommandsVisible] = useState(true);
 
   //Create a helper function file for functions occurring more than once
   const deleteSession = function () {
@@ -327,7 +328,21 @@ export default function Speech(props) {
             <button
               id="toggle-VCs"
               onClick={() => {
-                console.log("Hello minus is clicked");
+                const isVCsVisible = isVoiceCommandsVisible;
+
+                if (isVCsVisible) {
+                  document.querySelector("#toggle-VCs").innerHTML =
+                    "<i id='toggle-icon' class='fas fa-plus-circle'></i>";
+                  setIsVoiceCommandsVisible(!isVCsVisible);
+                }
+
+                if (!isVCsVisible) {
+                  document.querySelector("#toggle-VCs").innerHTML =
+                    "<i id='toggle-icon' class='fas fa-minus-circle'></i>";
+                  setIsVoiceCommandsVisible(!isVCsVisible);
+                }
+
+                // console.log("Hello minus is clicked");
               }}
             >
               <i id="toggle-icon" class="fas fa-minus-circle"></i>
