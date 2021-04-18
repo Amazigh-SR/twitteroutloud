@@ -11,15 +11,15 @@ const useAppMode = function (initialMode) {
 
   /**
    * When setting appMode, optionally trigger a player control function
-   * @param newMode an app mode constant; 
+   * @param newMode an app mode constant;
    * @param action a player control function from usePlayerControl;
    */
-  const updateAppMode = function(newMode, action) {
+  const updateAppMode = function (newMode, action) {
     if (action) {
       action();
     }
     setAppMode(newMode);
-  }
+  };
 
   return {
     appMode,

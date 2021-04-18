@@ -26,7 +26,7 @@ export default function Auth() {
         <div className="list-features">
           <ul>
             <li>Increasing accessibility and usability</li>
-            <li>Choose your mode - thread and binge</li>
+            <li>Choose your mode - thread and timeline</li>
             <li>Open Source</li>
           </ul>
         </div>

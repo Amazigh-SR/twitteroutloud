@@ -142,7 +142,7 @@ export default function Speech(props) {
     },
 
     {
-      command: ["Binge mode"],
+      command: ["Timeline mode"],
       callback: () => {
         document.getElementById("mode-binge").click();
       },
@@ -376,7 +376,7 @@ export default function Speech(props) {
               <li>Start</li>
               <li>Stop</li>
               <li>Log me Out</li>
-              <li>Binge Mode</li>
+              <li>Timeline Mode</li>
             </ul>
           </div>
           <div>
@@ -423,7 +423,7 @@ export default function Speech(props) {
               }}
             >
               <i className="fas fa-infinity"></i>
-              Binge
+              Timeline
             </button>
             {/* </ul> */}
           </div>
