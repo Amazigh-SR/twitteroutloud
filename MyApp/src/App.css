@@ -151,8 +151,8 @@ nav {
   /* background-color: var(--twitter-light-extra-light-gray); */
   opacity: 1;
   background-color: #347ab8;
-  background-image: url("./sound_wave.svg"), linear-gradient(#347ab8, var(--twitter-blue) 95%);
-  background-repeat: repeat-x;
+  background-image: url('./sound_wave_fade.svg'), linear-gradient(#347ab8, var(--twitter-blue) 95%);
+  /* background-repeat: repeat-x; */
   border-radius: 0 0 30px 30px;
   box-shadow:
   0 2.8px 2.2px rgba(0, 0, 0, 0.034),
@@ -183,12 +183,16 @@ h1.nav:hover {
   --d: 100%;
 
 } */
-
 h1.nav {
-  display: inline-block;
+  color: white;
+  display: flex;
+  text-align: center;
+}
+
+h1.nav > .fa-volume-up{
   color: white;
   overflow: hidden;
-  background: linear-gradient(to right, #f89244, #f89244 50%, white 50%);
+  background: linear-gradient(to right, #F2991D, #F2991D 50%, white 50%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -197,7 +201,7 @@ h1.nav {
   transition: background-position 275ms ease;
 }
 /* shoutout to @t_afif for this hover effect */
-h1.nav:hover {
+h1.nav:hover > .fa-volume-up{
   background-position: 0 100%;
 }
 
