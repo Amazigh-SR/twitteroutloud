@@ -103,6 +103,7 @@
   display: flex;
   justify-content: center;
   height: 600px;
+  margin-top: 15px;
 }
 
 /* #auth-image img {
@@ -116,6 +117,10 @@
   color: #11364d;
   margin-top: 20px;
   margin-bottom: 20px;
+}
+
+#auth-options a {
+  text-decoration: none;
 }
 
 #auth-header-text span {
@@ -322,6 +327,10 @@ li:before {
 #auth-list li::before {
   content: "✓";
   color: #1da1f2;
+}
+
+#auth-list li {
+  margin-bottom: 20px;
 }
 
 .App-header {
