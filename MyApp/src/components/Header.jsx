@@ -40,7 +40,7 @@ export default function Header(props) {
       <div className="signInOrOut">
         {!userAccess && (
           <a href={`${process.env.REACT_APP_BACK_END_HOST}/auth`}>
-            <button className="btn btn-primary logout">
+            <button id="header-top-sign-in" className="btn btn-primary logout">
               <i className="bi bi-twitter"></i> Sign in with Twitter
             </button>
           </a>
