@@ -238,7 +238,8 @@ export default function Speech(props) {
                 document.querySelector("#voice-commands").innerHTML =
                   "<i class='fas fa-microphone-slash'></i>" +
                   "Deactivate Voice Commands";
-                if (playerMode === PLAY || playerMode === PAUSE) play(settings, STOP);
+                if (playerMode === PLAY || playerMode === PAUSE)
+                  play(settings, STOP);
               }
               if (!newSpeechListenerIsActive) {
                 if (playerMode === PLAY || playerMode === PAUSE) stop();
@@ -247,11 +248,14 @@ export default function Speech(props) {
                 document.querySelector("#voice-commands").innerHTML =
                   "<i class='fas fa-microphone'></i>" +
                   "Activate Voice Commands";
-                if (playerMode === PLAY || playerMode === PAUSE) play(settings, STOP);
+                if (playerMode === PLAY || playerMode === PAUSE)
+                  play(settings, STOP);
               }
             });
           }}
-        > <i className="fas fa-microphone"></i>
+        >
+          {" "}
+          <i className="fas fa-microphone"></i>
           Activate Voice Commands
         </button>
         <div className="btn-group mr-2" role="group" aria-label="First group">
@@ -273,7 +277,7 @@ export default function Speech(props) {
           </button>
           <button
             className="btn player"
-            onClick={() => playerMode === ONLOAD ? null : pause() }
+            onClick={() => (playerMode === ONLOAD ? null : pause())}
           >
             <i className="bi bi-pause"></i>
           </button>
@@ -295,7 +299,9 @@ export default function Speech(props) {
               onClick={() => {
                 handleClick();
               }}
-            > <i className="fas fa-cogs"></i>
+            >
+              {" "}
+              <i className="fas fa-cogs"></i>
               Settings
             </button>
           </div>
@@ -311,7 +317,9 @@ export default function Speech(props) {
                   .querySelector("#appMode-drawer")
                   .classList.toggle("drawer");
               }}
-            > <i className="fas fa-toggle-on"></i>
+            >
+              {" "}
+              <i className="fas fa-toggle-on"></i>
               App Mode
             </button>
           </div>
@@ -368,6 +376,7 @@ export default function Speech(props) {
               <li>Start</li>
               <li>Stop</li>
               <li>Log me Out</li>
+              <li>Binge Mode</li>
             </ul>
           </div>
           <div>
@@ -375,6 +384,7 @@ export default function Speech(props) {
               <li>Next Tweet</li>
               <li>Previous Tweet</li>
               <li>Pause</li>
+              <li>Thread Mode</li>
             </ul>
           </div>
           <div>
