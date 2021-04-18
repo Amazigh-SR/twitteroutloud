@@ -8,7 +8,8 @@ import $ from "jquery";
 import { speechSynthesis } from "../helpers/speechSynthesis";
 import diffTweets from "../helpers/diffTweets";
 import { slideToggle } from "../helpers/slideToggle";
-
+import { slideDown } from "../helpers/slideDown";
+import { slideUp } from "../helpers/slideUp";
 import Settings from "./Settings";
 import TweetList from "./TweetList";
 
@@ -192,11 +193,7 @@ export default function Speech(props) {
   }, [utterances, appMode]);
 
   const handleClick = function () {
-    if ($("div.settingsComponent").first().is(":hidden")) {
-      $("div.settingsComponent").slideDown("fast");
-    } else {
-      $("div.settingsComponent").slideUp();
-    }
+    slideToggle(document.querySelector(".settingsComponent"), 300);
   };
 
   useEffect(() => {
