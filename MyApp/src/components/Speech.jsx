@@ -234,9 +234,7 @@ export default function Speech(props) {
           </button>
           <button
             className="btn player"
-            onClick={() => {
-              pause();
-            }}
+            onClick={() => playerMode === ONLOAD ? null : pause() }
           >
             <i className="bi bi-pause"></i>
           </button>
