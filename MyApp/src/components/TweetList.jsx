@@ -1,9 +1,12 @@
 import { Tweet } from 'react-twitter-widgets';
 import { useEffect, useState } from 'react';
 
-const generateNewTweet = function(tweet, nextTrack) {
+
+const generateNewTweet = function(tweet, nextTrack, isLeft = false) {
+  const conditionalClass = isLeft ? ' left-transition' : '';
+
   return (
-        <div key={nextTrack} className="individualTweet">
+        <div key={nextTrack} className={`individualTweet${conditionalClass}`} >
           <Tweet options={{width: 350}} key={tweet.id} tweetId={tweet.id_str}/>
         </div>
       )
@@ -41,7 +44,7 @@ export default function TweetList(props){
 
       } else if (tweetList.length === 3 && nextTrack === 1 && tweetListIndices[0] === 1) {
         //this last corner case is caused when track[2] is being read and previous is called
-        setTweetList(prev=>[generateNewTweet(tweets[nextTrack-1], nextTrack-1), ...prev.slice(0,2)])
+        setTweetList(prev=>[generateNewTweet(tweets[nextTrack-1], nextTrack-1, true), ...prev.slice(0,2)])
 
       } else if (tweetList.length === 3 && nextTrack !== 0) {
 
@@ -60,7 +63,7 @@ export default function TweetList(props){
 
         } else if(tweetListIndices[0] === nextTrack) {
           //when previous is called with a full queue
-          setTweetList(prev=>[generateNewTweet(tweets[nextTrack-1], nextTrack-1), ...prev.slice(0,2)])
+          setTweetList(prev=>[generateNewTweet(tweets[nextTrack-1], nextTrack-1, true), ...prev.slice(0,2)])
 
         } 
       }
