@@ -7,6 +7,7 @@ const slideDown = function (target, duration) {
     display = "block";
   }
   target.style.display = display;
+  // console.log("Hello from the other side");
 
   let height = target.offsetHeight;
   target.style.height = 0;
@@ -33,4 +34,4 @@ const slideDown = function (target, duration) {
   }, duration);
 };
 
-exports.slideDown = slideDown;
+export { slideDown };

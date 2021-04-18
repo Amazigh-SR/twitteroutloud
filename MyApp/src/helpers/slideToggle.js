@@ -9,3 +9,8 @@ const slideToggle = function (target, duration = 600) {
     return slideUp(target, duration);
   }
 };
+
+// console.log(slideDown())
+
+// exports.slideToggle = slideToggle;
+export { slideToggle };

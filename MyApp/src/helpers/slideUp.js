@@ -25,4 +25,4 @@ const slideUp = function (target, duration) {
   }, duration);
 };
 
-exports.slideUp = slideUp;
+export { slideUp };
