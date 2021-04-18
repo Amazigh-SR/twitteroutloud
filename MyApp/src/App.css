@@ -352,9 +352,6 @@ li:before {
   }
 
   .player {
-    background-color: white;
-    color: var(--twitter-blue);
-    border: 1px solid var(--twitter-blue);
     font-size: 1em;
   }
 }
