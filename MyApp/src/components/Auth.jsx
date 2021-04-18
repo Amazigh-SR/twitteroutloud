@@ -32,8 +32,13 @@ export default function Auth() {
         </div>
       </div>
       <div id="auth-options">
-        <button>Sign in</button>
-        <button>Sign up</button>
+        <button>
+          {" "}
+          <a href={`${process.env.REACT_APP_BACK_END_HOST}/auth`}>Sign in</a>
+        </button>
+        <button>
+          <a href="https://mobile.twitter.com/i/flow/signup">Sign up</a>
+        </button>
       </div>
     </div>
 
