@@ -17,10 +17,10 @@ const speechSynthesis = function (tweetObject, settings) {
     /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])?/gim,
     ""
   );
-  const regexHashtag = regexReplaceLinks.replace(/#/i, "hashtag ");
-  const regexRetweet = regexHashtag.replace(/tweets. RT/i, "retweeted. ");
-  const regexAt = regexRetweet.replace(/@/i, "at ");
-  const regexAnd = regexAt.replace(/&amp/i, "and");
+  const regexHashtag = regexReplaceLinks.replace(/#/gi, "hashtag ");
+  const regexRetweet = regexHashtag.replace(/tweets. RT/gi, "retweeted. ");
+  const regexAt = regexRetweet.replace(/@/gi, "at ");
+  const regexAnd = regexAt.replace(/&amp;/gi, "and");
   // console.log("post-regex", regexAt);
   const endMessage = regexAnd;
 
