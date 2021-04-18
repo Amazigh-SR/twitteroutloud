@@ -10,7 +10,7 @@ export default function Auth() {
         <p>
           <span>
             {" "}
-            <strong>Listen</strong>{" "}
+            <strong>LISTEN</strong>{" "}
           </span>{" "}
           to your Twitter feed instead!
         </p>
