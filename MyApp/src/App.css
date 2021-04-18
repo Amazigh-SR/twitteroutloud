@@ -23,7 +23,7 @@
   /* border: 1px solid var(--twitter-blue); */
   font-size: 1em;
   border-radius: 100px;
-  transition: 0.3s
+  transition: 0.3s;
 }
 
 .mode-list {
@@ -33,12 +33,28 @@
 .VC-list {
   display: flex;
   font-size: 24px;
+  justify-content: space-between;
+  /* border: 1px grey solid; */
+  /* border: hidden; */
 }
 
 #VC-drawer {
   width: 700px;
   /* height: 290px; */
 }
+
+#transcript-header img {
+  margin-right: 5px;
+}
+
+#VC-header-hideToggle .fas {
+  margin-right: 8px;
+  /* color: #1da1f2; */
+}
+
+/* #toggle-icon {
+  outline: none;
+} */
 
 #transcript-container {
   display: flex;
@@ -52,16 +68,6 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-/* 
-#transcript::after {
-  position: relative;
-  left: 0px;
-  content: "...";
-  word-wrap: break-word;
-  overflow: hidden;
-  direction: rtl;
-  white-space: nowrap;
-} */
 
 #transcript-text {
   text-align: left;
@@ -73,9 +79,20 @@
   white-space: nowrap;
   position: relative;
   left: 0px;
+}
 
-  /* content: "..."; */
-  /* content: "..."; */
+#VC-header-hideToggle {
+  display: flex;
+  justify-content: space-between;
+}
+
+#toggle-VCs {
+  border: none;
+  background-color: white;
+  font-size: 18px;
+  color: #1da1f2;
+  outline: none;
+  /* color: var(--twitter-blue); */
 }
 
 #transcript-header {
@@ -83,23 +100,87 @@
   font-size: 26px;
 }
 
+#header-logo a {
+  text-decoration: none;
+}
+
+#auth-container {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-around; */
+  background-color: white;
+  width: 100%;
+  min-height: 93vh;
+}
+
+#auth-image {
+  display: flex;
+  justify-content: center;
+  height: 600px;
+  margin-top: 15px;
+}
+
+/* #auth-image img {
+  max-width: 100%;
+  max-height: 100%;
+} */
+
+#auth-header-text {
+  font-size: 30px;
+  font-weight: bolder;
+  color: #11364d;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#auth-options a {
+  text-decoration: none;
+}
+
+#auth-header-text span {
+  color: #1da1f2;
+  text-decoration: underline;
+}
+
+#auth-list {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  color: #11364d;
+}
+
+#auth-options {
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+#auth-options button {
+  width: 200px;
+  height: 100px;
+  margin-left: 20px;
+  margin-right: 20px;
+  border-radius: 15%;
+  background-color: white;
+  border: 2px solid #1da1f2;
+  /* border-width: thick; */
+  /* padding: 4px 30px; */
+  font-weight: bold;
+  color: #11364d;
+}
+
+#auth-options button:hover {
+  background-color: #1da1f2;
+}
+
 .invisible {
-  /* display: none; */
   height: 0;
   padding: 0;
   margin: 0;
   border: 0;
   transition: 0.3s ease-in;
   overflow: hidden;
-  /* height: 0px;
-  transition: height 2s ease-out; */
 }
-
-/* .visible {
-  display: block;
-  height: 237px;
-  transition: height 2s ease-in-out;
-} */
 
 .settingsComponent {
   margin: 10px;
@@ -170,11 +251,8 @@ div.auth-container {
 h1.nav {
   display: inline-block;
   color: white;
-  background:
-  linear-gradient(#1da1f2 0 0) 
-  left /var(--d, 0%) 100% no-repeat;
+  background: linear-gradient(#1da1f2 0 0) left / var(--d, 0%) 100% no-repeat;
   transition: 0.5s;
-
 }
 /* shoutout to @t_afif for this hover effect */
 h1.nav:hover {
@@ -182,7 +260,7 @@ h1.nav:hover {
   color: white;
   --d: 100%;
   border-radius: 4px;
-  
+
   /* color: #fff; */
 }
 
@@ -227,60 +305,42 @@ button.modeButton {
 
 #twitter-widget-0 {
   /* selects twitter-widget-0 on load */
-  box-shadow:
-  0 2.8px 2.2px rgba(0, 0, 0, 0.034),
-  0 6.7px 5.3px rgba(0, 0, 0, 0.048),
-  0 12.5px 10px rgba(0, 0, 0, 0.06),
-  0 22.3px 17.9px rgba(0, 0, 0, 0.072),
-  0 41.8px 33.4px rgba(0, 0, 0, 0.086),
-  0 100px 80px rgba(143, 112, 112, 0.12);
+  box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
+    0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+    0 100px 80px rgba(143, 112, 112, 0.12);
   transition: 0.3s;
 }
 
 .individualTweet:nth-child(2) > div > div > div > iframe {
   /* selects the second tweet always */
-  box-shadow:
-  0 2.8px 2.2px rgba(0, 0, 0, 0.034),
-  0 6.7px 5.3px rgba(0, 0, 0, 0.048),
-  0 12.5px 10px rgba(0, 0, 0, 0.06),
-  0 22.3px 17.9px rgba(0, 0, 0, 0.072),
-  0 41.8px 33.4px rgba(0, 0, 0, 0.086),
-  0 100px 80px rgba(143, 112, 112, 0.12);
+  box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+    0 6.7px 5.3px rgba(0, 0, 0, 0.048), 0 12.5px 10px rgba(0, 0, 0, 0.06),
+    0 22.3px 17.9px rgba(0, 0, 0, 0.072), 0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+    0 100px 80px rgba(143, 112, 112, 0.12);
   transition: 0.3s;
 }
 
-.individualTweet:last-of-type > div > div > div > iframe  {
+.individualTweet:last-of-type > div > div > div > iframe {
   /* condition used for when the second tweet is also the last tweet */
-  box-shadow:
-  0 0 0 rgba(0, 0, 0, 0.034),
-  0 0 0 rgba(0, 0, 0, 0.048),
-  0 0 0 rgba(0, 0, 0, 0.06),
-  0 0 0 rgba(0, 0, 0, 0.072),
-  0 0 0 rgba(0, 0, 0, 0.086),
-  0 0 0 rgba(143, 112, 112, 0.12);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0.034), 0 0 0 rgba(0, 0, 0, 0.048),
+    0 0 0 rgba(0, 0, 0, 0.06), 0 0 0 rgba(0, 0, 0, 0.072),
+    0 0 0 rgba(0, 0, 0, 0.086), 0 0 0 rgba(143, 112, 112, 0.12);
   transition: 0;
 }
 
 .individualTweet:nth-last-child(3) > div > div > div > iframe#twitter-widget-0 {
   /* condition used for when twitter-widget-0 is the first of 3*/
-  box-shadow:
-  0 0 0 rgba(0, 0, 0, 0.034),
-  0 0 0 rgba(0, 0, 0, 0.048),
-  0 0 0 rgba(0, 0, 0, 0.06),
-  0 0 0 rgba(0, 0, 0, 0.072),
-  0 0 0 rgba(0, 0, 0, 0.086),
-  0 0 0 rgba(143, 112, 112, 0.12);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0.034), 0 0 0 rgba(0, 0, 0, 0.048),
+    0 0 0 rgba(0, 0, 0, 0.06), 0 0 0 rgba(0, 0, 0, 0.072),
+    0 0 0 rgba(0, 0, 0, 0.086), 0 0 0 rgba(143, 112, 112, 0.12);
   transition: 0;
 }
 
-
-
 .individualTweet:nth-child(3) {
-  
 }
 
 .individualTweet:nth-child(1) {
-
 }
 
 .btn-toolbar.mb-3.speechComponent {
@@ -291,10 +351,11 @@ button.modeButton {
   color: var(--twitter-blue);
   border: 1px solid var(--twitter-light-light-gray);
   border-radius: 11px;
-  
 }
 
-.btn-toolbar>.btn, .btn-toolbar>.btn-group, .btn-toolbar>.input-group {
+.btn-toolbar > .btn,
+.btn-toolbar > .btn-group,
+.btn-toolbar > .input-group {
   margin: 5px;
 }
 
@@ -358,6 +419,7 @@ button.modeButton {
   flex-direction: row;
   padding-bottom: 5em;
   overflow: hidden; /* Hide scrollbars */
+
   /* max-width: fit-content; */
   /* margin-top: 81px; Add a top margin to avoid content overlay */
   /* transition: 1s; */
@@ -378,6 +440,19 @@ li:before {
   content: "✓";
   margin-left: -20px;
   margin-right: 10px;
+}
+
+.VC-list li::before {
+  content: "▸";
+}
+
+#auth-list li::before {
+  content: "✓";
+  color: #1da1f2;
+}
+
+#auth-list li {
+  margin-bottom: 20px;
 }
 
 .App-header {

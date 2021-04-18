@@ -1,12 +1,13 @@
 // import checkSpeechSynthesis from "../helpers/checkSpeechSynthesis";
 import axios from "axios";
 import { usePlayer, playerConstants } from "../hooks/usePlayerControls";
-import { appModeConstants } from '../hooks/useAppMode'
+import { appModeConstants } from "../hooks/useAppMode";
 
 import $ from "jquery";
 
 import { speechSynthesis } from "../helpers/speechSynthesis";
 import diffTweets from "../helpers/diffTweets";
+import { slideToggle } from "../helpers/slideToggle";
 
 import Settings from "./Settings";
 import TweetList from "./TweetList";
@@ -22,7 +23,16 @@ import { voiceCommandStatus } from "../helpers/voiceCommandStatus";
 const { ONLOAD, PAUSE, STOP, RELOAD, PLAY } = playerConstants;
 
 export default function Speech(props) {
-  const { tweets, setTweets, voices, settings, setSettings, appMode, updateAppMode, setLoading } = props;
+  const {
+    tweets,
+    setTweets,
+    voices,
+    settings,
+    setSettings,
+    appMode,
+    updateAppMode,
+    setLoading,
+  } = props;
 
   // const utterances = tweets.map((tweet) => speechSynthesis(tweet, settings));
 
@@ -42,7 +52,8 @@ export default function Speech(props) {
     nextTrack,
   } = usePlayer();
 
-  const [speechListenerIsActive, setSpeechListenerIsActive] = useState(false); //! Added this here
+  const [speechListenerIsActive, setSpeechListenerIsActive] = useState(false);
+  const [isVoiceCommandsVisible, setIsVoiceCommandsVisible] = useState(true);
 
   //Create a helper function file for functions occurring more than once
   const deleteSession = function () {
@@ -129,6 +140,19 @@ export default function Speech(props) {
         document.querySelector(".settingsComponent").style.display = "none";
       },
     },
+
+    {
+      command: ["Binge mode"],
+      callback: () => {
+        document.getElementById("mode-binge").click();
+      },
+    },
+    {
+      command: ["Tread mode"],
+      callback: () => {
+        document.getElementById("mode-thread").click();
+      },
+    },
   ];
 
   const { transcript } = useSpeechRecognition({ commands });
@@ -136,14 +160,18 @@ export default function Speech(props) {
   // ------------------------------------------------------------ //
 
   useEffect(() => {
-    console.log("Line 139 from speech",tweets);
+    console.log("Line 139 from speech", tweets);
     updateTracks(tweets.map((tweet) => speechSynthesis(tweet, settings)));
   }, []);
 
   useEffect(() => {
     //! this use effect causes problems and is no longer idiomatic with how this app is poised to updateAppMode
     //this use effect calls pings the server every time more tweets are needed
-    if (nextTrack >= tweets.length && playerMode !== RELOAD && appMode === BINGE) {
+    if (
+      nextTrack >= tweets.length &&
+      playerMode !== RELOAD &&
+      appMode === BINGE
+    ) {
       reload();
       props.getTweets().then((newTweets) => {
         const mergedTweets = diffTweets(tweets, newTweets);
@@ -171,11 +199,20 @@ export default function Speech(props) {
     }
   };
 
+  useEffect(() => {
+    if (appMode === BINGE) {
+      document.getElementById("mode-binge").setAttribute("disabled", "");
+    }
+    if (appMode === THREAD) {
+      document.getElementById("mode-thread").setAttribute("disabled", "");
+    }
+  });
+
   return (
     <>
       {/* <h1> */}
-        {/* Now playing:{" "} */}
-        {/* {`${playerMode !== STOP ? "Tweet #" + nextTrack : "nothing"}`} */}
+      {/* Now playing:{" "} */}
+      {/* {`${playerMode !== STOP ? "Tweet #" + nextTrack : "nothing"}`} */}
       {/* </h1> */}
       <div
         className="btn-toolbar mb-3 speechComponent"
@@ -238,7 +275,10 @@ export default function Speech(props) {
           >
             <i className="bi bi-pause"></i>
           </button>
-          <button className="btn player" onClick={() => playerMode === ONLOAD ? null : stop() }>
+          <button
+            className="btn player"
+            onClick={() => (playerMode === ONLOAD ? null : stop())}
+          >
             <i className="bi bi-stop-fill"></i>
           </button>
           <button className="btn player" onClick={() => next(settings)}>
@@ -246,33 +286,33 @@ export default function Speech(props) {
           </button>
         </div>
         <div className="button-row btn-group mr-2">
-        <div className="btn-group">
-          <button
-            id="settingsButton"
-            className="btn player"
-            onClick={() => {
-              handleClick();
-            }}
-          >
-            Settings
-          </button>
-        </div>
-        <div className="btn-group">
-          <button
-            id="settingsButton"
-            className="btn player"
-            onClick={() => {
-              document
-                .querySelector("#appMode-drawer")
-                .classList.toggle("invisible");
-              document
-                .querySelector("#appMode-drawer")
-                .classList.toggle("drawer");
-            }}
-          >
-            App Mode
-          </button>
-        </div>
+          <div className="btn-group">
+            <button
+              id="settingsButton"
+              className="btn player"
+              onClick={() => {
+                handleClick();
+              }}
+            >
+              Settings
+            </button>
+          </div>
+          <div className="btn-group">
+            <button
+              id="settingsButton"
+              className="btn player"
+              onClick={() => {
+                document
+                  .querySelector("#appMode-drawer")
+                  .classList.toggle("invisible");
+                document
+                  .querySelector("#appMode-drawer")
+                  .classList.toggle("drawer");
+              }}
+            >
+              App Mode
+            </button>
+          </div>
         </div>
       </div>
       <Settings
@@ -283,7 +323,43 @@ export default function Speech(props) {
       />
       {/* Create a component for list of commands to clean up this disasta */}
       <div id="VC-drawer" className="invisible">
-        <h2>List of Voice Commands</h2>
+        <h2>
+          <div id="VC-header-hideToggle">
+            <span>
+              <i class="fas fa-microphone-alt"></i>List of Voice Commands
+            </span>
+            <button
+              id="toggle-VCs"
+              onClick={() => {
+                const isVCsVisible = isVoiceCommandsVisible;
+                const target = document.querySelector(".VC-list");
+                slideToggle(target, 300);
+
+                if (isVCsVisible) {
+                  document.querySelector("#toggle-VCs").innerHTML =
+                    "<i id='toggle-icon' class='fas fa-plus-circle'></i>";
+                  setIsVoiceCommandsVisible(!isVCsVisible);
+                  document.getElementById("hr-top").style.display = "none";
+                  document.getElementById("hr-bottom").style.display = "none";
+                }
+
+                if (!isVCsVisible) {
+                  document.querySelector("#toggle-VCs").innerHTML =
+                    "<i id='toggle-icon' class='fas fa-minus-circle'></i>";
+                  setIsVoiceCommandsVisible(!isVCsVisible);
+                  document.getElementById("hr-top").style.display = "block";
+                  document.getElementById("hr-bottom").style.display = "block";
+                }
+
+                // console.log("Hello minus is clicked");
+              }}
+            >
+              <i id="toggle-icon" class="fas fa-minus-circle"></i>
+            </button>
+          </div>
+        </h2>
+        {/* <i class="fas fa-minus"></i> */}
+        <hr id="hr-top" />
         <div className="VC-list">
           <div>
             <ul>
@@ -307,7 +383,7 @@ export default function Speech(props) {
             </ul>
           </div>
         </div>
-
+        <hr id="hr-bottom" />
         <div id="transcript-container">
           <div id="transcript-header">
             <img src="https://i.imgur.com/EiZiRou.gif" alt="waves" />
@@ -326,10 +402,14 @@ export default function Speech(props) {
         <div className="mode-list">
           <div>
             {/* <ul> */}
-            <button className="btn btn-primary modeButton" onClick={() => {
-              setLoading(true);
-              updateAppMode(BINGE, stop);
-            }}>
+            <button
+              id="mode-binge"
+              className="btn btn-primary modeButton"
+              onClick={() => {
+                setLoading(true);
+                updateAppMode(BINGE, stop);
+              }}
+            >
               <i className="fas fa-infinity"></i>
               Binge
             </button>
@@ -337,10 +417,14 @@ export default function Speech(props) {
           </div>
           <div>
             {/* <ul> */}
-            <button className="btn btn-primary modeButton" onClick={() => {
-              setLoading(true);
-              updateAppMode(THREAD, stop);
-            }}>
+            <button
+              id="mode-thread"
+              className="btn btn-primary modeButton"
+              onClick={() => {
+                setLoading(true);
+                updateAppMode(THREAD, stop);
+              }}
+            >
               <i className="fas fa-list-ul"></i>
               Thread
             </button>
