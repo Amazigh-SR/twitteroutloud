@@ -57,6 +57,7 @@ export default function Header(props) {
         </div>
         {userAccess && (
           <button
+            id="header-top-log-out"
             onClick={() => deleteSession()}
             className="btn btn-primary logout"
           >
