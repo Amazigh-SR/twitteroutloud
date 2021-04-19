@@ -214,6 +214,7 @@ function App() {
               <Countdown 
                 timeoutMessage = {timeoutMessage}
                 setTimeoutMessage={setTimeoutMessage}
+                setLoading={setLoading}
               />
             </Loading>
           </>
