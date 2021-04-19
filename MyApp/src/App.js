@@ -40,7 +40,7 @@ function App() {
   //     });
   //   });
   // }, []);
-  const [rateLimitExceeded, setRateLimitExceeded] = useState(false);
+  const [timeoutMessage, setTimeoutMessage] = useState("");
 
   useEffect(() => {
     const handleWindowClose = function () {
@@ -99,7 +99,7 @@ function App() {
                   tweets[0].message &&
                   tweets[0].message === "Rate limit exceeded"
                 ) {
-                  setRateLimitExceeded(true);
+                  setTimeoutMessage("Rate limit exceeded: try again later!");
                   setTimeout(() => setLoading(false), 1000);
                 } else {
     
@@ -125,7 +125,7 @@ function App() {
                       setTimeout(() => setLoading(false), 1000);
                     }
                   } else {
-                    setRateLimitExceeded(true);
+                    setTimeoutMessage("Looks like we couldn't find any new tweets...");
                     setTimeout(() => setLoading(false), 1000);
                   } 
                 }
@@ -163,7 +163,7 @@ function App() {
               tweets[0].message &&
               tweets[0].message === "Rate limit exceeded"
             ) {
-              setRateLimitExceeded(true);
+              setTimeoutMessage("Rate limit exceeded: try again later!");
               setTimeout(() => setLoading(false), 1000);
             } else {
 
@@ -189,7 +189,7 @@ function App() {
                   setTimeout(() => setLoading(false), 1000);
                 }
               } else {
-                setRateLimitExceeded(true);
+                setTimeoutMessage("Looks like we couldn't find any new tweets...");
                 setTimeout(() => setLoading(false), 1000);
               } 
             }
@@ -207,16 +207,19 @@ function App() {
           setUserAccess={setUserAccess}
           settings={settings}
         />
-        {rateLimitExceeded && (
+        {timeoutMessage && (
           <>
-            <h1>Rate limit exceeded: try again later!</h1>
+            <h1>{timeoutMessage}</h1>
             <Loading>
-              <Countdown setRateLimitExceeded={setRateLimitExceeded} />
+              <Countdown 
+                timeoutMessage = {timeoutMessage}
+                setTimeoutMessage={setTimeoutMessage}
+              />
             </Loading>
           </>
         )}
         {loading && <Loading>Fetching scones!</Loading>}
-        {!rateLimitExceeded && !loading && userAccess && (
+        {!timeoutMessage && !loading && userAccess && (
           <Speech
             tweets={tweets}
             setTweets={setTweets}
