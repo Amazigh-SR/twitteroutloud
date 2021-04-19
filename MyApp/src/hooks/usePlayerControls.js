@@ -138,9 +138,15 @@ const usePlayer = function () {
     }
   };
 
-  const reload = function () {
-    setMode(RELOAD);
-  };
+  // const reload = function (reloading) {
+  //   if (reloading) {
+  //     setMode(RELOAD);
+  //   } else {
+  //     setMode(PLAY);
+  //   }
+  // };
+
+  //!reload is currently a DO-NO-USE
 
   return {
     playerMode: mode,
@@ -152,7 +158,7 @@ const usePlayer = function () {
     stop,
     previous,
     next,
-    reload,
+    // reload,
     nextTrack,
   };
 };

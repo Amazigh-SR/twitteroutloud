@@ -22,6 +22,7 @@ export default function TweetList(props){
     // console.log(playerMode)
 
     if (nextTrack !== -1 && (playerMode === PLAY || playerMode === ONLOAD)) {
+      
       //nextTrack !== -1 => When we are calling previous, or stop early in the utterance queue nextTrack will be set to -1 - we don't want to update in this case
       // appMode !== STOP => when mode is  we should STOP should not advance the carousel
       
@@ -33,6 +34,12 @@ export default function TweetList(props){
       if (tweetList.length < 1){
         //Will only happen on page load
         setTweetList(prev=>[...prev, generateNewTweet(tweets[nextTrack], nextTrack), generateNewTweet(tweets[nextTrack+1], nextTrack+1)])
+
+      } else if ((tweetList.length === 2 && nextTrack + 3 >= tweets.length && nextTrack > 0)){
+        //nextTrack + 2 >= tweets.length is a condition where previous is called from the the last tweet.
+        //! remove this class every time the conditions are met
+        document.getElementsByClassName('tweetComponent')[0].classList.remove("left-justify");
+        setTweetList(prev=>[generateNewTweet(tweets[nextTrack], nextTrack, true), ...prev.slice(0,2)])
 
       } else if (tweetList.length === 2 && nextTrack + 1 < tweets.length && nextTrack > 0) {
         // the condition nextTrack > 0 avoids a situation where play is called from stop and nextTrack is 1
@@ -52,8 +59,9 @@ export default function TweetList(props){
           //when next is called
           
           if(nextTrack + 1 >= tweets.length) {
-            //! conditionally apply css to tweetComponent
             // when nextTrack + 1 is undefined
+            //! conditionally apply css to tweetComponent
+            document.getElementsByClassName('tweetComponent')[0].classList.add("left-justify")
             setTweetList(prev=>[...prev.slice(1)])
 
           } else {

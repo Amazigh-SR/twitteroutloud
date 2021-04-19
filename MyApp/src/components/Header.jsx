@@ -5,7 +5,7 @@ export default function Header(props) {
   const image_url = localStorage.getItem("image_url");
   const username = localStorage.getItem("username");
 
-  const { userAccess, setUserAccess, settings } = props;
+  const { userAccess, setUserAccess, settings, setTimeoutMessage, setLoading } = props;
 
   const deleteSession = function () {
     axios
@@ -18,6 +18,7 @@ export default function Header(props) {
       })
       .then((res) => {
         setUserAccess(false);
+        setTimeoutMessage("");
         localStorage.removeItem("isLoggedIn");
         for (const [key] of Object.entries(settings)) {
           localStorage.removeItem(key);
@@ -26,6 +27,7 @@ export default function Header(props) {
         localStorage.removeItem("image_url");
         localStorage.removeItem("counter");
         window.speechSynthesis.cancel();
+        setLoading(false);
       })
       .catch((err) => console.error(err));
   };

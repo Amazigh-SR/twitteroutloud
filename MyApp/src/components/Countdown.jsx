@@ -9,17 +9,19 @@ const convertSeconds = function(seconds) {
 }
 
 export default function Countdown(props) {
-  const { setRateLimitExceeded } = props;
+  const { timeoutMessage, setTimeoutMessage, setLoading } = props;
   const initialCount = localStorage.getItem("counter");
-  const [counter, setCounter] = useState(Number(initialCount) || 900);
+  const defaultTimeout = timeoutMessage === "Rate limit exceeded: try again later!" ? 900 : 300;
+  const [counter, setCounter] = useState(Number(initialCount) || defaultTimeout);
 
   useEffect(() => {
     if (counter > 0) {
       setTimeout(() => setCounter(counter - 1), 1000);
       localStorage.setItem("counter", counter)
     } else {
-      setRateLimitExceeded(false);
+      setTimeoutMessage("");
       localStorage.removeItem("counter");
+      setLoading(true);
     }
   }, [counter]);
 

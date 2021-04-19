@@ -3,7 +3,7 @@ export default function Auth() {
     <div id="auth-container">
       <div id="auth-image">
         {" "}
-        <img src="bird_headphones.png" alt="bird_headphones_logo" />
+        <img src="bird_headphones_transparent_final.svg" alt="bird_headphones_logo" />
       </div>
       <div id="auth-header-text">
         <p>Give scrolling a break.</p>
