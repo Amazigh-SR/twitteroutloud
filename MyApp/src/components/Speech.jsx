@@ -267,6 +267,12 @@ export default function Speech(props) {
             <i className="bi bi-skip-backward-fill"></i>
           </button>
           <button
+            className="btn player"
+            onClick={() => (playerMode === ONLOAD ? null : pause())}
+          >
+            <i className="bi bi-pause"></i>
+          </button>
+          <button
             type="button"
             className="btn player"
             onClick={() => {
@@ -274,12 +280,6 @@ export default function Speech(props) {
             }}
           >
             <i className="bi bi-play-fill"></i>
-          </button>
-          <button
-            className="btn player"
-            onClick={() => (playerMode === ONLOAD ? null : pause())}
-          >
-            <i className="bi bi-pause"></i>
           </button>
           <button
             className="btn player"
