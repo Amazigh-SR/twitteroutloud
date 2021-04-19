@@ -29,6 +29,7 @@ function App() {
   const [settings, setSettings] = useState({});
   const [voices, setVoices] = useState([]);
   const { appMode, updateAppMode } = useAppMode(BINGE);
+  const [lastTweet, setLastTweet] = useState(0);
 
   // useEffect(() => {
   //   // if(MODE ==="Thread")
@@ -90,29 +91,45 @@ function App() {
             if (data.valid) {
               // IF BASED ON MODE:
 
-              return getTweets().then((tweets) => {
-                if (appMode === THREAD) {
-                  threadHelper(tweets).then((res) => {
-                    console.log("res from threadHelper", res);
-                    setTweets(res);
-                    setTimeout(() => setLoading(false), 1000);
-                  });
-                } else if (appMode === BINGE) {
-                  //? commented out code below was prexisting master code => new if block handles rate limit on binge
-                  // setTweets(tweets);
-                  // setTimeout(() => setLoading(false), 1000);
-                  if (
-                    tweets[0].message &&
-                    tweets[0].message === "Rate limit exceeded"
-                  ) {
+              return getTweets()
+              .then((tweets) => {
+    
+                if (
+                  //checks to see if rate limit has been hit
+                  tweets[0].message &&
+                  tweets[0].message === "Rate limit exceeded"
+                ) {
+                  setRateLimitExceeded(true);
+                  setTimeout(() => setLoading(false), 1000);
+                } else {
+    
+                  //!filter based on last tweet of previous tweetsState
+                  const filteredTweets = tweets.filter((tweet)=>tweet.id >= lastTweet);
+                  console.log(filteredTweets)
+                  
+                  if (filteredTweets.length  >= 2) {
+    
+                    //!setLastTweet with the tweet id of the last tweet returned
+                    setLastTweet(tweets[tweets.length-1].id)
+                    
+                    if (appMode === THREAD) {
+                      threadHelper(filteredTweets).then((res) => {
+                        console.log("res from threadHelper", res);
+                        setTweets(res);
+                        setTimeout(() => setLoading(false), 1000);
+                      });
+                    } else if (appMode === BINGE) {
+                      //? commented out code below was prexisting master code => new if block handles rate limit on binge
+                      // setTweets(tweets);
+                      setTweets(filteredTweets);
+                      setTimeout(() => setLoading(false), 1000);
+                    }
+                  } else {
                     setRateLimitExceeded(true);
                     setTimeout(() => setLoading(false), 1000);
-                  } else {
-                    setTweets(tweets);
-                    setTimeout(() => setLoading(false), 1000);
-                  }
+                  } 
                 }
-              });
+              })
 
               // threadHelper(tweets);
               // setTweets(tweets);
@@ -140,25 +157,41 @@ function App() {
 
         getTweets()
           .then((tweets) => {
-            if (appMode === THREAD) {
-              threadHelper(tweets).then((res) => {
-                console.log("res from threadHelper", res);
-                setTweets(res);
-                setTimeout(() => setLoading(false), 1000);
-              });
-            } else if (appMode === BINGE) {
-              //? commented out code below was prexisting master code => new if block handles rate limit on binge
-              // setTweets(tweets);
-              if (
-                tweets[0].message &&
-                tweets[0].message === "Rate limit exceeded"
-              ) {
+
+            if (
+              //checks to see if rate limit has been hit
+              tweets[0].message &&
+              tweets[0].message === "Rate limit exceeded"
+            ) {
+              setRateLimitExceeded(true);
+              setTimeout(() => setLoading(false), 1000);
+            } else {
+
+              //!filter based on last tweet of previous tweetsState
+              const filteredTweets = tweets.filter((tweet)=>tweet.id >= lastTweet);
+              console.log(filteredTweets)
+              
+              if (filteredTweets.length  >= 2) {
+
+                //!setLastTweet with the tweet id of the last tweet returned
+                setLastTweet(tweets[tweets.length-1].id)
+                
+                if (appMode === THREAD) {
+                  threadHelper(filteredTweets).then((res) => {
+                    console.log("res from threadHelper", res);
+                    setTweets(res);
+                    setTimeout(() => setLoading(false), 1000);
+                  });
+                } else if (appMode === BINGE) {
+                  //? commented out code below was prexisting master code => new if block handles rate limit on binge
+                  // setTweets(tweets);
+                  setTweets(filteredTweets);
+                  setTimeout(() => setLoading(false), 1000);
+                }
+              } else {
                 setRateLimitExceeded(true);
                 setTimeout(() => setLoading(false), 1000);
-              } else {
-                setTweets(tweets);
-                setTimeout(() => setLoading(false), 1000);
-              }
+              } 
             }
           })
           .catch((err) => console.error(err));
