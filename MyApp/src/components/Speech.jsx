@@ -32,6 +32,7 @@ export default function Speech(props) {
     appMode,
     updateAppMode,
     setLoading,
+    setLastTweet,
   } = props;
 
   // const utterances = tweets.map((tweet) => speechSynthesis(tweet, settings));
@@ -418,8 +419,9 @@ export default function Speech(props) {
               id="mode-binge"
               className="btn player"
               onClick={() => {
-                setLoading(true);
+                setLastTweet(0)
                 updateAppMode(BINGE, stop);
+                setLoading(true);
               }}
             >
               <i className="fas fa-infinity"></i>
@@ -433,8 +435,9 @@ export default function Speech(props) {
               id="mode-thread"
               className="btn player"
               onClick={() => {
-                setLoading(true);
+                setLastTweet(0);
                 updateAppMode(THREAD, stop);
+                setLoading(true);
               }}
             >
               <i className="fas fa-list-ul"></i>

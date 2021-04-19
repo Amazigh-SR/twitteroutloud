@@ -234,6 +234,7 @@ function App() {
             appMode={appMode}
             updateAppMode={updateAppMode}
             setLoading={setLoading}
+            setLastTweet={setLastTweet}
           />
         )}
         {!loading && !userAccess && <Auth />}
