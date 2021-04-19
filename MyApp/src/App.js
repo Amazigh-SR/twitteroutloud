@@ -206,6 +206,7 @@ function App() {
           userAccess={userAccess}
           setUserAccess={setUserAccess}
           settings={settings}
+          setTimeoutMessage={setTimeoutMessage}
         />
         {timeoutMessage && (
           <>
