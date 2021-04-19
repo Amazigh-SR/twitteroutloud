@@ -48,7 +48,7 @@ export default function Speech(props) {
     stop,
     previous,
     next,
-    reload,
+    // reload,
     nextTrack,
   } = usePlayer();
 
@@ -164,32 +164,42 @@ export default function Speech(props) {
     updateTracks(tweets.map((tweet) => speechSynthesis(tweet, settings)));
   }, []);
 
-  useEffect(() => {
-    //! this use effect causes problems and is no longer idiomatic with how this app is poised to updateAppMode
-    //this use effect calls pings the server every time more tweets are needed
-    if (
-      nextTrack >= tweets.length &&
-      playerMode !== RELOAD &&
-      appMode === BINGE
-    ) {
-      reload();
-      props.getTweets().then((newTweets) => {
-        const mergedTweets = diffTweets(tweets, newTweets);
-        setTweets(mergedTweets);
-        updateTracks(
-          mergedTweets.map((tweet) => speechSynthesis(tweet, settings))
-        );
-        updateAppMode(BINGE);
-      });
+  // refresh tweets by updating appMode
+  useEffect(()=>{
+    if (nextTrack >= tweets.length) {
+      setLoading(true);
+      updateAppMode(appMode, stop);
     }
   }, [nextTrack]);
 
+  // useEffect(() => {
+  //   //! this use effect causes problems with carousel sync and is no longer idiomatic with how this app is poised to updateAppMode
+  //   //this use effect calls pings the server every time more tweets are needed
+  //   if (
+  //     nextTrack >= tweets.length - 1 &&
+  //     playerMode !== RELOAD &&
+  //     appMode === BINGE
+  //   ) {
+  //     reload(true);
+  //     props.getTweets().then((newTweets) => {
+  //       const mergedTweets = diffTweets(tweets, newTweets);
+  //       setTweets(mergedTweets);
+  //       updateTracks(
+  //         mergedTweets.map((tweet) => speechSynthesis(tweet, settings))
+  //       );
+  //       // reload(false);
+  //     });
+  //   }
+  // }, [nextTrack]);
+
+
+
   //while bingeing play will be called as long as new utterances are being generated
-  useEffect(() => {
-    if (appMode === BINGE && playerMode === RELOAD) {
-      play(settings);
-    }
-  }, [utterances, appMode]);
+  // useEffect(() => {
+  //   if (appMode === BINGE && playerMode === RELOAD) {
+  //     play(settings);
+  //   }
+  // }, [utterances, appMode]);
 
   const handleClick = function () {
     if ($("div.settingsComponent").first().is(":hidden")) {
