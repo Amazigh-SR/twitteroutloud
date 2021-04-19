@@ -536,6 +536,7 @@ li:before {
   text-decoration: none;
   background-color: #ecf5fe;
   color: var(--twitter-blue);
+  border-radius: 100px;
 }
 @media only screen and (max-width: 980px) {
   .tweetComponent {
