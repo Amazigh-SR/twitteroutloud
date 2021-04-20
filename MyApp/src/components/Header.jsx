@@ -5,7 +5,13 @@ export default function Header(props) {
   const image_url = localStorage.getItem("image_url");
   const username = localStorage.getItem("username");
 
-  const { userAccess, setUserAccess, settings, setTimeoutMessage, setLoading } = props;
+  const {
+    userAccess,
+    setUserAccess,
+    settings,
+    setTimeoutMessage,
+    setLoading,
+  } = props;
 
   const deleteSession = function () {
     axios
