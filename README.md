@@ -29,7 +29,7 @@ Featuring responsive styling so you can use TOL on any device, with totally cust
 ## Screenshots
 
 ![Landing Page](https://github.com/Amazigh-SR/twitteroutloud/blob/master/docs/Landing_page.png)
-![twitterOutLoud Player](https://github.com/Amazigh-SR/twitteroutloud/blob/master/docs/twitter_player.png)
+![twitterOutLoud Player](https://github.com/Amazigh-SR/twitteroutloud/blob/master/docs/TwitterOutLoud_player.png)
 ![Voice Commands](https://github.com/Amazigh-SR/twitteroutloud/blob/master/docs/voice_commands.png)
 
 ## Features
