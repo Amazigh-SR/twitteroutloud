@@ -35,12 +35,12 @@ const threadData = [
   {
     author_id: "1379970996350947335",
     text:
-      "We wanted to ensure that we developed a solution that would abide to accessibility trends and would run with minimal on-screen user input, so we built out a Voice User Interface to allow users to interact with the app hands free.",
+      "Sayeed Tweeted: We wanted to ensure that we developed a solution that would abide to accessibility trends and would run with minimal on-screen user input, so we built out a Voice User Interface to allow users to interact with the app hands free.",
     conversation_id: "1384208195070038016",
     id: "1384208195070038016",
     id_str: "1384208195070038016",
     full_text:
-      "We wanted to ensure that we developed a solution that would abide to accessibility trends and would run with minimal on-screen user input, so we built out a Voice User Interface to allow users to interact with the app hands free.",
+      "Sayeed Tweeted: We wanted to ensure that we developed a solution that would abide to accessibility trends and would run with minimal on-screen user input, so we built out a Voice User Interface to allow users to interact with the app hands free.",
   },
   {
     author_id: "1379970996350947335",
@@ -66,7 +66,7 @@ const threadData = [
     created_at: "Tue Apr 20 16:17:55 +0000 2021",
     id: 1384541850451710000,
     id_str: "1384541850451709955",
-    full_text: "Ultimate twitter thread of destiny",
+    full_text: "Francis Tweeted: Ultimate twitter thread of destiny",
     truncated: false,
     display_text_range: [0, 34],
     entities: {
@@ -304,6 +304,17 @@ const threadData = [
     favorited: false,
     retweeted: false,
     lang: "en",
+  },
+  {
+    text:
+      "I might not be the real Francis Bourgouin... But if I was - I would say that Dan, Saïd and Nick are my favourite bootcamp students.",
+    id: "1384589187685494786",
+    conversation_id: "1384541850451709955",
+    author_id: "1384540190849572872",
+    in_reply_to_user_id: "1384540190849572872",
+    id_str: "1384589187685494786",
+    full_text:
+      "I might not be the real Francis Bourgouin... But if I was - I would say that Dan, Saïd and Nick are my favourite bootcamp students.",
   },
 ];
 

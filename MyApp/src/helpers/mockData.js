@@ -107,7 +107,7 @@ const mockData = [
     user: {
       id: 1379970996350947300,
       id_str: "1379970996350947335",
-      name: "Saïd",
+      name: "Sayeed",
       screen_name: "sredouane10",
       location: "",
       description: "",
