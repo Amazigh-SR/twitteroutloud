@@ -66,7 +66,7 @@ const threadData = [
     created_at: "Tue Apr 20 16:17:55 +0000 2021",
     id: 1384541850451710000,
     id_str: "1384541850451709955",
-    full_text: "Francis Tweeted: Ultimate twitter thread of destiny",
+    full_text: "Ultimate twitter thread of destiny",
     truncated: false,
     display_text_range: [0, 34],
     entities: {
@@ -85,7 +85,7 @@ const threadData = [
     user: {
       id: 1384540190849572900,
       id_str: "1384540190849572872",
-      name: "NotFrancisB",
+      name: "Francis",
       screen_name: "NotFrancisB1",
       location: "",
       description: "",
@@ -166,7 +166,6 @@ const threadData = [
     user: {
       id: 1384540190849572900,
       id_str: "1384540190849572872",
-      name: "NotFrancisB",
       screen_name: "NotFrancisB1",
       location: "",
       description: "",
@@ -247,7 +246,6 @@ const threadData = [
     user: {
       id: 1384540190849572900,
       id_str: "1384540190849572872",
-      name: "NotFrancisB",
       screen_name: "NotFrancisB1",
       location: "",
       description: "",
