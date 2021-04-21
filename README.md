@@ -1,26 +1,10 @@
 # #Twitter Out Loud
 
-## Short description
-
 Twitter Out Loud reads your tweets to you so you can enjoy your Twitter feed without looking at a screen.
 
-## Setup
+## Why
 
-#### Running Webpack Development Server
-
-```sh
-npm start
-```
-
-#### Running backend Server
-
-```sh
-node app.js
-```
-
-## Why - problem it solves
-
-We all know that Twitter is an amazing source of information, whether it be news, jokes, or life updates. We, unfortunately, have to scroll and look at our screens to be able to enjoy our Twitter feeds...until now:
+We all know that Twitter is an amazing source of information, whether it’s news, jokes, or life updates. We, unfortunately, have to scroll and look at our screens to be able to enjoy our Twitter feeds...until now:
 
 Twitter Out Loud (TOL) is a single-page React app that allows users to log in with a pre-existing Twitter account via Twitter OAuth. TOL reads your tweets aloud via custom implementation of the WebSpeech SpeechSynthesis API. TOL allows users to control the player with their voice by leveraging SpeechRecognition API.
 
@@ -42,9 +26,12 @@ Voice Commands:
 
 ## Features
 
-- Feature 1
-- Feature 2
-- Feature 3
+- Text to Speech, using speechSynthesis
+- Control of voice settings (voice type, rate, pitch, volume)
+- Different modes (timeline & thread)
+- Voice commands, using Speech Recognition API
+
+
 
 ## Stack
 
@@ -55,15 +42,50 @@ Voice Commands:
 
 ## Installation
 
-Install dependencies with `npm install` in both the backend and MyApp folders.
+Install dependencies with `npm install` in both the `/backend` and `/MyApp` directories.
+
+## Setup
+
+Make a copy of `/backend/example.env` and rename it `.env` configure the file with the appropriate keys and credentials for your Twitter Developer Account and local PostgreSQL instance.
+
+Make a copy of `/MyApp/example.env` rename it `.env` and configure the file with the appropriate front and backend paths.
+
+#### Setting Up The DB
+
+After initializing a new Database in PG and pointing `/backend/.env` at it with the appropriate credentials:
+
+From `/backend` directory:
+
+```sh
+npm run db
+```
+
+If this fails (which can occur on later versions of node, or M1 machines) due to pg-native incompatibilities use this command instead:
+
+```sh
+npm run db:dan
+``` 
+
+#### Running Webpack Development Server
+
+From `/MyApp` directory:
+
+```sh
+npm start
+```
+
+#### Running backend Server
+
+From `/backend` directory:
+
+```sh
+node app.js
+```
 
 ## Dependencies
 
 - axios
-- passport
-- passport-twitter
 - react-speech-recognition
-- react-twitter-widgets
 - react-twitter-widgets
 - cookie-parser
 - cookie-session
